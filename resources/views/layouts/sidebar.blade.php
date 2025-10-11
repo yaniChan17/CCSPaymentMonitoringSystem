@@ -60,25 +60,30 @@
             
             /* Custom Scrollbar */
             .custom-scrollbar::-webkit-scrollbar {
-                width: 6px;
+                width: 8px;
             }
             
             .custom-scrollbar::-webkit-scrollbar-track {
-                background: #f1f1f1;
+                background: #f1f5f9;
             }
             
             .custom-scrollbar::-webkit-scrollbar-thumb {
-                background: #888;
-                border-radius: 3px;
+                background: #cbd5e1;
+                border-radius: 4px;
             }
             
             .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-                background: #555;
+                background: #94a3b8;
+            }
+            
+            /* Smooth scroll behavior */
+            .custom-scrollbar {
+                scroll-behavior: smooth;
             }
         </style>
     </head>
     <body class="font-sans antialiased bg-gray-50">
-        <div class="min-h-screen flex">
+        <div class="h-screen flex overflow-hidden">
             <!-- Sidebar -->
             <aside 
                 x-show="sidebarOpen"
@@ -88,11 +93,11 @@
                 x-transition:leave="transition ease-in duration-300"
                 x-transition:leave-start="translate-x-0"
                 x-transition:leave-end="-translate-x-full"
-                class="fixed lg:static inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 sidebar-transition overflow-y-auto custom-scrollbar"
+                class="fixed lg:relative inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 sidebar-transition flex flex-col h-screen"
                 @click.away="if (window.innerWidth < 1024) sidebarOpen = false"
             >
-                <!-- Sidebar Header -->
-                <div class="gradient-bg p-6">
+                <!-- Sidebar Header (Fixed) -->
+                <div class="gradient-bg p-6 flex-shrink-0">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-3">
                             <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
@@ -116,8 +121,8 @@
                     </div>
                 </div>
 
-                <!-- User Profile Section -->
-                <div class="p-4 border-b border-gray-200">
+                <!-- User Profile Section (Fixed) -->
+                <div class="p-4 border-b border-gray-200 flex-shrink-0">
                     <div class="flex items-center space-x-3">
                         <div class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-semibold">
                             {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
@@ -132,13 +137,13 @@
                     </div>
                 </div>
 
-                <!-- Navigation Links -->
-                <nav class="p-4 space-y-1">
+                <!-- Navigation Links (Scrollable) -->
+                <nav class="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-1">
                     {{ $navigation ?? '' }}
                 </nav>
 
-                <!-- Sidebar Footer -->
-                <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 bg-gray-50">
+                <!-- Sidebar Footer (Fixed) -->
+                <div class="flex-shrink-0 p-4 border-t border-gray-200 bg-gray-50">
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button 
@@ -168,9 +173,9 @@
             ></div>
 
             <!-- Main Content Area -->
-            <div class="flex-1 flex flex-col min-w-0">
-                <!-- Top Navigation Bar -->
-                <header class="bg-white border-b border-gray-200 sticky top-0 z-30">
+            <div class="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
+                <!-- Top Navigation Bar (Fixed) -->
+                <header class="bg-white border-b border-gray-200 flex-shrink-0 z-30">
                     <div class="px-4 sm:px-6 lg:px-8">
                         <div class="flex items-center justify-between h-16">
                             <!-- Left side -->
@@ -264,24 +269,24 @@
                     </div>
                 </header>
 
-                <!-- Page Content -->
-                <main class="flex-1 overflow-y-auto custom-scrollbar">
+                <!-- Page Content (Scrollable) -->
+                <main class="flex-1 overflow-y-auto custom-scrollbar bg-gray-50">
                     <div class="px-4 sm:px-6 lg:px-8 py-8">
                         {{ $slot }}
                     </div>
-                </main>
-
-                <!-- Footer -->
-                <footer class="bg-white border-t border-gray-200 px-4 sm:px-6 lg:px-8 py-4">
-                    <div class="flex flex-col sm:flex-row justify-between items-center text-sm text-gray-500">
-                        <p>&copy; {{ date('Y') }} CCS Payment Monitoring System. All rights reserved.</p>
-                        <div class="flex space-x-4 mt-2 sm:mt-0">
-                            <a href="#" class="hover:text-indigo-600 transition-colors">Privacy Policy</a>
-                            <a href="#" class="hover:text-indigo-600 transition-colors">Terms of Service</a>
-                            <a href="#" class="hover:text-indigo-600 transition-colors">Support</a>
+                    
+                    <!-- Footer -->
+                    <footer class="bg-white border-t border-gray-200 px-4 sm:px-6 lg:px-8 py-4 mt-auto">
+                        <div class="flex flex-col sm:flex-row justify-between items-center text-sm text-gray-500">
+                            <p>&copy; {{ date('Y') }} CCS Payment Monitoring System. All rights reserved.</p>
+                            <div class="flex space-x-4 mt-2 sm:mt-0">
+                                <a href="#" class="hover:text-indigo-600 transition-colors">Privacy Policy</a>
+                                <a href="#" class="hover:text-indigo-600 transition-colors">Terms of Service</a>
+                                <a href="#" class="hover:text-indigo-600 transition-colors">Support</a>
+                            </div>
                         </div>
-                    </div>
-                </footer>
+                    </footer>
+                </main>
             </div>
         </div>
     </body>

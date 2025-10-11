@@ -87,7 +87,7 @@
     </div>
 
     <!-- Recent Payments by This Treasurer -->
-    <div class="bg-white overflow-hidden shadow-md rounded-xl border border-gray-100">
+    <div class="bg-white shadow-md rounded-xl border border-gray-100">
         <div class="p-6 border-b border-gray-100">
             <div class="flex items-center justify-between">
                 <div>
