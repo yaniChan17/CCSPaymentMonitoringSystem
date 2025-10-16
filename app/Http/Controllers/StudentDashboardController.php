@@ -11,8 +11,10 @@ class StudentDashboardController extends Controller
         $user = auth()->user();
         $student = $user->student;
 
+        // This should not happen with automatic profile creation,
+        // but kept as a safety check
         if (!$student) {
-            abort(404, 'Student profile not found.');
+            return view('student.pending-setup');
         }
 
         $payments = $student->payments()

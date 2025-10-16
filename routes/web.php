@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
+use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentDashboardController;
 use App\Http\Controllers\TreasurerDashboardController;
@@ -32,6 +35,19 @@ Route::get('/dashboard', function () {
 // Admin Routes
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+    
+    // User Management
+    Route::resource('users', UserController::class);
+    
+    // Payment Management
+    Route::resource('payments', AdminPaymentController::class)->except(['create', 'store']);
+    
+    // Reports
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+    Route::get('/reports/summary', [ReportController::class, 'summary'])->name('reports.summary');
+    Route::get('/reports/export-payments', [ReportController::class, 'exportPayments'])->name('reports.export-payments');
+    Route::get('/reports/export-students', [ReportController::class, 'exportStudents'])->name('reports.export-students');
+    Route::get('/reports/export-summary', [ReportController::class, 'exportSummary'])->name('reports.export-summary');
 });
 
 // Treasurer Routes

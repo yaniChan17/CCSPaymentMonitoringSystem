@@ -3,15 +3,74 @@
         <x-nav.admin />
     </x-slot>
 
-    <x-slot name="header">
-        <h1 class="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
-        <p class="text-sm text-gray-500 mt-1">Welcome back! Here's what's happening today.</p>
-    </x-slot>
+    <div class="space-y-6">
+        <!-- Header -->
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
+                <p class="text-sm text-gray-600 mt-1">Welcome back! Here's your CSS Payment System overview.</p>
+            </div>
+            <div class="text-right">
+                <p class="text-sm text-gray-500">{{ now()->format('l, F j, Y') }}</p>
+                <p class="text-xs text-gray-400">{{ now()->format('g:i A') }}</p>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <a href="{{ route('admin.users.create') }}" class="bg-gradient-to-br from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white rounded-xl p-5 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-1">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm opacity-90 mb-1">Add New</p>
+                        <p class="text-lg font-bold">User</p>
+                    </div>
+                    <svg class="w-10 h-10 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+                    </svg>
+                </div>
+            </a>
+
+            <a href="{{ route('admin.payments.index') }}" class="bg-gradient-to-br from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-xl p-5 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-1">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm opacity-90 mb-1">View All</p>
+                        <p class="text-lg font-bold">Payments</p>
+                    </div>
+                    <svg class="w-10 h-10 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
+                    </svg>
+                </div>
+            </a>
+
+            <a href="{{ route('admin.reports.summary') }}" class="bg-gradient-to-br from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white rounded-xl p-5 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-1">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm opacity-90 mb-1">Generate</p>
+                        <p class="text-lg font-bold">Reports</p>
+                    </div>
+                    <svg class="w-10 h-10 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                </div>
+            </a>
+
+            <a href="{{ route('admin.users.index') }}" class="bg-gradient-to-br from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-xl p-5 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-1">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm opacity-90 mb-1">Manage</p>
+                        <p class="text-lg font-bold">Users</p>
+                    </div>
+                    <svg class="w-10 h-10 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                    </svg>
+                </div>
+            </a>
+        </div>
 
     <!-- Stats Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <!-- Total Students -->
-        <div class="stat-card bg-white overflow-hidden shadow-md rounded-xl hover-lift border border-gray-100">
+        <div class="bg-white overflow-hidden shadow-md rounded-xl border border-gray-100 hover:shadow-lg transition-shadow duration-200">
             <div class="p-6">
                 <div class="flex items-center justify-between">
                     <div class="flex-1">
@@ -34,13 +93,13 @@
         </div>
 
         <!-- Total Users -->
-        <div class="stat-card bg-white overflow-hidden shadow-md rounded-xl hover-lift border border-gray-100">
+        <div class="bg-white overflow-hidden shadow-md rounded-xl border border-gray-100 hover:shadow-lg transition-shadow duration-200">
             <div class="p-6">
                 <div class="flex items-center justify-between">
                     <div class="flex-1">
-                        <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Total Users</div>
+                        <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">System Users</div>
                         <div class="text-3xl font-bold text-gray-900">{{ $stats['total_users'] }}</div>
-                        <div class="mt-2 text-sm text-gray-500">System users</div>
+                        <div class="mt-2 text-sm text-gray-500">Users</div>
                     </div>
                     <div class="w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
                         <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -51,14 +110,14 @@
             </div>
         </div>
 
-        <!-- Total Payments -->
-        <div class="stat-card bg-white overflow-hidden shadow-md rounded-xl hover-lift border border-gray-100">
+        <!-- Total Collected -->
+        <div class="bg-white overflow-hidden shadow-md rounded-xl border border-gray-100 hover:shadow-lg transition-shadow duration-200">
             <div class="p-6">
                 <div class="flex items-center justify-between">
                     <div class="flex-1">
                         <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Total Collected</div>
                         <div class="text-3xl font-bold text-gray-900">₱{{ number_format($stats['total_payments'], 2) }}</div>
-                        <div class="mt-2 text-sm text-gray-500">All time</div>
+                        <div class="mt-2 text-sm text-green-600">All time revenue</div>
                     </div>
                     <div class="w-14 h-14 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center shadow-lg">
                         <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -69,18 +128,18 @@
             </div>
         </div>
 
-        <!-- Outstanding Balance -->
-        <div class="stat-card bg-white overflow-hidden shadow-md rounded-xl hover-lift border border-gray-100">
+        <!-- Pending Balance -->
+        <div class="bg-white overflow-hidden shadow-md rounded-xl border border-gray-100 hover:shadow-lg transition-shadow duration-200">
             <div class="p-6">
                 <div class="flex items-center justify-between">
                     <div class="flex-1">
-                        <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Outstanding Balance</div>
-                        <div class="text-3xl font-bold text-red-600">₱{{ number_format($stats['total_balance'], 2) }}</div>
-                        <div class="mt-2 text-sm text-red-500">Pending collection</div>
+                        <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Pending Balance</div>
+                        <div class="text-3xl font-bold text-orange-600">₱{{ number_format($stats['total_balance'], 2) }}</div>
+                        <div class="mt-2 text-sm text-orange-500">Awaiting payment</div>
                     </div>
-                    <div class="w-14 h-14 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center shadow-lg">
+                    <div class="w-14 h-14 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center shadow-lg">
                         <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
                     </div>
                 </div>
@@ -96,7 +155,7 @@
                     <h3 class="text-lg font-semibold text-gray-900">Recent Payments</h3>
                     <p class="text-sm text-gray-500 mt-1">Latest payment transactions across the system</p>
                 </div>
-                <a href="#" class="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
+                <a href="{{ route('admin.payments.index') }}" class="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
                     View All
                     <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>

@@ -94,7 +94,7 @@
                         <div class="flex flex-wrap gap-4">
                             @guest
                                 <a href="{{ route('register') }}" class="px-8 py-3 bg-white text-indigo-600 font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300">
-                                    Start Free Trial
+                                    Get Started
                                 </a>
                                 <a href="{{ route('login') }}" class="px-8 py-3 bg-indigo-700 text-white font-semibold rounded-lg shadow-lg hover:bg-indigo-800 transition duration-300">
                                     Sign In

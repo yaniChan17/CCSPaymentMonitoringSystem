@@ -83,6 +83,9 @@
         </style>
     </head>
     <body class="font-sans antialiased bg-gray-50">
+        <!-- Flash Messages -->
+        <x-flash-message />
+        
         <div class="h-screen flex overflow-hidden">
             <!-- Sidebar -->
             <aside 

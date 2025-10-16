@@ -66,46 +66,74 @@
                 33% { transform: translate(30px, -30px) rotate(120deg); }
                 66% { transform: translate(-20px, 20px) rotate(240deg); }
             }
+            
+            /* Custom Scrollbar Styling */
+            .custom-scrollbar::-webkit-scrollbar {
+                width: 8px;
+            }
+            
+            .custom-scrollbar::-webkit-scrollbar-track {
+                background: #f1f1f1;
+                border-radius: 10px;
+            }
+            
+            .custom-scrollbar::-webkit-scrollbar-thumb {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                border-radius: 10px;
+            }
+            
+            .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+                background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+            }
+            
+            /* Firefox */
+            .custom-scrollbar {
+                scrollbar-width: thin;
+                scrollbar-color: #667eea #f1f1f1;
+            }
         </style>
     </head>
     <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex">
+        <div class="min-h-screen h-screen flex overflow-hidden">
             <!-- Left Side - Form -->
-            <div class="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white relative overflow-hidden">
-                <!-- Floating Shapes -->
+            <div class="w-full lg:w-1/2 flex flex-col bg-white relative overflow-hidden">
+                <!-- Floating Shapes (Fixed) -->
                 <div class="floating-shape w-64 h-64 bg-indigo-500 top-10 -left-20" style="animation-delay: 0s;"></div>
                 <div class="floating-shape w-48 h-48 bg-purple-500 bottom-10 -right-10" style="animation-delay: 7s;"></div>
                 <div class="floating-shape w-32 h-32 bg-pink-500 top-1/2 left-1/3" style="animation-delay: 14s;"></div>
                 
-                <div class="w-full max-w-md relative z-10">
-                    <!-- Logo and Back to Home -->
-                    <div class="mb-8">
-                        <a href="/" class="inline-flex items-center text-gray-600 hover:text-indigo-600 transition-colors duration-200">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-                            </svg>
-                            <span class="text-sm font-medium">Back to Home</span>
-                        </a>
-                        
-                        <div class="mt-6 flex items-center">
-                            <div class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center">
-                                <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                <!-- Scrollable Form Container -->
+                <div class="flex-1 overflow-y-auto py-8 px-8 custom-scrollbar">
+                    <div class="w-full max-w-md mx-auto relative z-10">
+                        <!-- Logo and Back to Home -->
+                        <div class="mb-8">
+                            <a href="/" class="inline-flex items-center text-gray-600 hover:text-indigo-600 transition-colors duration-200">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                                 </svg>
-                            </div>
-                            <div class="ml-3">
-                                <h1 class="text-2xl font-bold text-gray-900">CCS Payment System</h1>
-                                <p class="text-sm text-gray-500">Streamline Your Payment Monitoring</p>
+                                <span class="text-sm font-medium">Back to Home</span>
+                            </a>
+                            
+                            <div class="mt-6 flex items-center">
+                                <div class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center">
+                                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                </div>
+                                <div class="ml-3">
+                                    <h1 class="text-2xl font-bold text-gray-900">CCS Payment System</h1>
+                                    <p class="text-sm text-gray-500">Streamline Your Payment Monitoring</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Form Content -->
-                    {{ $slot }}
+                        <!-- Form Content -->
+                        {{ $slot }}
+                    </div>
                 </div>
             </div>
 
-            <!-- Right Side - Gradient Background (Hidden on Mobile) -->
+            <!-- Right Side - Gradient Background (Hidden on Mobile, Fixed on Desktop) -->
             <div class="hidden lg:flex lg:w-1/2 auth-pattern items-center justify-center p-12 relative overflow-hidden">
                 <!-- Decorative Elements -->
                 <div class="absolute top-20 right-20 w-72 h-72 bg-white/10 rounded-full blur-3xl"></div>
@@ -157,21 +185,7 @@
                         </div>
                     </div>
                     
-                    <!-- Stats -->
-                    <div class="mt-12 grid grid-cols-3 gap-6">
-                        <div class="text-center">
-                            <div class="text-3xl font-bold text-white">1000+</div>
-                            <div class="text-sm text-indigo-200">Students</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-3xl font-bold text-white">₱5M+</div>
-                            <div class="text-sm text-indigo-200">Processed</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-3xl font-bold text-white">99.9%</div>
-                            <div class="text-sm text-indigo-200">Uptime</div>
-                        </div>
-                    </div>
+                   
                 </div>
             </div>
         </div>
