@@ -17,6 +17,20 @@ class PaymentController extends Controller
     {
         $query = Payment::with(['student', 'recordedBy']);
 
+        // Filter by block
+        if ($request->filled('block')) {
+            $query->whereHas('student', function ($q) use ($request) {
+                $q->where('block', $request->block);
+            });
+        }
+
+        // Filter by year level
+        if ($request->filled('year_level')) {
+            $query->whereHas('student', function ($q) use ($request) {
+                $q->where('year_level', $request->year_level);
+            });
+        }
+
         // Filter by status
         if ($request->filled('status')) {
             $query->where('status', $request->status);
@@ -40,7 +54,7 @@ class PaymentController extends Controller
             $search = $request->search;
             $query->whereHas('student', function ($q) use ($search) {
                 $q->where('full_name', 'like', "%{$search}%")
-                  ->orWhere('student_id', 'like', "%{$search}%");
+                    ->orWhere('student_id', 'like', "%{$search}%");
             });
         }
 
@@ -51,18 +65,36 @@ class PaymentController extends Controller
 
         $payments = $query->paginate(20);
 
-        // Statistics
+        // Statistics - apply same filters
+        $statsQuery = Payment::query();
+
+        if ($request->filled('block')) {
+            $statsQuery->whereHas('student', function ($q) use ($request) {
+                $q->where('block', $request->block);
+            });
+        }
+
+        if ($request->filled('year_level')) {
+            $statsQuery->whereHas('student', function ($q) use ($request) {
+                $q->where('year_level', $request->year_level);
+            });
+        }
+
         $stats = [
-            'total' => Payment::count(),
-            'total_amount' => Payment::where('status', 'paid')->sum('amount'),
-            'pending_count' => Payment::where('status', 'pending')->count(),
-            'pending_amount' => Payment::where('status', 'pending')->sum('amount'),
-            'today' => Payment::where('status', 'paid')
+            'total' => (clone $statsQuery)->count(),
+            'total_amount' => (clone $statsQuery)->where('status', 'paid')->sum('amount'),
+            'pending_count' => (clone $statsQuery)->where('status', 'pending')->count(),
+            'pending_amount' => (clone $statsQuery)->where('status', 'pending')->sum('amount'),
+            'today' => (clone $statsQuery)->where('status', 'paid')
                 ->whereDate('payment_date', today())
                 ->sum('amount'),
         ];
 
-        return view('admin.payments.index', compact('payments', 'stats'));
+        // Get available blocks and year levels for filters
+        $blocks = Student::whereNotNull('block')->distinct()->pluck('block')->sort();
+        $yearLevels = Student::distinct()->pluck('year_level')->sort();
+
+        return view('admin.payments.index', compact('payments', 'stats', 'blocks', 'yearLevels'));
     }
 
     /**
@@ -71,6 +103,7 @@ class PaymentController extends Controller
     public function show(Payment $payment)
     {
         $payment->load(['student', 'recordedBy']);
+
         return view('admin.payments.show', compact('payment'));
     }
 
@@ -82,7 +115,7 @@ class PaymentController extends Controller
         $payment->load('student');
         $students = Student::where('status', 'active')->orderBy('full_name')->get();
         $treasurers = User::where('role', 'treasurer')->orderBy('name')->get();
-        
+
         return view('admin.payments.edit', compact('payment', 'students', 'treasurers'));
     }
 

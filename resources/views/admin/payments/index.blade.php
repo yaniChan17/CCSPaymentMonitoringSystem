@@ -10,7 +10,7 @@
                 <h1 class="text-2xl font-bold text-gray-900">Payment Management</h1>
                 <p class="mt-1 text-sm text-gray-600">View and manage all payment records</p>
             </div>
-            <a href="{{ route('admin.reports.export-payments') }}" 
+            <a href="{{ route('admin.reports.export-payments', request()->only(['block', 'year_level', 'status', 'date_from', 'date_to'])) }}" 
                class="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors shadow-sm">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
@@ -79,10 +79,60 @@
             </div>
         </div>
 
+        <!-- Filter Status Message -->
+        @if(request()->filled('block') || request()->filled('year_level'))
+            <div class="bg-blue-50 border border-blue-200 text-blue-800 rounded-lg p-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                        </svg>
+                        <span>
+                            Showing {{ $stats['total'] }} payment(s)
+                            @if(request('block'))
+                                for <strong>Block {{ request('block') }}</strong>
+                            @endif
+                            @if(request('year_level'))
+                                @if(request('block')), @endif
+                                <strong>{{ request('year_level') }}</strong>
+                            @endif
+                        </span>
+                    </div>
+                    <a href="{{ route('admin.payments.index') }}" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                        Clear Filters
+                    </a>
+                </div>
+            </div>
+        @endif
+
         <!-- Filters -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
             <form method="GET" action="{{ route('admin.payments.index') }}" class="space-y-4">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- Block Filter -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Block</label>
+                        <select name="block" 
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                            <option value="">All Blocks</option>
+                            @foreach($blocks as $block)
+                                <option value="{{ $block }}" {{ request('block') === $block ? 'selected' : '' }}>Block {{ $block }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <!-- Year Level Filter -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Year Level</label>
+                        <select name="year_level" 
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                            <option value="">All Year Levels</option>
+                            @foreach($yearLevels as $yearLevel)
+                                <option value="{{ $yearLevel }}" {{ request('year_level') === $yearLevel ? 'selected' : '' }}>{{ $yearLevel }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
                     <!-- Search -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Search Student</label>
@@ -156,7 +206,7 @@
                                 class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
                             Apply Filters
                         </button>
-                        @if(request()->hasAny(['search', 'status', 'payment_method', 'date_from', 'date_to', 'sort']))
+                        @if(request()->hasAny(['search', 'status', 'payment_method', 'date_from', 'date_to', 'sort', 'block', 'year_level']))
                             <a href="{{ route('admin.payments.index') }}" 
                                class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">
                                 Clear

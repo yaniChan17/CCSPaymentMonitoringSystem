@@ -48,6 +48,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/reports/export-payments', [ReportController::class, 'exportPayments'])->name('reports.export-payments');
     Route::get('/reports/export-students', [ReportController::class, 'exportStudents'])->name('reports.export-students');
     Route::get('/reports/export-summary', [ReportController::class, 'exportSummary'])->name('reports.export-summary');
+    
+    // Settings
+    Route::get('/settings', [App\Http\Controllers\Admin\SettingsController::class, 'index'])->name('settings.index');
+    Route::put('/settings', [App\Http\Controllers\Admin\SettingsController::class, 'update'])->name('settings.update');
 });
 
 // Treasurer Routes
