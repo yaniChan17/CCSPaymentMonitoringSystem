@@ -23,8 +23,8 @@ class Setting extends Model
     public static function get(string $key, $default = null)
     {
         $setting = static::where('key', $key)->first();
-        
-        if (!$setting) {
+
+        if (! $setting) {
             return $default;
         }
 
@@ -50,7 +50,7 @@ class Setting extends Model
      */
     protected static function castValue($value, string $type)
     {
-        return match($type) {
+        return match ($type) {
             'boolean' => filter_var($value, FILTER_VALIDATE_BOOLEAN),
             'number' => is_numeric($value) ? (float) $value : 0,
             'json' => json_decode($value, true),

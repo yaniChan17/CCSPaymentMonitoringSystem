@@ -50,6 +50,7 @@ class ReportController extends Controller
             ->get()
             ->map(function ($item) {
                 $item->month_name = \Carbon\Carbon::create($item->year, $item->month, 1)->format('M Y');
+
                 return $item;
             });
 
@@ -73,13 +74,13 @@ class ReportController extends Controller
                 $q->where('block', $request->block);
             });
         }
-        
+
         if ($request->filled('year_level')) {
             $query->whereHas('student', function ($q) use ($request) {
                 $q->where('year_level', $request->year_level);
             });
         }
-        
+
         if ($request->filled('date_from')) {
             $query->whereDate('payment_date', '>=', $request->date_from);
         }
@@ -94,27 +95,27 @@ class ReportController extends Controller
 
         // Build filename with filter information
         $filenameParts = ['payments'];
-        
+
         if ($request->filled('block')) {
-            $filenameParts[] = 'block_' . strtolower(str_replace(' ', '_', $request->block));
+            $filenameParts[] = 'block_'.strtolower(str_replace(' ', '_', $request->block));
         }
-        
+
         if ($request->filled('year_level')) {
             $yearLevel = strtolower(str_replace(['st', 'nd', 'rd', 'th', ' '], ['', '', '', '', '_'], $request->year_level));
-            $filenameParts[] = 'year_' . $yearLevel;
+            $filenameParts[] = 'year_'.$yearLevel;
         }
-        
+
         $filenameParts[] = now()->format('Y-m-d_His');
-        $filename = implode('_', $filenameParts) . '.csv';
+        $filename = implode('_', $filenameParts).'.csv';
 
         $headers = [
             'Content-Type' => 'text/csv',
             'Content-Disposition' => "attachment; filename=\"{$filename}\"",
         ];
 
-        $callback = function() use ($payments) {
+        $callback = function () use ($payments) {
             $file = fopen('php://output', 'w');
-            
+
             // CSV Headers
             fputcsv($file, [
                 'Payment ID',
@@ -128,7 +129,7 @@ class ReportController extends Controller
                 'Status',
                 'Reference Number',
                 'Recorded By',
-                'Notes'
+                'Notes',
             ]);
 
             // CSV Data
@@ -145,7 +146,7 @@ class ReportController extends Controller
                     ucfirst($payment->status),
                     $payment->reference_number ?? 'N/A',
                     $payment->recordedBy->name ?? 'System',
-                    $payment->notes ?? ''
+                    $payment->notes ?? '',
                 ]);
             }
 
@@ -172,16 +173,16 @@ class ReportController extends Controller
 
         $students = $query->orderBy('full_name')->get();
 
-        $filename = 'students_report_' . now()->format('Y-m-d_His') . '.csv';
+        $filename = 'students_report_'.now()->format('Y-m-d_His').'.csv';
 
         $headers = [
             'Content-Type' => 'text/csv',
             'Content-Disposition' => "attachment; filename=\"{$filename}\"",
         ];
 
-        $callback = function() use ($students) {
+        $callback = function () use ($students) {
             $file = fopen('php://output', 'w');
-            
+
             // CSV Headers
             fputcsv($file, [
                 'Student ID',
@@ -193,14 +194,14 @@ class ReportController extends Controller
                 'Total Payments',
                 'Total Paid Amount',
                 'Pending Amount',
-                'Outstanding Balance'
+                'Outstanding Balance',
             ]);
 
             // CSV Data
             foreach ($students as $student) {
                 $totalPaid = $student->payments->where('status', 'paid')->sum('amount');
                 $pendingAmount = $student->payments->where('status', 'pending')->sum('amount');
-                
+
                 fputcsv($file, [
                     $student->student_id,
                     $student->full_name,
@@ -211,7 +212,7 @@ class ReportController extends Controller
                     $student->payments->count(),
                     number_format($totalPaid, 2),
                     number_format($pendingAmount, 2),
-                    number_format($student->balance ?? 0, 2)
+                    number_format($student->balance ?? 0, 2),
                 ]);
             }
 
@@ -259,8 +260,9 @@ class ReportController extends Controller
             ->orderBy('total_collected', 'desc')
             ->limit(10)
             ->get()
-            ->map(function($item) {
+            ->map(function ($item) {
                 $item->treasurer = User::find($item->recorded_by);
+
                 return $item;
             });
 
@@ -299,32 +301,32 @@ class ReportController extends Controller
         $totalPending = $payments->where('status', 'pending')->sum('amount');
         $totalCancelled = $payments->where('status', 'cancelled')->sum('amount');
 
-        $filename = 'summary_report_' . now()->format('Y-m-d_His') . '.csv';
+        $filename = 'summary_report_'.now()->format('Y-m-d_His').'.csv';
 
         $headers = [
             'Content-Type' => 'text/csv',
             'Content-Disposition' => "attachment; filename=\"{$filename}\"",
         ];
 
-        $callback = function() use ($payments, $totalPaid, $totalPending, $totalCancelled, $request) {
+        $callback = function () use ($payments, $totalPaid, $totalPending, $totalCancelled, $request) {
             $file = fopen('php://output', 'w');
 
             // Add summary header
             fputcsv($file, ['SUMMARY REPORT']);
             fputcsv($file, ['Generated:', now()->format('Y-m-d H:i:s')]);
-            
+
             if ($request->filled('date_from') && $request->filled('date_to')) {
-                fputcsv($file, ['Period:', $request->date_from . ' to ' . $request->date_to]);
+                fputcsv($file, ['Period:', $request->date_from.' to '.$request->date_to]);
             } elseif ($request->filled('date_from')) {
-                fputcsv($file, ['Period:', 'From ' . $request->date_from]);
+                fputcsv($file, ['Period:', 'From '.$request->date_from]);
             } elseif ($request->filled('date_to')) {
-                fputcsv($file, ['Period:', 'Until ' . $request->date_to]);
+                fputcsv($file, ['Period:', 'Until '.$request->date_to]);
             } else {
                 fputcsv($file, ['Period:', 'All Time']);
             }
-            
+
             fputcsv($file, []);
-            
+
             // Summary statistics
             fputcsv($file, ['SUMMARY STATISTICS']);
             fputcsv($file, ['Total Payments:', $payments->count()]);
@@ -345,7 +347,7 @@ class ReportController extends Controller
                 'Status',
                 'Reference Number',
                 'Recorded By',
-                'Notes'
+                'Notes',
             ]);
 
             // Payment details
@@ -360,7 +362,7 @@ class ReportController extends Controller
                     ucfirst($payment->status),
                     $payment->reference_number ?? 'N/A',
                     $payment->recordedBy->name ?? 'System',
-                    $payment->notes ?? ''
+                    $payment->notes ?? '',
                 ]);
             }
 

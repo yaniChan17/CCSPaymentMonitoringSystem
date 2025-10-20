@@ -54,7 +54,7 @@ class PaymentController extends Controller
             $search = $request->search;
             $query->whereHas('student', function ($q) use ($search) {
                 $q->where('full_name', 'like', "%{$search}%")
-                  ->orWhere('student_id', 'like', "%{$search}%");
+                    ->orWhere('student_id', 'like', "%{$search}%");
             });
         }
 
@@ -67,13 +67,13 @@ class PaymentController extends Controller
 
         // Statistics - apply same filters
         $statsQuery = Payment::query();
-        
+
         if ($request->filled('block')) {
             $statsQuery->whereHas('student', function ($q) use ($request) {
                 $q->where('block', $request->block);
             });
         }
-        
+
         if ($request->filled('year_level')) {
             $statsQuery->whereHas('student', function ($q) use ($request) {
                 $q->where('year_level', $request->year_level);
@@ -103,6 +103,7 @@ class PaymentController extends Controller
     public function show(Payment $payment)
     {
         $payment->load(['student', 'recordedBy']);
+
         return view('admin.payments.show', compact('payment'));
     }
 
@@ -114,7 +115,7 @@ class PaymentController extends Controller
         $payment->load('student');
         $students = Student::where('status', 'active')->orderBy('full_name')->get();
         $treasurers = User::where('role', 'treasurer')->orderBy('name')->get();
-        
+
         return view('admin.payments.edit', compact('payment', 'students', 'treasurers'));
     }
 

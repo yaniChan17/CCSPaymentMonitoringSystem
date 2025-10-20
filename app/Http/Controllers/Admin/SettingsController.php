@@ -17,12 +17,12 @@ class SettingsController extends Controller
             // Academic Settings
             'academic_year' => Setting::get('academic_year', '2024-2025'),
             'semester' => Setting::get('semester', '1st Semester'),
-            
+
             // Payment Settings
             'default_payment_amount' => Setting::get('default_payment_amount', '500.00'),
             'late_fee' => Setting::get('late_fee', '50.00'),
             'payment_deadline_day' => Setting::get('payment_deadline_day', '15'),
-            
+
             // System Settings
             'system_name' => Setting::get('system_name', 'CSS Payment Monitoring System'),
             'contact_email' => Setting::get('contact_email', 'css@example.com'),
@@ -49,10 +49,10 @@ class SettingsController extends Controller
         ]);
 
         foreach ($validated as $key => $value) {
-            $type = in_array($key, ['default_payment_amount', 'late_fee', 'payment_deadline_day']) 
-                ? 'number' 
+            $type = in_array($key, ['default_payment_amount', 'late_fee', 'payment_deadline_day'])
+                ? 'number'
                 : 'string';
-            
+
             Setting::set($key, $value, $type);
         }
 
