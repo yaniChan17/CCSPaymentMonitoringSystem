@@ -68,6 +68,18 @@ class ReportController extends Controller
         $query = Payment::with(['student', 'recordedBy']);
 
         // Apply filters
+        if ($request->filled('block')) {
+            $query->whereHas('student', function ($q) use ($request) {
+                $q->where('block', $request->block);
+            });
+        }
+        
+        if ($request->filled('year_level')) {
+            $query->whereHas('student', function ($q) use ($request) {
+                $q->where('year_level', $request->year_level);
+            });
+        }
+        
         if ($request->filled('date_from')) {
             $query->whereDate('payment_date', '>=', $request->date_from);
         }
@@ -80,7 +92,20 @@ class ReportController extends Controller
 
         $payments = $query->orderBy('payment_date', 'desc')->get();
 
-        $filename = 'payments_report_' . now()->format('Y-m-d_His') . '.csv';
+        // Build filename with filter information
+        $filenameParts = ['payments'];
+        
+        if ($request->filled('block')) {
+            $filenameParts[] = 'block_' . strtolower(str_replace(' ', '_', $request->block));
+        }
+        
+        if ($request->filled('year_level')) {
+            $yearLevel = strtolower(str_replace(['st', 'nd', 'rd', 'th', ' '], ['', '', '', '', '_'], $request->year_level));
+            $filenameParts[] = 'year_' . $yearLevel;
+        }
+        
+        $filenameParts[] = now()->format('Y-m-d_His');
+        $filename = implode('_', $filenameParts) . '.csv';
 
         $headers = [
             'Content-Type' => 'text/csv',
@@ -96,6 +121,8 @@ class ReportController extends Controller
                 'Date',
                 'Student ID',
                 'Student Name',
+                'Year Level',
+                'Block',
                 'Amount',
                 'Payment Method',
                 'Status',
@@ -111,6 +138,8 @@ class ReportController extends Controller
                     $payment->payment_date->format('Y-m-d'),
                     $payment->student->student_id ?? 'N/A',
                     $payment->student->full_name ?? 'N/A',
+                    $payment->student->year_level ?? 'N/A',
+                    $payment->student->block ?? 'N/A',
                     number_format($payment->amount, 2),
                     ucfirst(str_replace('_', ' ', $payment->payment_method)),
                     ucfirst($payment->status),

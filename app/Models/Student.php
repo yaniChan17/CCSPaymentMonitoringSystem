@@ -26,6 +26,7 @@ class Student extends Model
         'contact_number',
         'course',
         'year_level',
+        'block',
         'total_fees',
         'balance',
         'status',
