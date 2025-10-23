@@ -19,13 +19,18 @@
                     <div class="text-white">
                         <h3 class="text-2xl font-bold">{{ $student->full_name }}</h3>
                         <p class="text-indigo-100 text-sm mt-1">{{ $student->student_id }}</p>
-                        <div class="flex items-center space-x-2 mt-2">
+                        <div class="flex items-center space-x-2 mt-2 flex-wrap">
                             <span class="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs font-medium">
                                 {{ $student->course }}
                             </span>
                             <span class="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs font-medium">
                                 Year {{ $student->year_level }}
                             </span>
+                            @if($student->block)
+                                <span class="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs font-medium">
+                                    Block {{ $student->block }}
+                                </span>
+                            @endif
                             @if($student->status === 'active')
                                 <span class="px-3 py-1 bg-green-400/30 backdrop-blur-sm rounded-full text-xs font-semibold flex items-center">
                                     <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">

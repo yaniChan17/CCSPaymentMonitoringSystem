@@ -7,6 +7,8 @@ use App\Models\Payment;
 use App\Models\Student;
 use App\Models\User;
 use Illuminate\Http\Request;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class PaymentController extends Controller
 {
@@ -16,6 +18,15 @@ class PaymentController extends Controller
     public function index(Request $request)
     {
         $query = Payment::with(['student', 'recordedBy']);
+
+        // Search by student name or ID (FIRST)
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->whereHas('student', function ($q) use ($search) {
+                $q->where('student_id', 'like', "%{$search}%")
+                    ->orWhereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ["%{$search}%"]);
+            });
+        }
 
         // Filter by block
         if ($request->filled('block')) {
@@ -28,6 +39,13 @@ class PaymentController extends Controller
         if ($request->filled('year_level')) {
             $query->whereHas('student', function ($q) use ($request) {
                 $q->where('year_level', $request->year_level);
+            });
+        }
+
+        // Filter by course
+        if ($request->filled('course')) {
+            $query->whereHas('student', function ($q) use ($request) {
+                $q->where('course', $request->course);
             });
         }
 
@@ -47,15 +65,6 @@ class PaymentController extends Controller
         }
         if ($request->filled('date_to')) {
             $query->whereDate('payment_date', '<=', $request->date_to);
-        }
-
-        // Search by student name or ID
-        if ($request->filled('search')) {
-            $search = $request->search;
-            $query->whereHas('student', function ($q) use ($search) {
-                $q->where('full_name', 'like', "%{$search}%")
-                    ->orWhere('student_id', 'like', "%{$search}%");
-            });
         }
 
         // Sort
@@ -90,11 +99,12 @@ class PaymentController extends Controller
                 ->sum('amount'),
         ];
 
-        // Get available blocks and year levels for filters
+        // Get available blocks, year levels, and courses for filters
         $blocks = Student::whereNotNull('block')->distinct()->pluck('block')->sort();
         $yearLevels = Student::distinct()->pluck('year_level')->sort();
+        $courses = Student::distinct()->pluck('course')->sort();
 
-        return view('admin.payments.index', compact('payments', 'stats', 'blocks', 'yearLevels'));
+        return view('admin.payments.index', compact('payments', 'stats', 'blocks', 'yearLevels', 'courses'));
     }
 
     /**
@@ -149,5 +159,125 @@ class PaymentController extends Controller
 
         return redirect()->route('admin.payments.index')
             ->with('success', 'Payment deleted successfully!');
+    }
+
+    /**
+     * Export payments to Excel.
+     */
+    public function export(Request $request)
+    {
+        try {
+            $query = Payment::with(['student', 'recordedBy']);
+
+            // Apply same filters as index
+            if ($request->filled('search')) {
+                $search = $request->search;
+                $query->whereHas('student', function ($q) use ($search) {
+                    $q->where('student_id', 'like', "%{$search}%")
+                        ->orWhereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ["%{$search}%"]);
+                });
+            }
+
+            if ($request->filled('block')) {
+                $query->whereHas('student', function ($q) use ($request) {
+                    $q->where('block', $request->block);
+                });
+            }
+
+            if ($request->filled('year_level')) {
+                $query->whereHas('student', function ($q) use ($request) {
+                    $q->where('year_level', $request->year_level);
+                });
+            }
+
+            if ($request->filled('course')) {
+                $query->whereHas('student', function ($q) use ($request) {
+                    $q->where('course', $request->course);
+                });
+            }
+
+            if ($request->filled('status')) {
+                $query->where('status', $request->status);
+            }
+
+            if ($request->filled('date_from')) {
+                $query->whereDate('payment_date', '>=', $request->date_from);
+            }
+
+            if ($request->filled('date_to')) {
+                $query->whereDate('payment_date', '<=', $request->date_to);
+            }
+
+            $payments = $query->orderBy('payment_date', 'desc')->get();
+
+            // Create new Spreadsheet
+            $spreadsheet = new Spreadsheet();
+            $sheet = $spreadsheet->getActiveSheet();
+
+            // Set headers
+            $headers = [
+                'Payment ID',
+                'Payment Date',
+                'Student Number',
+                'Student Name',
+                'Course',
+                'Year Level',
+                'Block Number',
+                'Amount',
+                'Payment Type',
+                'Status',
+                'Reference Number',
+                'Recorded By',
+                'Notes',
+            ];
+
+            $col = 'A';
+            foreach ($headers as $header) {
+                $sheet->setCellValue($col.'1', $header);
+                $sheet->getStyle($col.'1')->getFont()->setBold(true);
+                $col++;
+            }
+
+            // Add data
+            $row = 2;
+            foreach ($payments as $payment) {
+                $sheet->setCellValue('A'.$row, $payment->id);
+                $sheet->setCellValue('B'.$row, $payment->payment_date->format('Y-m-d'));
+                $sheet->setCellValue('C'.$row, $payment->student->student_id ?? 'N/A');
+                $sheet->setCellValue('D'.$row, $payment->student->full_name ?? 'N/A');
+                $sheet->setCellValue('E'.$row, $payment->student->course ?? 'N/A');
+                $sheet->setCellValue('F'.$row, $payment->student->year_level ?? 'N/A');
+                $sheet->setCellValue('G'.$row, $payment->student->block ?? 'N/A');
+                $sheet->setCellValue('H'.$row, number_format($payment->amount, 2));
+                $sheet->setCellValue('I'.$row, ucfirst(str_replace('_', ' ', $payment->payment_method)));
+                $sheet->setCellValue('J'.$row, ucfirst($payment->status));
+                $sheet->setCellValue('K'.$row, $payment->reference_number ?? 'N/A');
+                $sheet->setCellValue('L'.$row, $payment->recordedBy->name ?? 'System');
+                $sheet->setCellValue('M'.$row, $payment->notes ?? '');
+                $row++;
+            }
+
+            // Auto-size columns
+            foreach (range('A', 'M') as $col) {
+                $sheet->getColumnDimension($col)->setAutoSize(true);
+            }
+
+            // Generate filename
+            $filename = 'payments_export_'.now()->format('Y-m-d_His').'.xlsx';
+
+            // Create writer and output
+            $writer = new Xlsx($spreadsheet);
+
+            // Set headers for download
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Disposition: attachment;filename="'.$filename.'"');
+            header('Cache-Control: max-age=0');
+
+            $writer->save('php://output');
+            exit;
+        } catch (\Exception $e) {
+            return redirect()->route('admin.payments.index')
+                ->with('error', 'Export failed: '.$e->getMessage());
+        }
     }
 }
