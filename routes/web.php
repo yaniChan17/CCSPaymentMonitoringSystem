@@ -41,6 +41,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     
     // Payment Management
     Route::resource('payments', AdminPaymentController::class)->except(['create', 'store']);
+    Route::get('/payments-export', [AdminPaymentController::class, 'export'])->name('payments.export');
     
     // Reports
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');

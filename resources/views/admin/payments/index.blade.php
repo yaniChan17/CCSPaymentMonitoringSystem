@@ -10,12 +10,12 @@
                 <h1 class="text-2xl font-bold text-gray-900">Payment Management</h1>
                 <p class="mt-1 text-sm text-gray-600">View and manage all payment records</p>
             </div>
-            <a href="{{ route('admin.reports.export-payments', request()->only(['block', 'year_level', 'status', 'date_from', 'date_to'])) }}" 
+            <a href="{{ route('admin.payments.export', request()->all()) }}" 
                class="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors shadow-sm">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                 </svg>
-                Export CSV
+                Export Excel
             </a>
         </div>
 
@@ -80,7 +80,7 @@
         </div>
 
         <!-- Filter Status Message -->
-        @if(request()->filled('block') || request()->filled('year_level'))
+        @if(request()->hasAny(['search', 'block', 'year_level', 'course', 'status', 'date_from', 'date_to']))
             <div class="bg-blue-50 border border-blue-200 text-blue-800 rounded-lg p-4">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center">
@@ -89,12 +89,20 @@
                         </svg>
                         <span>
                             Showing {{ $stats['total'] }} payment(s)
+                            @if(request('search'))
+                                matching "<strong>{{ request('search') }}</strong>"
+                            @endif
                             @if(request('block'))
+                                @if(request('search')), @endif
                                 for <strong>Block {{ request('block') }}</strong>
                             @endif
                             @if(request('year_level'))
-                                @if(request('block')), @endif
+                                @if(request('search') || request('block')), @endif
                                 <strong>{{ request('year_level') }}</strong>
+                            @endif
+                            @if(request('course'))
+                                @if(request('search') || request('block') || request('year_level')), @endif
+                                <strong>{{ request('course') }}</strong>
                             @endif
                         </span>
                     </div>
@@ -108,10 +116,25 @@
         <!-- Filters -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
             <form method="GET" action="{{ route('admin.payments.index') }}" class="space-y-4">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- First Row: Search (Priority) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="lg:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            <svg class="inline-block w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                            </svg>
+                            Search Student
+                        </label>
+                        <input type="text" 
+                               name="search" 
+                               value="{{ request('search') }}"
+                               placeholder="Search by student name or ID..." 
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                    </div>
+
                     <!-- Block Filter -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Block</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Block Number</label>
                         <select name="block" 
                                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                             <option value="">All Blocks</option>
@@ -120,7 +143,10 @@
                             @endforeach
                         </select>
                     </div>
+                </div>
 
+                <!-- Second Row: Other Filters -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <!-- Year Level Filter -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Year Level</label>
@@ -133,19 +159,21 @@
                         </select>
                     </div>
 
-                    <!-- Search -->
+                    <!-- Course Filter -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Search Student</label>
-                        <input type="text" 
-                               name="search" 
-                               value="{{ request('search') }}"
-                               placeholder="Name or ID..." 
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Course</label>
+                        <select name="course" 
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                            <option value="">All Courses</option>
+                            @foreach($courses as $course)
+                                <option value="{{ $course }}" {{ request('course') === $course ? 'selected' : '' }}>{{ $course }}</option>
+                            @endforeach
+                        </select>
                     </div>
 
                     <!-- Status Filter -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Payment Status</label>
                         <select name="status" 
                                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                             <option value="">All Status</option>
@@ -158,41 +186,29 @@
                     <!-- Payment Method Filter -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Payment Method</label>
-                        <select name="payment_method" 
+                        <select name="method" 
                                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                             <option value="">All Methods</option>
-                            <option value="cash" {{ request('payment_method') === 'cash' ? 'selected' : '' }}>Cash</option>
-                            <option value="check" {{ request('payment_method') === 'check' ? 'selected' : '' }}>Check</option>
-                            <option value="bank_transfer" {{ request('payment_method') === 'bank_transfer' ? 'selected' : '' }}>Bank Transfer</option>
-                            <option value="online" {{ request('payment_method') === 'online' ? 'selected' : '' }}>Online</option>
-                        </select>
-                    </div>
-
-                    <!-- Sort -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Sort By</label>
-                        <select name="sort" 
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-                            <option value="payment_date_desc" {{ request('sort', 'payment_date_desc') === 'payment_date_desc' ? 'selected' : '' }}>Date (Newest)</option>
-                            <option value="payment_date_asc" {{ request('sort') === 'payment_date_asc' ? 'selected' : '' }}>Date (Oldest)</option>
-                            <option value="amount_desc" {{ request('sort') === 'amount_desc' ? 'selected' : '' }}>Amount (High to Low)</option>
-                            <option value="amount_asc" {{ request('sort') === 'amount_asc' ? 'selected' : '' }}>Amount (Low to High)</option>
+                            <option value="cash" {{ request('method') === 'cash' ? 'selected' : '' }}>Cash</option>
+                            <option value="check" {{ request('method') === 'check' ? 'selected' : '' }}>Check</option>
+                            <option value="bank_transfer" {{ request('method') === 'bank_transfer' ? 'selected' : '' }}>Bank Transfer</option>
+                            <option value="online" {{ request('method') === 'online' ? 'selected' : '' }}>Online</option>
                         </select>
                     </div>
                 </div>
 
+                <!-- Third Row: Date Range -->
                 <div class="flex flex-col sm:flex-row gap-4">
-                    <!-- Date Range -->
                     <div class="flex-1 grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">From Date</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Date Range - From</label>
                             <input type="date" 
                                    name="date_from" 
                                    value="{{ request('date_from') }}"
                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">To Date</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Date Range - To</label>
                             <input type="date" 
                                    name="date_to" 
                                    value="{{ request('date_to') }}"
@@ -203,13 +219,13 @@
                     <!-- Action Buttons -->
                     <div class="flex items-end space-x-2">
                         <button type="submit" 
-                                class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
+                                class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors shadow-sm">
                             Apply Filters
                         </button>
-                        @if(request()->hasAny(['search', 'status', 'payment_method', 'date_from', 'date_to', 'sort', 'block', 'year_level']))
+                        @if(request()->hasAny(['search', 'status', 'method', 'date_from', 'date_to', 'block', 'year_level', 'course']))
                             <a href="{{ route('admin.payments.index') }}" 
                                class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">
-                                Clear
+                                Clear All
                             </a>
                         @endif
                     </div>
