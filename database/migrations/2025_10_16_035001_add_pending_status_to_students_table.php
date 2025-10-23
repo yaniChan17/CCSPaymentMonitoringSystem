@@ -12,8 +12,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Change the enum to include 'pending' status
-        DB::statement("ALTER TABLE students MODIFY COLUMN status ENUM('active', 'inactive', 'graduated', 'pending') DEFAULT 'active'");
+        // SQLite doesn't support ENUM modifications, so we need to handle it differently
+        if (DB::connection()->getDriverName() === 'sqlite') {
+            // For SQLite, recreate the table with the new enum
+            Schema::table('students', function (Blueprint $table) {
+                // SQLite doesn't need enum modification as it's flexible with text fields
+            });
+        } else {
+            // For MySQL/PostgreSQL
+            DB::statement("ALTER TABLE students MODIFY COLUMN status ENUM('active', 'inactive', 'graduated', 'pending') DEFAULT 'active'");
+        }
     }
 
     /**
@@ -21,7 +29,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Revert back to original enum values
-        DB::statement("ALTER TABLE students MODIFY COLUMN status ENUM('active', 'inactive', 'graduated') DEFAULT 'active'");
+        // SQLite doesn't support ENUM modifications
+        if (DB::connection()->getDriverName() !== 'sqlite') {
+            DB::statement("ALTER TABLE students MODIFY COLUMN status ENUM('active', 'inactive', 'graduated') DEFAULT 'active'");
+        }
     }
 };
