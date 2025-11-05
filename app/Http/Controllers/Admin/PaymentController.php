@@ -42,13 +42,6 @@ class PaymentController extends Controller
             });
         }
 
-        // Filter by course
-        if ($request->filled('course')) {
-            $query->whereHas('student', function ($q) use ($request) {
-                $q->where('course', $request->course);
-            });
-        }
-
         // Filter by status
         if ($request->filled('status')) {
             $query->where('status', $request->status);
@@ -99,12 +92,11 @@ class PaymentController extends Controller
                 ->sum('amount'),
         ];
 
-        // Get available blocks, year levels, and courses for filters
+        // Get available blocks and year levels for filters
         $blocks = Student::whereNotNull('block')->distinct()->pluck('block')->sort();
         $yearLevels = Student::distinct()->pluck('year_level')->sort();
-        $courses = Student::distinct()->pluck('course')->sort();
 
-        return view('admin.payments.index', compact('payments', 'stats', 'blocks', 'yearLevels', 'courses'));
+        return view('admin.payments.index', compact('payments', 'stats', 'blocks', 'yearLevels'));
     }
 
     /**
@@ -190,12 +182,6 @@ class PaymentController extends Controller
                 });
             }
 
-            if ($request->filled('course')) {
-                $query->whereHas('student', function ($q) use ($request) {
-                    $q->where('course', $request->course);
-                });
-            }
-
             if ($request->filled('status')) {
                 $query->where('status', $request->status);
             }
@@ -265,16 +251,15 @@ class PaymentController extends Controller
             // Generate filename
             $filename = 'payments_export_'.now()->format('Y-m-d_His').'.xlsx';
 
-            // Create writer and output
+            // Create writer and save to temp file
             $writer = new Xlsx($spreadsheet);
+            $tempFile = tempnam(sys_get_temp_dir(), 'excel_');
+            $writer->save($tempFile);
 
-            // Set headers for download
-            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-            header('Content-Disposition: attachment;filename="'.$filename.'"');
-            header('Cache-Control: max-age=0');
-
-            $writer->save('php://output');
-            exit;
+            // Return as download response
+            return response()->download($tempFile, $filename, [
+                'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            ])->deleteFileAfterSend(true);
         } catch (\Exception $e) {
             return redirect()->route('admin.payments.index')
                 ->with('error', 'Export failed: '.$e->getMessage());

@@ -70,16 +70,16 @@
         </div>
 
         <!-- Quick Actions Card -->
-        <div class="stat-card bg-gradient-to-br from-indigo-500 to-purple-600 overflow-hidden shadow-md rounded-xl hover-lift border border-indigo-300">
+        <div class="stat-card bg-gradient-to-br from-primary-500 to-accent-600 overflow-hidden shadow-md rounded-xl hover-lift border border-indigo-300">
             <div class="p-6">
                 <div class="text-xs font-semibold text-indigo-100 uppercase tracking-wider mb-3">Quick Actions</div>
-                <button class="w-full bg-white hover:bg-gray-50 text-indigo-700 font-semibold py-3 px-4 rounded-lg transition-all duration-200 hover:shadow-lg flex items-center justify-center space-x-2">
+                <button class="w-full bg-white hover:bg-gray-50 text-primary-700 font-semibold py-3 px-4 rounded-lg transition-all duration-200 hover:shadow-lg flex items-center justify-center space-x-2">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                     </svg>
                     <span>Record Payment</span>
                 </button>
-                <button class="w-full mt-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 text-sm">
+                <button class="w-full mt-2 bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 text-sm">
                     Search Student
                 </button>
             </div>
@@ -94,7 +94,7 @@
                     <h3 class="text-lg font-semibold text-gray-900">My Recent Payments</h3>
                     <p class="text-sm text-gray-500 mt-1">Payments you've recorded today</p>
                 </div>
-                <a href="#" class="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
+                <a href="#" class="inline-flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
                     View All
                     <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
@@ -123,7 +123,7 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
-                                    <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center text-white text-xs font-semibold mr-3">
+                                    <div class="w-8 h-8 bg-gradient-to-br from-primary-500 to-accent-600 rounded-full flex items-center justify-center text-white text-xs font-semibold mr-3">
                                         {{ strtoupper(substr($payment->student->full_name, 0, 2)) }}
                                     </div>
                                     <div>
@@ -160,7 +160,7 @@
                                 @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                <button class="text-indigo-600 hover:text-indigo-900 mr-3 transition-colors">
+                                <button class="text-primary-600 hover:text-primary-900 mr-3 transition-colors">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                     </svg>
@@ -181,7 +181,7 @@
                                 <h3 class="mt-2 text-sm font-medium text-gray-900">No payments recorded yet</h3>
                                 <p class="mt-1 text-sm text-gray-500">Start by recording your first payment.</p>
                                 <div class="mt-6">
-                                    <button class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                                    <button class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700">
                                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                                         </svg>

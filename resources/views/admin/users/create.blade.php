@@ -39,7 +39,7 @@
                                        id="name" 
                                        value="{{ old('name') }}"
                                        required
-                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('name') border-red-500 @enderror">
+                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('name') border-red-500 @enderror">
                                 @error('name')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
@@ -55,7 +55,7 @@
                                        id="email" 
                                        value="{{ old('email') }}"
                                        required
-                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('email') border-red-500 @enderror">
+                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('email') border-red-500 @enderror">
                                 @error('email')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
@@ -70,7 +70,7 @@
                                         id="role" 
                                         x-model="role"
                                         required
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('role') border-red-500 @enderror">
+                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('role') border-red-500 @enderror">
                                     <option value="student" {{ old('role', 'student') === 'student' ? 'selected' : '' }}>Student</option>
                                     <option value="treasurer" {{ old('role') === 'treasurer' ? 'selected' : '' }}>Treasurer</option>
                                     <option value="admin" {{ old('role') === 'admin' ? 'selected' : '' }}>Admin</option>
@@ -89,7 +89,7 @@
                                        name="password" 
                                        id="password" 
                                        required
-                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('password') border-red-500 @enderror">
+                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('password') border-red-500 @enderror">
                                 @error('password')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
@@ -105,7 +105,7 @@
                                        name="password_confirmation" 
                                        id="password_confirmation" 
                                        required
-                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
                             </div>
                         </div>
                     </div>
@@ -126,26 +126,19 @@
                                        name="student_id" 
                                        id="student_id" 
                                        value="{{ old('student_id') }}"
-                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('student_id') border-red-500 @enderror">
+                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('student_id') border-red-500 @enderror">
                                 @error('student_id')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
 
-                            <!-- Course -->
-                            <div>
-                                <label for="course" class="block text-sm font-medium text-gray-700 mb-1">
-                                    Course <span class="text-red-500">*</span>
-                                </label>
-                                <input type="text" 
-                                       name="course" 
-                                       id="course" 
-                                       value="{{ old('course') }}"
-                                       placeholder="e.g., BSCS, BSIT, BSCE"
-                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('course') border-red-500 @enderror">
-                                @error('course')
-                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                                @enderror
+                            <!-- Course (Fixed to BSIT for CCS) -->
+                            <input type="hidden" name="course" value="BSIT">
+                            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                <p class="text-sm text-blue-800">
+                                    <strong>Course:</strong> BSIT (Bachelor of Science in Information Technology)
+                                    <br><span class="text-xs">All CCS students are enrolled in the BSIT program</span>
+                                </p>
                             </div>
 
                             <!-- Year Level -->
@@ -155,7 +148,7 @@
                                 </label>
                                 <select name="year_level" 
                                         id="year_level"
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('year_level') border-red-500 @enderror">
+                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('year_level') border-red-500 @enderror">
                                     <option value="">Select Year Level</option>
                                     <option value="1" {{ old('year_level') == '1' ? 'selected' : '' }}>1st Year</option>
                                     <option value="2" {{ old('year_level') == '2' ? 'selected' : '' }}>2nd Year</option>
@@ -163,6 +156,26 @@
                                     <option value="4" {{ old('year_level') == '4' ? 'selected' : '' }}>4th Year</option>
                                 </select>
                                 @error('year_level')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <!-- Block Number -->
+                            <div>
+                                <label for="block" class="block text-sm font-medium text-gray-700 mb-1">
+                                    Block Number <span class="text-red-500">*</span>
+                                </label>
+                                <select name="block" 
+                                        id="block"
+                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('block') border-red-500 @enderror">
+                                    <option value="">Select Block</option>
+                                    <option value="1" {{ old('block') == '1' ? 'selected' : '' }}>Block 1</option>
+                                    <option value="2" {{ old('block') == '2' ? 'selected' : '' }}>Block 2</option>
+                                    <option value="3" {{ old('block') == '3' ? 'selected' : '' }}>Block 3</option>
+                                    <option value="4" {{ old('block') == '4' ? 'selected' : '' }}>Block 4</option>
+                                    <option value="5" {{ old('block') == '5' ? 'selected' : '' }}>Block 5</option>
+                                </select>
+                                @error('block')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
@@ -177,7 +190,7 @@
                         Cancel
                     </a>
                     <button type="submit" 
-                            class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors shadow-sm">
+                            class="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors shadow-sm">
                         Create User
                     </button>
                 </div>

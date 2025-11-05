@@ -32,7 +32,7 @@
             <!-- System Information -->
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                 <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                    <svg class="w-5 h-5 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5 mr-2 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                     System Information
@@ -44,7 +44,7 @@
                         <input type="text" 
                                name="system_name" 
                                value="{{ old('system_name', $settings['system_name']) }}"
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('system_name') border-red-500 @enderror"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('system_name') border-red-500 @enderror"
                                placeholder="CCS Payment Monitoring System">
                         @error('system_name')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -56,7 +56,7 @@
                         <input type="text" 
                                name="college_name" 
                                value="{{ old('college_name', $settings['college_name']) }}"
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('college_name') border-red-500 @enderror"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('college_name') border-red-500 @enderror"
                                placeholder="College of Computer Studies">
                         @error('college_name')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -68,7 +68,7 @@
                         <input type="text" 
                                name="academic_year" 
                                value="{{ old('academic_year', $settings['academic_year']) }}"
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('academic_year') border-red-500 @enderror"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('academic_year') border-red-500 @enderror"
                                placeholder="e.g., 2024-2025">
                         @error('academic_year')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -78,7 +78,7 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Semester</label>
                         <select name="semester" 
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('semester') border-red-500 @enderror">
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('semester') border-red-500 @enderror">
                             <option value="1st Semester" {{ old('semester', $settings['semester']) === '1st Semester' ? 'selected' : '' }}>1st Semester</option>
                             <option value="2nd Semester" {{ old('semester', $settings['semester']) === '2nd Semester' ? 'selected' : '' }}>2nd Semester</option>
                             <option value="Summer" {{ old('semester', $settings['semester']) === 'Summer' ? 'selected' : '' }}>Summer</option>
@@ -107,7 +107,7 @@
                                value="{{ old('default_payment_amount', $settings['default_payment_amount']) }}"
                                step="0.01"
                                min="0"
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('default_payment_amount') border-red-500 @enderror"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('default_payment_amount') border-red-500 @enderror"
                                placeholder="500.00">
                         <p class="mt-1 text-xs text-gray-500">Default amount for new payments</p>
                         @error('default_payment_amount')
@@ -122,7 +122,7 @@
                                value="{{ old('payment_deadline_day', $settings['payment_deadline_day']) }}"
                                min="1"
                                max="31"
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('payment_deadline_day') border-red-500 @enderror"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('payment_deadline_day') border-red-500 @enderror"
                                placeholder="15">
                         <p class="mt-1 text-xs text-gray-500">Day of each month for payment deadline</p>
                         @error('payment_deadline_day')
@@ -137,7 +137,7 @@
                                value="{{ old('late_fee_grace_period', $settings['late_fee_grace_period']) }}"
                                min="0"
                                max="30"
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('late_fee_grace_period') border-red-500 @enderror"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('late_fee_grace_period') border-red-500 @enderror"
                                placeholder="3">
                         <p class="mt-1 text-xs text-gray-500">Days after deadline before late fee applies</p>
                         @error('late_fee_grace_period')
@@ -152,7 +152,7 @@
                                value="{{ old('late_fee', $settings['late_fee']) }}"
                                step="0.01"
                                min="0"
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('late_fee') border-red-500 @enderror"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('late_fee') border-red-500 @enderror"
                                placeholder="50.00">
                         <p class="mt-1 text-xs text-gray-500">Fee charged for late payments</p>
                         @error('late_fee')
@@ -179,7 +179,7 @@
                                    name="enable_email_notifications" 
                                    value="1"
                                    {{ old('enable_email_notifications', $settings['enable_email_notifications']) == '1' ? 'checked' : '' }}
-                                   class="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                                   class="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500">
                             <span class="ml-3">
                                 <span class="text-sm font-medium text-gray-700">Enable Email Notifications</span>
                                 <p class="text-xs text-gray-500">Send email notifications to students</p>
@@ -194,7 +194,7 @@
                                value="{{ old('payment_reminder_days', $settings['payment_reminder_days']) }}"
                                min="1"
                                max="30"
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('payment_reminder_days') border-red-500 @enderror"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('payment_reminder_days') border-red-500 @enderror"
                                placeholder="7">
                         <p class="mt-1 text-xs text-gray-500">Days before deadline to send reminder</p>
                         @error('payment_reminder_days')
@@ -218,7 +218,7 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Records Per Page</label>
                         <select name="records_per_page" 
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('records_per_page') border-red-500 @enderror">
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('records_per_page') border-red-500 @enderror">
                             <option value="10" {{ old('records_per_page', $settings['records_per_page']) == '10' ? 'selected' : '' }}>10</option>
                             <option value="20" {{ old('records_per_page', $settings['records_per_page']) == '20' ? 'selected' : '' }}>20</option>
                             <option value="50" {{ old('records_per_page', $settings['records_per_page']) == '50' ? 'selected' : '' }}>50</option>
@@ -232,7 +232,7 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Date Format</label>
                         <select name="date_format" 
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('date_format') border-red-500 @enderror">
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('date_format') border-red-500 @enderror">
                             <option value="Y-m-d" {{ old('date_format', $settings['date_format']) === 'Y-m-d' ? 'selected' : '' }}>YYYY-MM-DD</option>
                             <option value="m/d/Y" {{ old('date_format', $settings['date_format']) === 'm/d/Y' ? 'selected' : '' }}>MM/DD/YYYY</option>
                             <option value="d/m/Y" {{ old('date_format', $settings['date_format']) === 'd/m/Y' ? 'selected' : '' }}>DD/MM/YYYY</option>
@@ -245,7 +245,7 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Export Format</label>
                         <select name="export_format" 
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('export_format') border-red-500 @enderror">
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('export_format') border-red-500 @enderror">
                             <option value="xlsx" {{ old('export_format', $settings['export_format']) === 'xlsx' ? 'selected' : '' }}>Excel (XLSX)</option>
                             <option value="csv" {{ old('export_format', $settings['export_format']) === 'csv' ? 'selected' : '' }}>CSV</option>
                         </select>
@@ -288,7 +288,7 @@
                                value="{{ old('data_retention_months', $settings['data_retention_months']) }}"
                                min="1"
                                max="120"
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('data_retention_months') border-red-500 @enderror"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('data_retention_months') border-red-500 @enderror"
                                placeholder="24">
                         <p class="mt-1 text-xs text-gray-500">How long to keep old records (1-120 months)</p>
                         @error('data_retention_months')
@@ -313,7 +313,7 @@
                         <input type="email" 
                                name="contact_email" 
                                value="{{ old('contact_email', $settings['contact_email']) }}"
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('contact_email') border-red-500 @enderror"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('contact_email') border-red-500 @enderror"
                                placeholder="css@example.com">
                         @error('contact_email')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -325,7 +325,7 @@
                         <input type="text" 
                                name="contact_phone" 
                                value="{{ old('contact_phone', $settings['contact_phone']) }}"
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('contact_phone') border-red-500 @enderror"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('contact_phone') border-red-500 @enderror"
                                placeholder="+63 123 456 7890">
                         @error('contact_phone')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -341,7 +341,7 @@
                     Cancel
                 </a>
                 <button type="submit" 
-                        class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
+                        class="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
                     Save Settings
                 </button>
             </div>

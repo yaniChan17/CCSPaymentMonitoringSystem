@@ -13,13 +13,13 @@
         <!-- Quick Export Actions -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- Export Payments -->
-            <div class="bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-xl shadow-lg p-6 text-white">
+            <div class="bg-gradient-to-br from-primary-500 to-indigo-600 rounded-xl shadow-lg p-6 text-white">
                 <div class="flex items-start justify-between">
                     <div>
                         <h3 class="text-lg font-semibold mb-2">Export Payments</h3>
                         <p class="text-sm opacity-90 mb-4">Download all payment records in CSV format</p>
                         <a href="{{ route('admin.reports.export-payments') }}" 
-                           class="inline-flex items-center px-4 py-2 bg-white text-indigo-600 font-medium rounded-lg hover:bg-indigo-50 transition-colors">
+                           class="inline-flex items-center px-4 py-2 bg-white text-primary-600 font-medium rounded-lg hover:bg-primary-50 transition-colors">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                             </svg>
@@ -142,7 +142,7 @@
             <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
                 <h3 class="text-lg font-semibold text-gray-900">Recent Payments</h3>
                 <a href="{{ route('admin.payments.index') }}" 
-                   class="text-sm text-indigo-600 hover:text-indigo-800 font-medium">
+                   class="text-sm text-primary-600 hover:text-primary-800 font-medium">
                     View All →
                 </a>
             </div>
@@ -197,7 +197,7 @@
                         <div class="w-32 text-sm font-medium text-gray-700">{{ $month->month_name }}</div>
                         <div class="flex-1 mx-4">
                             <div class="bg-gray-200 rounded-full h-8 relative overflow-hidden">
-                                <div class="bg-gradient-to-r from-indigo-500 to-indigo-600 h-full rounded-full flex items-center px-3 text-white text-xs font-semibold transition-all duration-500" 
+                                <div class="bg-gradient-to-r from-primary-500 to-indigo-600 h-full rounded-full flex items-center px-3 text-white text-xs font-semibold transition-all duration-500" 
                                      style="width: {{ $month->total > 0 ? ($month->total / $monthly_data->max('total')) * 100 : 0 }}%">
                                     @if($month->total > 0)
                                         ₱{{ number_format($month->total, 2) }}

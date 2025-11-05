@@ -9,11 +9,11 @@
     </x-slot>
 
     <!-- Student Profile Card -->
-    <div class="bg-gradient-to-br from-indigo-500 to-purple-600 overflow-hidden shadow-lg rounded-xl mb-8">
+    <div class="bg-gradient-to-br from-primary-500 to-accent-600 overflow-hidden shadow-lg rounded-xl mb-8">
         <div class="p-6 sm:p-8">
             <div class="flex items-start justify-between">
                 <div class="flex items-center space-x-4">
-                    <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center text-indigo-600 text-2xl font-bold shadow-lg">
+                    <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center text-primary-600 text-2xl font-bold shadow-lg">
                         {{ strtoupper(substr($student->full_name, 0, 2)) }}
                     </div>
                     <div class="text-white">
@@ -43,7 +43,7 @@
                     </div>
                 </div>
                 <div class="hidden sm:block">
-                    <button class="px-4 py-2 bg-white text-indigo-600 rounded-lg font-medium text-sm hover:bg-indigo-50 transition-colors duration-200">
+                    <button class="px-4 py-2 bg-white text-primary-600 rounded-lg font-medium text-sm hover:bg-primary-50 transition-colors duration-200">
                         Edit Profile
                     </button>
                 </div>

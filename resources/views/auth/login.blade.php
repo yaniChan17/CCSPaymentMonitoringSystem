@@ -39,7 +39,7 @@
                     required 
                     autofocus 
                     autocomplete="username"
-                    class="input-focus block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
+                    class="input-focus block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-indigo-500 transition-all duration-200"
                     placeholder="you@example.com"
                 />
             </div>
@@ -70,7 +70,7 @@
                     name="password" 
                     required 
                     autocomplete="current-password"
-                    class="input-focus block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
+                    class="input-focus block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-indigo-500 transition-all duration-200"
                     placeholder="••••••••"
                 />
             </div>
@@ -91,13 +91,13 @@
                     id="remember_me" 
                     type="checkbox" 
                     name="remember"
-                    class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded cursor-pointer"
+                    class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded cursor-pointer"
                 />
                 <span class="ml-2 text-sm text-gray-600">Remember me</span>
             </label>
 
             @if (Route::has('password.request'))
-                <a href="{{ route('password.request') }}" class="text-sm font-medium text-indigo-600 hover:text-indigo-500 transition-colors duration-200">
+                <a href="{{ route('password.request') }}" class="text-sm font-medium text-primary-600 hover:text-primary-500 transition-colors duration-200">
                     Forgot password?
                 </a>
             @endif
@@ -106,7 +106,7 @@
         <!-- Submit Button -->
         <button 
             type="submit" 
-            class="btn-gradient w-full py-3 px-4 border border-transparent rounded-lg text-white font-medium text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            class="btn-gradient w-full py-3 px-4 border border-transparent rounded-lg text-white font-medium text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
         >
             <span class="flex items-center justify-center">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -141,9 +141,9 @@
     <div class="mt-8 pt-6 border-t border-gray-200">
         <p class="text-xs text-center text-gray-500">
             By signing in, you agree to our 
-            <a href="#" class="text-indigo-600 hover:text-indigo-500">Terms of Service</a> 
+            <a href="#" class="text-primary-600 hover:text-primary-500">Terms of Service</a> 
             and 
-            <a href="#" class="text-indigo-600 hover:text-indigo-500">Privacy Policy</a>
+            <a href="#" class="text-primary-600 hover:text-primary-500">Privacy Policy</a>
         </p>
     </div>
 </x-guest-layout>

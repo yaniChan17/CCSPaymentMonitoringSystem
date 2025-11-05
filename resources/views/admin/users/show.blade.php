@@ -5,34 +5,16 @@
 
     <div class="max-w-5xl mx-auto space-y-6">
         <!-- Header -->
-        <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-4">
-                <a href="{{ route('admin.users.index') }}" 
-                   class="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-                    </svg>
-                </a>
-                <div>
-                    <h1 class="text-2xl font-bold text-gray-900">User Details</h1>
-                    <p class="mt-1 text-sm text-gray-600">View and manage user information</p>
-                </div>
-            </div>
-            <div class="flex items-center space-x-3">
-                <a href="{{ route('admin.users.edit', $user) }}" 
-                   class="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors">
-                    Edit User
-                </a>
-                <form action="{{ route('admin.users.destroy', $user) }}" 
-                      method="POST" 
-                      onsubmit="return confirm('Are you sure you want to delete this user?');">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" 
-                            class="px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition-colors">
-                        Delete User
-                    </button>
-                </form>
+        <div class="flex items-center space-x-4">
+            <a href="{{ route('admin.users.index') }}" 
+               class="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+            </a>
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900">User Details</h1>
+                <p class="mt-1 text-sm text-gray-600">View and manage user information</p>
             </div>
         </div>
 
@@ -89,6 +71,10 @@
                             <div class="flex items-start">
                                 <div class="w-32 text-sm font-medium text-gray-600">Year Level:</div>
                                 <div class="flex-1 text-sm text-gray-900">{{ $user->student->year_level }}{{ $user->student->year_level == 1 ? 'st' : ($user->student->year_level == 2 ? 'nd' : ($user->student->year_level == 3 ? 'rd' : 'th')) }} Year</div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="w-32 text-sm font-medium text-gray-600">Block Number:</div>
+                                <div class="flex-1 text-sm text-gray-900">{{ $user->student->block ? 'Block ' . $user->student->block : 'Not assigned' }}</div>
                             </div>
                             <div class="flex items-start">
                                 <div class="w-32 text-sm font-medium text-gray-600">Status:</div>
@@ -172,7 +158,7 @@
                 <!-- Profile Avatar -->
                 <div class="bg-white shadow-md rounded-xl border border-gray-100 p-6">
                     <div class="flex flex-col items-center">
-                        <div class="h-24 w-24 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                        <div class="h-24 w-24 rounded-full bg-gradient-to-br from-primary-500 to-accent-600 flex items-center justify-center">
                             <span class="text-white font-bold text-3xl">{{ strtoupper(substr($user->name, 0, 2)) }}</span>
                         </div>
                         <h3 class="mt-4 text-lg font-semibold text-gray-900 text-center">{{ $user->name }}</h3>
@@ -206,6 +192,23 @@
                                 View Payments
                             </a>
                         @endif
+                        
+                        <!-- Delete User -->
+                        <div class="border-t border-gray-200 pt-2 mt-2">
+                            <form action="{{ route('admin.users.destroy', $user) }}" 
+                                  method="POST" 
+                                  onsubmit="return confirm('Are you sure you want to delete this user? This action cannot be undone.');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" 
+                                        class="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                    </svg>
+                                    Delete User
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>

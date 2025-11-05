@@ -20,7 +20,7 @@
             </div>
             <div class="flex items-center space-x-3">
                 <a href="{{ route('admin.payments.edit', $payment) }}" 
-                   class="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors">
+                   class="px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 transition-colors">
                     Edit Payment
                 </a>
                 <form action="{{ route('admin.payments.destroy', $payment) }}" 
@@ -84,13 +84,13 @@
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="text-lg font-semibold text-gray-900">Student Information</h3>
                         <a href="{{ route('admin.users.show', $payment->student->user) }}" 
-                           class="text-sm text-indigo-600 hover:text-indigo-800">
+                           class="text-sm text-primary-600 hover:text-primary-800">
                             View Profile →
                         </a>
                     </div>
                     <div class="flex items-start space-x-4">
                         <div class="flex-shrink-0">
-                            <div class="h-16 w-16 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                            <div class="h-16 w-16 rounded-full bg-gradient-to-br from-primary-500 to-accent-600 flex items-center justify-center">
                                 <span class="text-white font-bold text-xl">{{ strtoupper(substr($payment->student->full_name, 0, 2)) }}</span>
                             </div>
                         </div>

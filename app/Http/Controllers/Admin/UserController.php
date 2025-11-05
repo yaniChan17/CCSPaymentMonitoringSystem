@@ -68,7 +68,8 @@ class UserController extends Controller
             // Student-specific fields
             'student_id' => ['required_if:role,student', 'nullable', 'string', 'unique:students,student_id'],
             'course' => ['required_if:role,student', 'nullable', 'string'],
-            'year_level' => ['required_if:role,student', 'nullable', 'integer', 'min:1', 'max:5'],
+            'year_level' => ['required_if:role,student', 'nullable', 'string'],
+            'block' => ['required_if:role,student', 'nullable', 'string', 'max:10'],
         ]);
 
         // Create user
@@ -86,13 +87,18 @@ class UserController extends Controller
             $firstName = $nameParts[0];
             $lastName = $nameParts[1] ?? '';
 
+            // Convert year_level number to formatted string
+            $yearLevelMap = ['1' => '1st Year', '2' => '2nd Year', '3' => '3rd Year', '4' => '4th Year'];
+            $yearLevelFormatted = $yearLevelMap[$validated['year_level']] ?? $validated['year_level'];
+
             $student = Student::create([
                 'student_id' => $validated['student_id'],
                 'first_name' => $firstName,
                 'last_name' => $lastName,
                 'email' => $validated['email'],
-                'course' => $validated['course'],
-                'year_level' => $validated['year_level'],
+                'course' => $validated['course'] ?? 'BSIT',
+                'year_level' => $yearLevelFormatted,
+                'block' => $validated['block'] ?? null,
                 'status' => 'active',
             ]);
 
@@ -162,7 +168,8 @@ class UserController extends Controller
                 Rule::unique('students', 'student_id')->ignore($user->student?->id)
             ],
             'course' => ['required_if:role,student', 'nullable', 'string'],
-            'year_level' => ['required_if:role,student', 'nullable', 'integer', 'min:1', 'max:5'],
+            'year_level' => ['required_if:role,student', 'nullable', 'string'],
+            'block' => ['required_if:role,student', 'nullable', 'string', 'max:10'],
             'status' => ['nullable', 'in:active,inactive'],
         ]);
 
@@ -185,6 +192,10 @@ class UserController extends Controller
             $firstName = $nameParts[0];
             $lastName = $nameParts[1] ?? '';
 
+            // Convert year_level number to formatted string
+            $yearLevelMap = ['1' => '1st Year', '2' => '2nd Year', '3' => '3rd Year', '4' => '4th Year'];
+            $yearLevelFormatted = $yearLevelMap[$validated['year_level']] ?? $validated['year_level'];
+
             if ($user->student) {
                 // Update existing student record
                 $user->student->update([
@@ -192,8 +203,9 @@ class UserController extends Controller
                     'first_name' => $firstName,
                     'last_name' => $lastName,
                     'email' => $validated['email'],
-                    'course' => $validated['course'],
-                    'year_level' => $validated['year_level'],
+                    'course' => $validated['course'] ?? 'BSIT',
+                    'year_level' => $yearLevelFormatted,
+                    'block' => $validated['block'] ?? null,
                     'status' => $validated['status'] ?? $user->student->status,
                 ]);
             } else {
@@ -203,8 +215,9 @@ class UserController extends Controller
                     'first_name' => $firstName,
                     'last_name' => $lastName,
                     'email' => $validated['email'],
-                    'course' => $validated['course'],
-                    'year_level' => $validated['year_level'],
+                    'course' => $validated['course'] ?? 'BSIT',
+                    'year_level' => $yearLevelFormatted,
+                    'block' => $validated['block'] ?? null,
                     'status' => $validated['status'] ?? 'active',
                 ]);
 

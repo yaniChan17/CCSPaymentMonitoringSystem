@@ -51,8 +51,9 @@ class RegisteredUserController extends Controller
             'last_name' => $lastName,
             'email' => $request->email,
             'contact_number' => '', // Will be filled later
-            'course' => 'Pending', // Will be updated by admin
-            'year_level' => 1, // Default to first year
+            'course' => 'BSIT', // Default to BSIT for CCS
+            'year_level' => '1st Year', // Default to first year
+            'block' => null, // Will be assigned by admin
             'total_fees' => 0.00,
             'balance' => 0.00,
             'status' => 'pending', // Pending until admin approves

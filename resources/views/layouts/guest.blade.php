@@ -98,7 +98,7 @@
             <!-- Left Side - Form -->
             <div class="w-full lg:w-1/2 flex flex-col bg-white relative overflow-hidden">
                 <!-- Floating Shapes (Fixed) -->
-                <div class="floating-shape w-64 h-64 bg-indigo-500 top-10 -left-20" style="animation-delay: 0s;"></div>
+                <div class="floating-shape w-64 h-64 bg-primary-500 top-10 -left-20" style="animation-delay: 0s;"></div>
                 <div class="floating-shape w-48 h-48 bg-purple-500 bottom-10 -right-10" style="animation-delay: 7s;"></div>
                 <div class="floating-shape w-32 h-32 bg-pink-500 top-1/2 left-1/3" style="animation-delay: 14s;"></div>
                 
@@ -107,7 +107,7 @@
                     <div class="w-full max-w-md mx-auto relative z-10">
                         <!-- Logo and Back to Home -->
                         <div class="mb-8">
-                            <a href="/" class="inline-flex items-center text-gray-600 hover:text-indigo-600 transition-colors duration-200">
+                            <a href="/" class="inline-flex items-center text-gray-600 hover:text-primary-600 transition-colors duration-200">
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                                 </svg>
@@ -115,7 +115,7 @@
                             </a>
                             
                             <div class="mt-6 flex items-center">
-                                <div class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center">
+                                <div class="w-12 h-12 bg-gradient-to-br from-primary-500 to-accent-600 rounded-lg flex items-center justify-center">
                                     <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                     </svg>

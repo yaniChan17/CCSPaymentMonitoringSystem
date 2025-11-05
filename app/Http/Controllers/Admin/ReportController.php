@@ -167,11 +167,8 @@ class ReportController extends Controller
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
-        if ($request->filled('course')) {
-            $query->where('course', $request->course);
-        }
 
-        $students = $query->orderBy('full_name')->get();
+        $students = $query->orderBy('first_name')->orderBy('last_name')->get();
 
         $filename = 'students_report_'.now()->format('Y-m-d_His').'.csv';
 
@@ -190,6 +187,7 @@ class ReportController extends Controller
                 'Email',
                 'Course',
                 'Year Level',
+                'Block Number',
                 'Status',
                 'Total Payments',
                 'Total Paid Amount',
@@ -208,6 +206,7 @@ class ReportController extends Controller
                     $student->email,
                     $student->course,
                     $student->year_level,
+                    $student->block ?? 'N/A',
                     ucfirst($student->status),
                     $student->payments->count(),
                     number_format($totalPaid, 2),

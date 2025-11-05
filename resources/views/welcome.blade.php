@@ -52,7 +52,7 @@
                 <div class="flex justify-between items-center h-16">
                     <div class="flex items-center">
                         <div class="flex-shrink-0 flex items-center">
-                            <svg class="h-8 w-8 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg class="h-8 w-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
                             </svg>
                             <span class="ml-2 text-xl font-bold text-gray-900 dark:text-white">CCS Payment</span>
@@ -60,15 +60,15 @@
                     </div>
                     <div class="flex items-center space-x-4">
                         @auth
-                            <a href="{{ url('/dashboard') }}" class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition duration-300">
+                            <a href="{{ url('/dashboard') }}" class="px-4 py-2 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-lg transition duration-300">
                                 Dashboard
                             </a>
                         @else
-                            <a href="{{ route('login') }}" class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-indigo-600 transition duration-300">
+                            <a href="{{ route('login') }}" class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 transition duration-300">
                                 Log in
                             </a>
                             @if (Route::has('register'))
-                                <a href="{{ route('register') }}" class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition duration-300">
+                                <a href="{{ route('register') }}" class="px-4 py-2 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-lg transition duration-300">
                                     Get Started
                                 </a>
                             @endif
@@ -93,14 +93,14 @@
                         </p>
                         <div class="flex flex-wrap gap-4">
                             @guest
-                                <a href="{{ route('register') }}" class="px-8 py-3 bg-white text-indigo-600 font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300">
+                                <a href="{{ route('register') }}" class="px-8 py-3 bg-white text-primary-600 font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300">
                                     Get Started
                                 </a>
-                                <a href="{{ route('login') }}" class="px-8 py-3 bg-indigo-700 text-white font-semibold rounded-lg shadow-lg hover:bg-indigo-800 transition duration-300">
+                                <a href="{{ route('login') }}" class="px-8 py-3 bg-primary-700 text-white font-semibold rounded-lg shadow-lg hover:bg-indigo-800 transition duration-300">
                                     Sign In
                                 </a>
                             @else
-                                <a href="{{ url('/dashboard') }}" class="px-8 py-3 bg-white text-indigo-600 font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300">
+                                <a href="{{ url('/dashboard') }}" class="px-8 py-3 bg-white text-primary-600 font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300">
                                     Go to Dashboard
                                 </a>
                             @endguest
@@ -173,7 +173,7 @@
                 <div class="grid md:grid-cols-3 gap-8">
                     <!-- Feature 1 -->
                     <div class="card-hover p-8 bg-gradient-to-br from-purple-50 to-indigo-50 dark:from-gray-700 dark:to-gray-600 rounded-xl">
-                        <div class="w-12 h-12 bg-indigo-600 rounded-lg flex items-center justify-center mb-4">
+                        <div class="w-12 h-12 bg-primary-600 rounded-lg flex items-center justify-center mb-4">
                             <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                             </svg>
@@ -248,11 +248,11 @@
                     Join educational institutions already using our platform to streamline their payment processes.
                 </p>
                 @guest
-                    <a href="{{ route('register') }}" class="inline-block px-8 py-4 bg-white text-indigo-600 font-bold rounded-lg shadow-xl hover:shadow-2xl transform hover:scale-105 transition duration-300">
+                    <a href="{{ route('register') }}" class="inline-block px-8 py-4 bg-white text-primary-600 font-bold rounded-lg shadow-xl hover:shadow-2xl transform hover:scale-105 transition duration-300">
                         Create Free Account
                     </a>
                 @else
-                    <a href="{{ url('/dashboard') }}" class="inline-block px-8 py-4 bg-white text-indigo-600 font-bold rounded-lg shadow-xl hover:shadow-2xl transform hover:scale-105 transition duration-300">
+                    <a href="{{ url('/dashboard') }}" class="inline-block px-8 py-4 bg-white text-primary-600 font-bold rounded-lg shadow-xl hover:shadow-2xl transform hover:scale-105 transition duration-300">
                         Go to Dashboard
                     </a>
                 @endguest
@@ -265,7 +265,7 @@
                 <div class="grid md:grid-cols-4 gap-8">
                     <div class="col-span-2">
                         <div class="flex items-center mb-4">
-                            <svg class="h-8 w-8 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg class="h-8 w-8 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
                             </svg>
                             <span class="ml-2 text-xl font-bold text-white">CCS Payment</span>

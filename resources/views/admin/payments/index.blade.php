@@ -70,8 +70,8 @@
                         <p class="text-sm font-medium text-gray-600">Today's Collection</p>
                         <p class="mt-2 text-3xl font-bold text-gray-900">₱{{ number_format($stats['today'], 2) }}</p>
                     </div>
-                    <div class="p-3 bg-indigo-50 rounded-lg">
-                        <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="p-3 bg-primary-50 rounded-lg">
+                        <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                         </svg>
                     </div>
@@ -80,7 +80,7 @@
         </div>
 
         <!-- Filter Status Message -->
-        @if(request()->hasAny(['search', 'block', 'year_level', 'course', 'status', 'date_from', 'date_to']))
+        @if(request()->hasAny(['search', 'block', 'year_level', 'status', 'date_from', 'date_to']))
             <div class="bg-blue-50 border border-blue-200 text-blue-800 rounded-lg p-4">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center">
@@ -100,10 +100,6 @@
                                 @if(request('search') || request('block')), @endif
                                 <strong>{{ request('year_level') }}</strong>
                             @endif
-                            @if(request('course'))
-                                @if(request('search') || request('block') || request('year_level')), @endif
-                                <strong>{{ request('course') }}</strong>
-                            @endif
                         </span>
                     </div>
                     <a href="{{ route('admin.payments.index') }}" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
@@ -113,12 +109,13 @@
             </div>
         @endif
 
-        <!-- Filters -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+        <!-- Filters - Simplified -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4" x-data="{ showAdvanced: false }">
             <form method="GET" action="{{ route('admin.payments.index') }}" class="space-y-4">
-                <!-- First Row: Search (Priority) -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <div class="lg:col-span-2">
+                <!-- Primary Filters Row -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Search -->
+                    <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">
                             <svg class="inline-block w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
@@ -128,15 +125,27 @@
                         <input type="text" 
                                name="search" 
                                value="{{ request('search') }}"
-                               placeholder="Search by student name or ID..." 
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                               placeholder="Name or ID..." 
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                    </div>
+
+                    <!-- Status Filter -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                        <select name="status" 
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                            <option value="">All Status</option>
+                            <option value="paid" {{ request('status') === 'paid' ? 'selected' : '' }}>Paid</option>
+                            <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending</option>
+                            <option value="cancelled" {{ request('status') === 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+                        </select>
                     </div>
 
                     <!-- Block Filter -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Block Number</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Block</label>
                         <select name="block" 
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
                             <option value="">All Blocks</option>
                             @foreach($blocks as $block)
                                 <option value="{{ $block }}" {{ request('block') === $block ? 'selected' : '' }}>Block {{ $block }}</option>
@@ -145,49 +154,25 @@
                     </div>
                 </div>
 
-                <!-- Second Row: Other Filters -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Advanced Filters (Collapsible) -->
+                <div x-show="showAdvanced" x-transition class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-gray-200">
                     <!-- Year Level Filter -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Year Level</label>
                         <select name="year_level" 
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-                            <option value="">All Year Levels</option>
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                            <option value="">All Years</option>
                             @foreach($yearLevels as $yearLevel)
                                 <option value="{{ $yearLevel }}" {{ request('year_level') === $yearLevel ? 'selected' : '' }}>{{ $yearLevel }}</option>
                             @endforeach
                         </select>
                     </div>
 
-                    <!-- Course Filter -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Course</label>
-                        <select name="course" 
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-                            <option value="">All Courses</option>
-                            @foreach($courses as $course)
-                                <option value="{{ $course }}" {{ request('course') === $course ? 'selected' : '' }}>{{ $course }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <!-- Status Filter -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Payment Status</label>
-                        <select name="status" 
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-                            <option value="">All Status</option>
-                            <option value="paid" {{ request('status') === 'paid' ? 'selected' : '' }}>Paid</option>
-                            <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending</option>
-                            <option value="cancelled" {{ request('status') === 'cancelled' ? 'selected' : '' }}>Cancelled</option>
-                        </select>
-                    </div>
-
                     <!-- Payment Method Filter -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Payment Method</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Method</label>
                         <select name="method" 
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
                             <option value="">All Methods</option>
                             <option value="cash" {{ request('method') === 'cash' ? 'selected' : '' }}>Cash</option>
                             <option value="check" {{ request('method') === 'check' ? 'selected' : '' }}>Check</option>
@@ -195,37 +180,48 @@
                             <option value="online" {{ request('method') === 'online' ? 'selected' : '' }}>Online</option>
                         </select>
                     </div>
+
+                    <!-- Date From -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Date From</label>
+                        <input type="date" 
+                               name="date_from" 
+                               value="{{ request('date_from') }}"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                    </div>
+                    
+                    <!-- Date To -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Date To</label>
+                        <input type="date" 
+                               name="date_to" 
+                               value="{{ request('date_to') }}"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                    </div>
                 </div>
 
-                <!-- Third Row: Date Range -->
-                <div class="flex flex-col sm:flex-row gap-4">
-                    <div class="flex-1 grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Date Range - From</label>
-                            <input type="date" 
-                                   name="date_from" 
-                                   value="{{ request('date_from') }}"
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Date Range - To</label>
-                            <input type="date" 
-                                   name="date_to" 
-                                   value="{{ request('date_to') }}"
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-                        </div>
-                    </div>
+                <!-- Action Buttons Row -->
+                <div class="flex flex-col sm:flex-row gap-3 items-center justify-between">
+                    <!-- Toggle Advanced Filters -->
+                    <button type="button" 
+                            @click="showAdvanced = !showAdvanced"
+                            class="text-sm text-primary-600 hover:text-primary-700 font-medium flex items-center">
+                        <svg class="w-4 h-4 mr-1 transition-transform" :class="{ 'rotate-180': showAdvanced }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                        <span x-text="showAdvanced ? 'Hide Advanced Filters' : 'Show Advanced Filters'"></span>
+                    </button>
 
                     <!-- Action Buttons -->
                     <div class="flex items-end space-x-2">
                         <button type="submit" 
-                                class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors shadow-sm">
+                                class="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors shadow-sm">
                             Apply Filters
                         </button>
-                        @if(request()->hasAny(['search', 'status', 'method', 'date_from', 'date_to', 'block', 'year_level', 'course']))
+                        @if(request()->hasAny(['search', 'status', 'method', 'date_from', 'date_to', 'block', 'year_level']))
                             <a href="{{ route('admin.payments.index') }}" 
                                class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">
-                                Clear All
+                                Clear Filters
                             </a>
                         @endif
                     </div>
@@ -277,7 +273,7 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
                                     <a href="{{ route('admin.payments.show', $payment) }}" 
-                                       class="text-indigo-600 hover:text-indigo-900 transition-colors">
+                                       class="text-primary-600 hover:text-primary-900 transition-colors">
                                         View
                                     </a>
                                     <a href="{{ route('admin.payments.edit', $payment) }}" 

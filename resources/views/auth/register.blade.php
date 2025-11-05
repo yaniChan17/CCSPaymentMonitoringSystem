@@ -27,7 +27,7 @@
                     required 
                     autofocus 
                     autocomplete="name"
-                    class="input-focus block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
+                    class="input-focus block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-indigo-500 transition-all duration-200"
                     placeholder="Juan Dela Cruz"
                 />
             </div>
@@ -59,7 +59,7 @@
                     value="{{ old('email') }}" 
                     required 
                     autocomplete="username"
-                    class="input-focus block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
+                    class="input-focus block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-indigo-500 transition-all duration-200"
                     placeholder="you@example.com"
                 />
             </div>
@@ -90,7 +90,7 @@
                     name="password" 
                     required 
                     autocomplete="new-password"
-                    class="input-focus block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
+                    class="input-focus block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-indigo-500 transition-all duration-200"
                     placeholder="••••••••"
                 />
             </div>
@@ -122,7 +122,7 @@
                     name="password_confirmation" 
                     required 
                     autocomplete="new-password"
-                    class="input-focus block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
+                    class="input-focus block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-indigo-500 transition-all duration-200"
                     placeholder="••••••••"
                 />
             </div>
@@ -144,15 +144,15 @@
                     name="terms" 
                     type="checkbox" 
                     required
-                    class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded cursor-pointer"
+                    class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded cursor-pointer"
                 />
             </div>
             <div class="ml-3 text-sm">
                 <label for="terms" class="text-gray-600">
                     I agree to the 
-                    <a href="#" class="text-indigo-600 hover:text-indigo-500 font-medium">Terms of Service</a> 
+                    <a href="#" class="text-primary-600 hover:text-primary-500 font-medium">Terms of Service</a> 
                     and 
-                    <a href="#" class="text-indigo-600 hover:text-indigo-500 font-medium">Privacy Policy</a>
+                    <a href="#" class="text-primary-600 hover:text-primary-500 font-medium">Privacy Policy</a>
                 </label>
             </div>
         </div>
@@ -160,7 +160,7 @@
         <!-- Submit Button -->
         <button 
             type="submit" 
-            class="btn-gradient w-full py-3 px-4 border border-transparent rounded-lg text-white font-medium text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            class="btn-gradient w-full py-3 px-4 border border-transparent rounded-lg text-white font-medium text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
         >
             <span class="flex items-center justify-center">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

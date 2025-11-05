@@ -16,9 +16,8 @@ class StudentFactory extends Factory
      */
     public function definition(): array
     {
-        $courses = ['BSCS', 'BSIT', 'BSIS', 'ACT'];
         $yearLevels = ['1st Year', '2nd Year', '3rd Year', '4th Year'];
-        $blocks = ['A', 'B', 'C', '1', '2', '3'];
+        $blocks = ['1', '2', '3', '4', '5'];
         $totalFees = fake()->randomElement([25000, 30000, 35000, 40000]);
 
         return [
@@ -27,7 +26,7 @@ class StudentFactory extends Factory
             'last_name' => fake()->lastName(),
             'email' => fake()->unique()->safeEmail(),
             'contact_number' => fake()->phoneNumber(),
-            'course' => fake()->randomElement($courses),
+            'course' => 'BSIT', // Default to BSIT for CCS
             'year_level' => fake()->randomElement($yearLevels),
             'block' => fake()->randomElement($blocks),
             'total_fees' => $totalFees,

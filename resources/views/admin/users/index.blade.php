@@ -11,7 +11,7 @@
                 <p class="mt-1 text-sm text-gray-600">Manage system users, roles, and permissions</p>
             </div>
             <a href="{{ route('admin.users.create') }}" 
-               class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors shadow-sm">
+               class="inline-flex items-center px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 transition-colors shadow-sm">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                 </svg>
@@ -27,8 +27,8 @@
                         <p class="text-sm font-medium text-gray-600">Total Users</p>
                         <p class="mt-2 text-3xl font-bold text-gray-900">{{ $stats['total_users'] }}</p>
                     </div>
-                    <div class="p-3 bg-indigo-50 rounded-lg">
-                        <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="p-3 bg-primary-50 rounded-lg">
+                        <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
                         </svg>
                     </div>
@@ -86,11 +86,11 @@
                            name="search" 
                            value="{{ request('search') }}"
                            placeholder="Search by name or email..." 
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
                 </div>
                 <div class="sm:w-48">
                     <select name="role" 
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
                         <option value="">All Roles</option>
                         <option value="admin" {{ request('role') === 'admin' ? 'selected' : '' }}>Admin</option>
                         <option value="treasurer" {{ request('role') === 'treasurer' ? 'selected' : '' }}>Treasurer</option>
@@ -130,14 +130,19 @@
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center">
                                         <div class="flex-shrink-0 h-10 w-10">
-                                            <div class="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
-                                                <span class="text-indigo-600 font-semibold text-sm">{{ strtoupper(substr($user->name, 0, 2)) }}</span>
+                                            <div class="h-10 w-10 rounded-full bg-primary-100 flex items-center justify-center">
+                                                <span class="text-primary-600 font-semibold text-sm">{{ strtoupper(substr($user->name, 0, 2)) }}</span>
                                             </div>
                                         </div>
                                         <div class="ml-4">
                                             <div class="text-sm font-medium text-gray-900">{{ $user->name }}</div>
                                             @if($user->role === 'student' && $user->student)
-                                                <div class="text-xs text-gray-500">ID: {{ $user->student->student_id }}</div>
+                                                <div class="text-xs text-gray-500">
+                                                    ID: {{ $user->student->student_id }}
+                                                    @if($user->student->block)
+                                                        | Block {{ $user->student->block }}
+                                                    @endif
+                                                </div>
                                             @endif
                                         </div>
                                     </div>
@@ -170,7 +175,7 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
                                     <a href="{{ route('admin.users.show', $user) }}" 
-                                       class="text-indigo-600 hover:text-indigo-900 transition-colors">
+                                       class="text-primary-600 hover:text-primary-900 transition-colors">
                                         View
                                     </a>
                                     <a href="{{ route('admin.users.edit', $user) }}" 
