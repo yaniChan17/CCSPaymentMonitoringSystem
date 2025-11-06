@@ -18,7 +18,7 @@
 
         <!-- Quick Actions -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <a href="{{ route('admin.users.create') }}" class="bg-gradient-to-br from-primary-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white rounded-xl p-5 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-1">
+            <a href="{{ route('admin.users.create') }}" class="bg-gradient-to-br from-primary-600 to-secondary-500 hover:from-primary-700 hover:to-secondary-600 text-white rounded-lg p-5 shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm opacity-90 mb-1">Add New</p>
@@ -30,7 +30,7 @@
                 </div>
             </a>
 
-            <a href="{{ route('admin.payments.index') }}" class="bg-gradient-to-br from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-xl p-5 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-1">
+            <a href="{{ route('admin.payments.index') }}" class="bg-gradient-to-br from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-lg p-5 shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm opacity-90 mb-1">View All</p>
@@ -42,7 +42,7 @@
                 </div>
             </a>
 
-            <a href="{{ route('admin.reports.summary') }}" class="bg-gradient-to-br from-purple-500 to-accent-600 hover:from-purple-600 hover:to-purple-700 text-white rounded-xl p-5 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-1">
+            <a href="{{ route('admin.reports.summary') }}" class="bg-gradient-to-br from-secondary-500 to-secondary-600 hover:from-secondary-600 hover:to-secondary-700 text-gray-900 rounded-lg p-5 shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm opacity-90 mb-1">Generate</p>
@@ -54,7 +54,7 @@
                 </div>
             </a>
 
-            <a href="{{ route('admin.users.index') }}" class="bg-gradient-to-br from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-xl p-5 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-1">
+            <a href="{{ route('admin.users.index') }}" class="bg-gradient-to-br from-gray-700 to-gray-800 hover:from-gray-800 hover:to-gray-900 text-white rounded-lg p-5 shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm opacity-90 mb-1">Manage</p>
@@ -69,8 +69,8 @@
 
     <!-- Stats Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <!-- Total Students -->
-        <div class="bg-white overflow-hidden shadow-md rounded-xl border border-gray-100 hover:shadow-lg transition-shadow duration-200">
+        <!-- Total Students - Clickable -->
+        <a href="{{ route('admin.users.index', ['role' => 'student']) }}" class="block bg-white overflow-hidden shadow-md hover:shadow-xl rounded-[14px] border border-gray-100 transition-all duration-200 transform hover:scale-102 cursor-pointer">
             <div class="p-6">
                 <div class="flex items-center justify-between">
                     <div class="flex-1">
@@ -83,40 +83,40 @@
                             {{ $stats['active_students'] }} active
                         </div>
                     </div>
-                    <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                    <div class="w-14 h-14 bg-gradient-to-br from-primary-600 to-secondary-500 rounded-xl flex items-center justify-center shadow-lg">
                         <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
                         </svg>
                     </div>
                 </div>
             </div>
-        </div>
+        </a>
 
-        <!-- Total Users -->
-        <div class="bg-white overflow-hidden shadow-md rounded-xl border border-gray-100 hover:shadow-lg transition-shadow duration-200">
+        <!-- Total Users - Clickable (Treasurers) -->
+        <a href="{{ route('admin.users.index', ['role' => 'treasurer']) }}" class="block bg-white overflow-hidden shadow-md hover:shadow-xl rounded-[14px] border border-gray-100 transition-all duration-200 transform hover:scale-102 cursor-pointer">
             <div class="p-6">
                 <div class="flex items-center justify-between">
                     <div class="flex-1">
-                        <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">System Users</div>
+                        <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Treasurers</div>
                         <div class="text-3xl font-bold text-gray-900">{{ $stats['total_users'] }}</div>
-                        <div class="mt-2 text-sm text-gray-500">Users</div>
+                        <div class="mt-2 text-sm text-gray-500">System users</div>
                     </div>
-                    <div class="w-14 h-14 bg-gradient-to-br from-purple-500 to-accent-600 rounded-xl flex items-center justify-center shadow-lg">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-14 h-14 bg-gradient-to-br from-secondary-500 to-secondary-600 rounded-xl flex items-center justify-center shadow-lg">
+                        <svg class="w-8 h-8 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
                         </svg>
                     </div>
                 </div>
             </div>
-        </div>
+        </a>
 
-        <!-- Total Collected -->
-        <div class="bg-white overflow-hidden shadow-md rounded-xl border border-gray-100 hover:shadow-lg transition-shadow duration-200">
+        <!-- Total Collected - Clickable (Paid Payments) -->
+        <a href="{{ route('admin.payments.index', ['status' => 'paid']) }}" class="block bg-white overflow-hidden shadow-md hover:shadow-xl rounded-[14px] border border-gray-100 transition-all duration-200 transform hover:scale-102 cursor-pointer">
             <div class="p-6">
                 <div class="flex items-center justify-between">
                     <div class="flex-1">
                         <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Total Collected</div>
-                        <div class="text-3xl font-bold text-gray-900">₱{{ number_format($stats['total_payments'], 2) }}</div>
+                        <div class="text-3xl font-bold text-green-600">₱{{ number_format($stats['total_payments'], 2) }}</div>
                         <div class="mt-2 text-sm text-green-600">All time revenue</div>
                     </div>
                     <div class="w-14 h-14 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center shadow-lg">
@@ -126,25 +126,25 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </a>
 
-        <!-- Pending Balance -->
-        <div class="bg-white overflow-hidden shadow-md rounded-xl border border-gray-100 hover:shadow-lg transition-shadow duration-200">
+        <!-- Pending Balance - Clickable (Pending Payments) -->
+        <a href="{{ route('admin.payments.index', ['status' => 'pending']) }}" class="block bg-white overflow-hidden shadow-md hover:shadow-xl rounded-[14px] border border-gray-100 transition-all duration-200 transform hover:scale-102 cursor-pointer">
             <div class="p-6">
                 <div class="flex items-center justify-between">
                     <div class="flex-1">
-                        <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Pending Balance</div>
-                        <div class="text-3xl font-bold text-orange-600">₱{{ number_format($stats['total_balance'], 2) }}</div>
-                        <div class="mt-2 text-sm text-orange-500">Awaiting payment</div>
+                        <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Pending Payments</div>
+                        <div class="text-3xl font-bold text-primary-600">₱{{ number_format($stats['total_balance'], 2) }}</div>
+                        <div class="mt-2 text-sm text-gray-500">Awaiting payment</div>
                     </div>
-                    <div class="w-14 h-14 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center shadow-lg">
+                    <div class="w-14 h-14 bg-gradient-to-br from-primary-600 to-primary-700 rounded-xl flex items-center justify-center shadow-lg">
                         <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
                     </div>
                 </div>
             </div>
-        </div>
+        </a>
     </div>
 
     <!-- Recent Payments Table -->
@@ -155,7 +155,7 @@
                     <h3 class="text-lg font-semibold text-gray-900">Recent Payments</h3>
                     <p class="text-sm text-gray-500 mt-1">Latest payment transactions across the system</p>
                 </div>
-                <a href="{{ route('admin.payments.index') }}" class="inline-flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
+                <a href="{{ route('admin.payments.index') }}" class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-primary-600 to-secondary-500 hover:from-primary-700 hover:to-secondary-600 text-white text-sm font-medium rounded-lg transition-all duration-200 shadow-md hover:shadow-lg">
                     View All
                     <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>

@@ -23,10 +23,10 @@
                 font-family: 'Inter', sans-serif;
             }
             .gradient-bg {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                background: linear-gradient(135deg, #D72638 0%, #FFCB05 100%);
             }
             .hero-pattern {
-                background-color: #667eea;
+                background-color: #D72638;
                 background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
             }
             .animate-float {
@@ -85,38 +85,38 @@
                     <!-- Left Content -->
                     <div class="text-white">
                         <h1 class="text-5xl font-bold mb-6 leading-tight">
-                            Streamline Your
-                            <span class="block text-yellow-300">Payment Monitoring</span>
+                            CCS Payment
+                            <span class="block text-yellow-300">Management System</span>
                         </h1>
-                        <p class="text-xl mb-8 text-indigo-100">
-                            Modern, efficient, and secure payment tracking system designed for educational institutions. Manage student payments with ease.
+                        <p class="text-xl mb-8 text-red-50">
+                            Efficient and secure payment tracking system for CCS students. Monitor payments, track balances, and manage transactions with transparency and ease.
                         </p>
                         <div class="flex flex-wrap gap-4">
                             @guest
-                                <a href="{{ route('register') }}" class="px-8 py-3 bg-white text-primary-600 font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300">
+                                <a href="{{ route('register') }}" class="px-8 py-3 bg-white text-red-600 font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300">
                                     Get Started
                                 </a>
-                                <a href="{{ route('login') }}" class="px-8 py-3 bg-primary-700 text-white font-semibold rounded-lg shadow-lg hover:bg-indigo-800 transition duration-300">
+                                <a href="{{ route('login') }}" class="px-8 py-3 bg-yellow-400 text-gray-900 font-semibold rounded-lg shadow-lg hover:bg-yellow-500 transition duration-300">
                                     Sign In
                                 </a>
                             @else
-                                <a href="{{ url('/dashboard') }}" class="px-8 py-3 bg-white text-primary-600 font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300">
+                                <a href="{{ url('/dashboard') }}" class="px-8 py-3 bg-white text-red-600 font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300">
                                     Go to Dashboard
                                 </a>
                             @endguest
                         </div>
-                        <div class="mt-8 flex items-center space-x-6 text-sm text-indigo-100">
+                        <div class="mt-8 flex items-center space-x-6 text-sm text-red-50">
                             <div class="flex items-center">
                                 <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                                 </svg>
-                                Secure Payments
+                                Secure & Transparent
                             </div>
                             <div class="flex items-center">
                                 <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                                 </svg>
-                                Real-time Tracking
+                                Real-time Balance Tracking
                             </div>
                         </div>
                     </div>
@@ -166,8 +166,8 @@
         <div class="py-20 bg-white dark:bg-gray-800">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-16">
-                    <h2 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">Powerful Features</h2>
-                    <p class="text-xl text-gray-600 dark:text-gray-300">Everything you need to manage payments efficiently</p>
+                    <h2 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">System Features</h2>
+                    <p class="text-xl text-gray-600 dark:text-gray-300">Complete payment management solution for CCS students and treasurers</p>
                 </div>
 
                 <div class="grid md:grid-cols-3 gap-8">
@@ -178,8 +178,8 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                             </svg>
                         </div>
-                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Student Management</h3>
-                        <p class="text-gray-600 dark:text-gray-300">Easily manage student profiles, track payment history, and monitor outstanding balances.</p>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Student Records</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Manage CCS student profiles by block, track complete payment history, and monitor balances in real-time.</p>
                     </div>
 
                     <!-- Feature 2 -->
@@ -189,8 +189,8 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         </div>
-                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Payment Tracking</h3>
-                        <p class="text-gray-600 dark:text-gray-300">Real-time payment updates with detailed records and automatic balance calculations.</p>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Payment Recording</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Record payments via Cash, GCash, Maya, or PayPal with automatic balance updates and receipt attachments.</p>
                     </div>
 
                     <!-- Feature 3 -->
@@ -200,8 +200,8 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                             </svg>
                         </div>
-                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Analytics & Reports</h3>
-                        <p class="text-gray-600 dark:text-gray-300">Comprehensive reports and visualizations to help you make informed decisions.</p>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Reports & Export</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Generate comprehensive payment reports, export to Excel, and track collection trends by block and semester.</p>
                     </div>
 
                     <!-- Feature 4 -->
@@ -211,8 +211,8 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                             </svg>
                         </div>
-                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Secure Access</h3>
-                        <p class="text-gray-600 dark:text-gray-300">Role-based authentication ensures data security and proper access control.</p>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Role-Based Access</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Secure authentication with separate access for Admins, Treasurers (by block), and Students with activity logging.</p>
                     </div>
 
                     <!-- Feature 5 -->
@@ -222,8 +222,8 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                             </svg>
                         </div>
-                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Fast Performance</h3>
-                        <p class="text-gray-600 dark:text-gray-300">Built with Laravel for lightning-fast response times and optimal performance.</p>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Activity Auditing</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Complete audit trail tracking all payment changes, updates, and deletions with IP addresses and timestamps.</p>
                     </div>
 
                     <!-- Feature 6 -->
@@ -233,8 +233,8 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
                             </svg>
                         </div>
-                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Mobile Friendly</h3>
-                        <p class="text-gray-600 dark:text-gray-300">Responsive design works perfectly on all devices - desktop, tablet, and mobile.</p>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Email Notifications</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Automatic email notifications when payments are recorded, keeping students and guardians informed.</p>
                     </div>
                 </div>
             </div>
@@ -244,15 +244,15 @@
         <div class="py-20 gradient-bg">
             <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
                 <h2 class="text-4xl font-bold text-white mb-6">Ready to Get Started?</h2>
-                <p class="text-xl text-indigo-100 mb-8">
-                    Join educational institutions already using our platform to streamline their payment processes.
+                <p class="text-xl text-white mb-8">
+                    Streamline your CCS payment management with our secure, efficient, and transparent system.
                 </p>
                 @guest
-                    <a href="{{ route('register') }}" class="inline-block px-8 py-4 bg-white text-primary-600 font-bold rounded-lg shadow-xl hover:shadow-2xl transform hover:scale-105 transition duration-300">
-                        Create Free Account
+                    <a href="{{ route('register') }}" class="inline-block px-8 py-4 bg-white text-red-600 font-bold rounded-lg shadow-xl hover:shadow-2xl transform hover:scale-105 transition duration-300">
+                        Create Account
                     </a>
                 @else
-                    <a href="{{ url('/dashboard') }}" class="inline-block px-8 py-4 bg-white text-primary-600 font-bold rounded-lg shadow-xl hover:shadow-2xl transform hover:scale-105 transition duration-300">
+                    <a href="{{ url('/dashboard') }}" class="inline-block px-8 py-4 bg-white text-red-600 font-bold rounded-lg shadow-xl hover:shadow-2xl transform hover:scale-105 transition duration-300">
                         Go to Dashboard
                     </a>
                 @endguest

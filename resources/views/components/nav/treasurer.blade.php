@@ -2,7 +2,7 @@
 <div class="space-y-1">
     <!-- Dashboard -->
     <a href="{{ route('treasurer.dashboard') }}" 
-       class="flex items-center space-x-3 px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 {{ request()->routeIs('treasurer.dashboard') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700 hover:bg-gray-100' }}">
+       class="flex items-center space-x-3 px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 {{ request()->routeIs('treasurer.dashboard') ? 'bg-red-50 text-primary-600' : 'text-gray-700 hover:bg-gray-100' }}">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
         </svg>
@@ -23,10 +23,10 @@
             </svg>
         </button>
         <div x-show="open" x-transition class="ml-11 mt-1 space-y-1">
-            <a href="#" class="block px-4 py-2 text-sm text-gray-600 hover:text-indigo-600 hover:bg-gray-50 rounded-lg transition-colors">Record Payment</a>
-            <a href="#" class="block px-4 py-2 text-sm text-gray-600 hover:text-indigo-600 hover:bg-gray-50 rounded-lg transition-colors">View All</a>
-            <a href="#" class="block px-4 py-2 text-sm text-gray-600 hover:text-indigo-600 hover:bg-gray-50 rounded-lg transition-colors">Pending</a>
-            <a href="#" class="block px-4 py-2 text-sm text-gray-600 hover:text-indigo-600 hover:bg-gray-50 rounded-lg transition-colors">Today's Collection</a>
+            <a href="#" class="block px-4 py-2 text-sm text-gray-600 hover:text-primary-600 hover:bg-red-50 rounded-lg transition-colors">Record Payment</a>
+            <a href="#" class="block px-4 py-2 text-sm text-gray-600 hover:text-primary-600 hover:bg-red-50 rounded-lg transition-colors">View All</a>
+            <a href="#" class="block px-4 py-2 text-sm text-gray-600 hover:text-primary-600 hover:bg-red-50 rounded-lg transition-colors">Pending</a>
+            <a href="#" class="block px-4 py-2 text-sm text-gray-600 hover:text-primary-600 hover:bg-red-50 rounded-lg transition-colors">Today's Collection</a>
         </div>
     </div>
 
@@ -52,9 +52,9 @@
             </svg>
         </button>
         <div x-show="open" x-transition class="ml-11 mt-1 space-y-1">
-            <a href="#" class="block px-4 py-2 text-sm text-gray-600 hover:text-indigo-600 hover:bg-gray-50 rounded-lg transition-colors">Daily Collection</a>
-            <a href="#" class="block px-4 py-2 text-sm text-gray-600 hover:text-indigo-600 hover:bg-gray-50 rounded-lg transition-colors">Monthly Summary</a>
-            <a href="#" class="block px-4 py-2 text-sm text-gray-600 hover:text-indigo-600 hover:bg-gray-50 rounded-lg transition-colors">Balance Report</a>
+            <a href="#" class="block px-4 py-2 text-sm text-gray-600 hover:text-primary-600 hover:bg-red-50 rounded-lg transition-colors">Daily Collection</a>
+            <a href="#" class="block px-4 py-2 text-sm text-gray-600 hover:text-primary-600 hover:bg-red-50 rounded-lg transition-colors">Monthly Summary</a>
+            <a href="#" class="block px-4 py-2 text-sm text-gray-600 hover:text-primary-600 hover:bg-red-50 rounded-lg transition-colors">Balance Report</a>
         </div>
     </div>
 

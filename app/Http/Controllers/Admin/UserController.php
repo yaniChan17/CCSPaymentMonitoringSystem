@@ -16,8 +16,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $query = User::with('student')
-            ->where('id', '!=', auth()->id()); // Exclude current admin
+        $query = User::with('student'); // Include all users (including current admin)
 
         // Search filter (name or email)
         if ($request->filled('search')) {
@@ -37,6 +36,7 @@ class UserController extends Controller
             ->paginate(15)
             ->appends($request->query()); // Maintain query params in pagination
 
+        // Calculate accurate stats
         $stats = [
             'total_users' => User::count(),
             'admins' => User::where('role', 'admin')->count(),

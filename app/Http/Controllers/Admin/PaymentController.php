@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\ActivityLog;
 use App\Models\Payment;
 use App\Models\Student;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -130,13 +132,41 @@ class PaymentController extends Controller
             'student_id' => ['required', 'exists:students,id'],
             'amount' => ['required', 'numeric', 'min:0.01'],
             'payment_date' => ['required', 'date'],
-            'payment_method' => ['required', 'in:cash,check,bank_transfer,online'],
+            'payment_method' => ['required', 'in:cash,gcash,maya,paypal'],
             'status' => ['required', 'in:paid,pending,cancelled'],
             'reference_number' => ['nullable', 'string', 'max:255'],
             'notes' => ['nullable', 'string', 'max:1000'],
+            'receipt_attachment' => ['nullable', 'image', 'mimes:jpeg,png,jpg,pdf', 'max:5120'], // 5MB max
         ]);
 
+        // Handle receipt upload
+        if ($request->hasFile('receipt_attachment')) {
+            // Delete old receipt if exists
+            if ($payment->receipt_attachment) {
+                Storage::disk('public')->delete('receipts/' . $payment->receipt_attachment);
+            }
+
+            // Store new receipt
+            $file = $request->file('receipt_attachment');
+            $filename = time() . '_' . $payment->id . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('receipts', $filename, 'public');
+            $validated['receipt_attachment'] = $filename;
+        }
+
+        // Log the changes
+        $oldValues = $payment->getOriginal();
+        
         $payment->update($validated);
+
+        // Log activity
+        ActivityLog::log(
+            'updated',
+            'Payment',
+            $payment->id,
+            $oldValues,
+            $payment->getChanges(),
+            "Updated payment #{$payment->id} for {$payment->student->full_name}"
+        );
 
         return redirect()->route('admin.payments.index')
             ->with('success', 'Payment updated successfully!');
@@ -147,6 +177,16 @@ class PaymentController extends Controller
      */
     public function destroy(Payment $payment)
     {
+        // Log before deletion
+        ActivityLog::log(
+            'deleted',
+            'Payment',
+            $payment->id,
+            $payment->toArray(),
+            null,
+            "Deleted payment #{$payment->id} for {$payment->student->full_name}"
+        );
+
         $payment->delete();
 
         return redirect()->route('admin.payments.index')

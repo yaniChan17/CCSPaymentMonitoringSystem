@@ -15,8 +15,8 @@ class AdminDashboardController extends Controller
             'total_students' => Student::count(),
             'active_students' => Student::where('status', 'active')->count(),
             'total_payments' => Payment::where('status', 'paid')->sum('amount'),
-            'total_users' => User::count(),
-            'total_balance' => Student::sum('balance'),
+            'total_users' => User::where('role', 'treasurer')->count(), // Count treasurers only
+            'total_balance' => Payment::where('status', 'pending')->sum('amount'), // Sum of pending payments
         ];
 
         $recentPayments = Payment::with(['student', 'treasurer'])

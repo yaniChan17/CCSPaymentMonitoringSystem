@@ -21,12 +21,11 @@
             }
             
             .gradient-bg {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                background: linear-gradient(135deg, #D72638 0%, #FFCB05 100%);
             }
             
             .auth-pattern {
-                background-color: #667eea;
-                background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+                background: linear-gradient(135deg, #D72638 0%, #FFCB05 100%);
             }
             
             .glass-effect {
@@ -41,17 +40,17 @@
             
             .input-focus:focus {
                 transform: translateY(-2px);
-                box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+                box-shadow: 0 4px 12px rgba(215, 38, 56, 0.15);
             }
             
             .btn-gradient {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                background: linear-gradient(135deg, #D72638 0%, #FFCB05 100%);
                 transition: all 0.3s ease;
             }
             
             .btn-gradient:hover {
                 transform: translateY(-2px);
-                box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+                box-shadow: 0 8px 20px rgba(215, 38, 56, 0.3);
             }
             
             .floating-shape {
@@ -67,6 +66,18 @@
                 66% { transform: translate(-20px, 20px) rotate(240deg); }
             }
             
+            .logo-watermark {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                opacity: 0.15;
+                width: 800px;
+                height: 800px;
+                pointer-events: none;
+                object-fit: contain;
+            }
+            
             /* Custom Scrollbar Styling */
             .custom-scrollbar::-webkit-scrollbar {
                 width: 8px;
@@ -78,18 +89,18 @@
             }
             
             .custom-scrollbar::-webkit-scrollbar-thumb {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                background: linear-gradient(135deg, #D72638 0%, #FFCB05 100%);
                 border-radius: 10px;
             }
             
             .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-                background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+                background: linear-gradient(135deg, #FFCB05 0%, #D72638 100%);
             }
             
             /* Firefox */
             .custom-scrollbar {
                 scrollbar-width: thin;
-                scrollbar-color: #667eea #f1f1f1;
+                scrollbar-color: #D72638 #f1f1f1;
             }
         </style>
     </head>
@@ -98,9 +109,9 @@
             <!-- Left Side - Form -->
             <div class="w-full lg:w-1/2 flex flex-col bg-white relative overflow-hidden">
                 <!-- Floating Shapes (Fixed) -->
-                <div class="floating-shape w-64 h-64 bg-primary-500 top-10 -left-20" style="animation-delay: 0s;"></div>
-                <div class="floating-shape w-48 h-48 bg-purple-500 bottom-10 -right-10" style="animation-delay: 7s;"></div>
-                <div class="floating-shape w-32 h-32 bg-pink-500 top-1/2 left-1/3" style="animation-delay: 14s;"></div>
+                <div class="floating-shape w-64 h-64 bg-primary-600 top-10 -left-20" style="animation-delay: 0s;"></div>
+                <div class="floating-shape w-48 h-48 bg-secondary-500 bottom-10 -right-10" style="animation-delay: 7s;"></div>
+                <div class="floating-shape w-32 h-32 bg-primary-400 top-1/2 left-1/3" style="animation-delay: 14s;"></div>
                 
                 <!-- Scrollable Form Container -->
                 <div class="flex-1 overflow-y-auto py-8 px-8 custom-scrollbar">
@@ -115,14 +126,20 @@
                             </a>
                             
                             <div class="mt-6 flex items-center">
-                                <div class="w-12 h-12 bg-gradient-to-br from-primary-500 to-accent-600 rounded-lg flex items-center justify-center">
-                                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                    </svg>
-                                </div>
-                                <div class="ml-3">
-                                    <h1 class="text-2xl font-bold text-gray-900">CCS Payment System</h1>
-                                    <p class="text-sm text-gray-500">Streamline Your Payment Monitoring</p>
+                                @if(file_exists(public_path('images/ccs-logo.png')) || file_exists(public_path('images/ccs-logo.jpg')))
+                                    <img src="{{ asset(file_exists(public_path('images/ccs-logo.png')) ? 'images/ccs-logo.png' : 'images/ccs-logo.jpg') }}" 
+                                         alt="CCS Logo" 
+                                         class="w-16 h-16 object-contain rounded-full">
+                                @else
+                                    <div class="w-16 h-16 bg-gradient-to-br from-primary-600 to-secondary-500 rounded-full flex items-center justify-center">
+                                        <svg class="w-9 h-9 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
+                                    </div>
+                                @endif
+                                <div class="ml-4">
+                                    <h1 class="text-2xl font-bold text-gray-900">CCS Payment</h1>
+                                    <p class="text-sm text-gray-500">Management System</p>
                                 </div>
                             </div>
                         </div>
@@ -133,15 +150,22 @@
                 </div>
             </div>
 
-            <!-- Right Side - Gradient Background (Hidden on Mobile, Fixed on Desktop) -->
+            <!-- Right Side - Gradient Background with Faded Logo (Hidden on Mobile, Fixed on Desktop) -->
             <div class="hidden lg:flex lg:w-1/2 auth-pattern items-center justify-center p-12 relative overflow-hidden">
+                <!-- Faded Logo Watermark -->
+                @if(file_exists(public_path('images/ccs-logo.png')) || file_exists(public_path('images/ccs-logo.jpg')))
+                    <img src="{{ asset(file_exists(public_path('images/ccs-logo.png')) ? 'images/ccs-logo.png' : 'images/ccs-logo.jpg') }}" 
+                         alt="CCS Logo" 
+                         class="logo-watermark">
+                @endif
+                
                 <!-- Decorative Elements -->
                 <div class="absolute top-20 right-20 w-72 h-72 bg-white/10 rounded-full blur-3xl"></div>
-                <div class="absolute bottom-20 left-20 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"></div>
+                <div class="absolute bottom-20 left-20 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
                 
                 <div class="relative z-10 text-white max-w-lg">
-                    <h2 class="text-4xl font-bold mb-6">Welcome to CCS Payment Monitoring</h2>
-                    <p class="text-lg text-indigo-100 mb-8">
+                    <h2 class="text-4xl font-bold mb-6">Welcome to CCS Payment Management System</h2>
+                    <p class="text-lg text-white/90 mb-8">
                         Manage student payments efficiently with our comprehensive monitoring system. 
                         Track payments, generate reports, and streamline your financial operations.
                     </p>
@@ -156,7 +180,7 @@
                             </div>
                             <div class="ml-3">
                                 <h3 class="font-semibold text-white">Real-time Payment Tracking</h3>
-                                <p class="text-sm text-indigo-100">Monitor all transactions as they happen</p>
+                                <p class="text-sm text-white/80">Monitor all transactions as they happen</p>
                             </div>
                         </div>
                         
@@ -168,7 +192,7 @@
                             </div>
                             <div class="ml-3">
                                 <h3 class="font-semibold text-white">Secure & Reliable</h3>
-                                <p class="text-sm text-indigo-100">Bank-level security for your data</p>
+                                <p class="text-sm text-white/80">Bank-level security for your data</p>
                             </div>
                         </div>
                         
@@ -180,7 +204,7 @@
                             </div>
                             <div class="ml-3">
                                 <h3 class="font-semibold text-white">Comprehensive Reports</h3>
-                                <p class="text-sm text-indigo-100">Generate detailed analytics and insights</p>
+                                <p class="text-sm text-white/80">Generate detailed analytics and insights</p>
                             </div>
                         </div>
                     </div>

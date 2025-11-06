@@ -41,6 +41,38 @@
             @enderror
         </div>
 
+        <!-- Student/Employee ID (Optional) -->
+        <div>
+            <label for="student_id" class="block text-sm font-medium text-gray-700 mb-2">
+                Student/Employee ID <span class="text-gray-400 text-xs">(Optional)</span>
+            </label>
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"/>
+                    </svg>
+                </div>
+                <input 
+                    id="student_id" 
+                    type="text" 
+                    name="student_id" 
+                    value="{{ old('student_id') }}" 
+                    autocomplete="off"
+                    class="input-focus block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-600 transition-all duration-200"
+                    placeholder="e.g., 2024-001234"
+                />
+            </div>
+            <p class="mt-1 text-xs text-gray-500">Leave blank to auto-generate a temporary ID</p>
+            @error('student_id')
+                <p class="mt-2 text-sm text-red-600 flex items-center">
+                    <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                    </svg>
+                    {{ $message }}
+                </p>
+            @enderror
+        </div>
+
         <!-- Email Address -->
         <div>
             <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
@@ -59,7 +91,7 @@
                     value="{{ old('email') }}" 
                     required 
                     autocomplete="username"
-                    class="input-focus block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-indigo-500 transition-all duration-200"
+                    class="input-focus block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-600 transition-all duration-200"
                     placeholder="you@example.com"
                 />
             </div>

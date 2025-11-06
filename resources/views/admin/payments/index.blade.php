@@ -109,12 +109,11 @@
             </div>
         @endif
 
-        <!-- Filters - Simplified -->
+        <!-- Filters -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4" x-data="{ showAdvanced: false }">
             <form method="GET" action="{{ route('admin.payments.index') }}" class="space-y-4">
-                <!-- Primary Filters Row -->
+                <!-- Primary Filters: Search, Status, Block -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <!-- Search -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">
                             <svg class="inline-block w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -125,13 +124,12 @@
                         <input type="text" 
                                name="search" 
                                value="{{ request('search') }}"
-                               placeholder="Name or ID..." 
+                               placeholder="Search by student name or ID..." 
                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
                     </div>
 
-                    <!-- Status Filter -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Payment Status</label>
                         <select name="status" 
                                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
                             <option value="">All Status</option>
@@ -141,9 +139,8 @@
                         </select>
                     </div>
 
-                    <!-- Block Filter -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Block</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Block Number</label>
                         <select name="block" 
                                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
                             <option value="">All Blocks</option>
@@ -154,64 +151,19 @@
                     </div>
                 </div>
 
-                <!-- Advanced Filters (Collapsible) -->
-                <div x-show="showAdvanced" x-transition class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-gray-200">
-                    <!-- Year Level Filter -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Year Level</label>
-                        <select name="year_level" 
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
-                            <option value="">All Years</option>
-                            @foreach($yearLevels as $yearLevel)
-                                <option value="{{ $yearLevel }}" {{ request('year_level') === $yearLevel ? 'selected' : '' }}>{{ $yearLevel }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <!-- Payment Method Filter -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Method</label>
-                        <select name="method" 
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
-                            <option value="">All Methods</option>
-                            <option value="cash" {{ request('method') === 'cash' ? 'selected' : '' }}>Cash</option>
-                            <option value="check" {{ request('method') === 'check' ? 'selected' : '' }}>Check</option>
-                            <option value="bank_transfer" {{ request('method') === 'bank_transfer' ? 'selected' : '' }}>Bank Transfer</option>
-                            <option value="online" {{ request('method') === 'online' ? 'selected' : '' }}>Online</option>
-                        </select>
-                    </div>
-
-                    <!-- Date From -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Date From</label>
-                        <input type="date" 
-                               name="date_from" 
-                               value="{{ request('date_from') }}"
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
-                    </div>
-                    
-                    <!-- Date To -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Date To</label>
-                        <input type="date" 
-                               name="date_to" 
-                               value="{{ request('date_to') }}"
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
-                    </div>
-                </div>
-
-                <!-- Action Buttons Row -->
-                <div class="flex flex-col sm:flex-row gap-3 items-center justify-between">
-                    <!-- Toggle Advanced Filters -->
+                <!-- Advanced Filters Toggle & Apply Button -->
+                <div class="flex items-center justify-between pt-2 border-t border-gray-200">
                     <button type="button" 
                             @click="showAdvanced = !showAdvanced"
-                            class="text-sm text-primary-600 hover:text-primary-700 font-medium flex items-center">
-                        <svg class="w-4 h-4 mr-1 transition-transform" :class="{ 'rotate-180': showAdvanced }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-primary-600 transition-colors">
+                        <svg class="w-4 h-4 mr-2 transition-transform duration-200" 
+                             :class="{ 'rotate-180': showAdvanced }"
+                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                         </svg>
                         <span x-text="showAdvanced ? 'Hide Advanced Filters' : 'Show Advanced Filters'"></span>
                     </button>
-
+                    
                     <!-- Action Buttons -->
                     <div class="flex items-end space-x-2">
                         <button type="submit" 
@@ -224,6 +176,61 @@
                                 Clear Filters
                             </a>
                         @endif
+                    </div>
+                </div>
+
+                <!-- Advanced Filters Panel (Collapsible) -->
+                <div x-show="showAdvanced" 
+                     x-transition:enter="transition ease-out duration-200"
+                     x-transition:enter-start="opacity-0 transform -translate-y-2"
+                     x-transition:enter-end="opacity-100 transform translate-y-0"
+                     x-transition:leave="transition ease-in duration-150"
+                     x-transition:leave-start="opacity-100 transform translate-y-0"
+                     x-transition:leave-end="opacity-0 transform -translate-y-2"
+                     class="space-y-4 pt-4 border-t border-gray-200">
+                    
+                    <!-- Year Level & Payment Method -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Year Level</label>
+                            <select name="year_level" 
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                <option value="">All Year Levels</option>
+                                @foreach($yearLevels as $yearLevel)
+                                    <option value="{{ $yearLevel }}" {{ request('year_level') === $yearLevel ? 'selected' : '' }}>{{ $yearLevel }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Payment Method</label>
+                            <select name="method" 
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                <option value="">All Methods</option>
+                                <option value="cash" {{ request('method') === 'cash' ? 'selected' : '' }}>Cash</option>
+                                <option value="gcash" {{ request('method') === 'gcash' ? 'selected' : '' }}>GCash</option>
+                                <option value="maya" {{ request('method') === 'maya' ? 'selected' : '' }}>Maya</option>
+                                <option value="paypal" {{ request('method') === 'paypal' ? 'selected' : '' }}>PayPal</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Date Range -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Date From</label>
+                            <input type="date" 
+                                   name="date_from" 
+                                   value="{{ request('date_from') }}"
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Date To</label>
+                            <input type="date" 
+                                   name="date_to" 
+                                   value="{{ request('date_to') }}"
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                        </div>
                     </div>
                 </div>
             </form>

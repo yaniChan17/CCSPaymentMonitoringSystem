@@ -24,7 +24,7 @@ class PaymentFactory extends Factory
             'amount' => fake()->randomFloat(2, 500, 5000),
             'payment_date' => fake()->dateTimeBetween('-6 months', 'now'),
             'status' => fake()->randomElement(['paid', 'pending', 'overdue']),
-            'payment_method' => fake()->randomElement(['cash', 'online', 'check', 'bank_transfer']),
+            'payment_method' => fake()->randomElement(['cash', 'gcash', 'maya', 'paypal']),
             'reference_number' => fake()->optional(0.6)->numerify('REF-########'),
             'notes' => fake()->optional(0.3)->sentence(),
         ];

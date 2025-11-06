@@ -21,7 +21,7 @@
 
         <!-- Stats Cards -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <a href="{{ route('admin.users.index') }}" class="block bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-lg hover:border-primary-300 transition-all duration-200 cursor-pointer">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-gray-600">Total Users</p>
@@ -33,9 +33,9 @@
                         </svg>
                     </div>
                 </div>
-            </div>
+            </a>
 
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <a href="{{ route('admin.users.index', ['role' => 'admin']) }}" class="block bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-lg hover:border-purple-300 transition-all duration-200 cursor-pointer">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-gray-600">Admins</p>
@@ -47,9 +47,9 @@
                         </svg>
                     </div>
                 </div>
-            </div>
+            </a>
 
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <a href="{{ route('admin.users.index', ['role' => 'treasurer']) }}" class="block bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-lg hover:border-green-300 transition-all duration-200 cursor-pointer">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-gray-600">Treasurers</p>
@@ -61,9 +61,9 @@
                         </svg>
                     </div>
                 </div>
-            </div>
+            </a>
 
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <a href="{{ route('admin.users.index', ['role' => 'student']) }}" class="block bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-lg hover:border-blue-300 transition-all duration-200 cursor-pointer">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-gray-600">Students</p>
@@ -75,7 +75,7 @@
                         </svg>
                     </div>
                 </div>
-            </div>
+            </a>
         </div>
 
         <!-- Filters -->

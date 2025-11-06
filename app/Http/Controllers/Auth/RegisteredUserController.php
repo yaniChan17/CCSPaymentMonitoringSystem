@@ -32,8 +32,9 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'student_id' => ['nullable', 'string', 'max:50', 'unique:students,student_id'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'password' => ['required', 'confirmed', 'min:8'],
         ]);
 
         // Split name into first and last name
@@ -41,8 +42,8 @@ class RegisteredUserController extends Controller
         $firstName = $nameParts[0];
         $lastName = $nameParts[1] ?? '';
 
-        // Generate a temporary student ID (can be updated by admin later)
-        $studentIdNumber = 'TEMP-' . strtoupper(substr(uniqid(), -6));
+        // Use provided student ID or generate a temporary one
+        $studentIdNumber = $request->student_id ?? 'TEMP-' . strtoupper(substr(uniqid(), -6));
 
         // Create student profile first
         $student = Student::create([

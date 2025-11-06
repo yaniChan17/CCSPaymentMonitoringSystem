@@ -21,7 +21,7 @@
             }
             
             .gradient-bg {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                background: linear-gradient(135deg, #D72638 0%, #FFCB05 100%);
             }
             
             .sidebar-transition {
@@ -68,12 +68,12 @@
             }
             
             .custom-scrollbar::-webkit-scrollbar-thumb {
-                background: #cbd5e1;
+                background: linear-gradient(135deg, #D72638 0%, #FFCB05 100%);
                 border-radius: 4px;
             }
             
             .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-                background: #94a3b8;
+                background: linear-gradient(135deg, #FFCB05 0%, #D72638 100%);
             }
             
             /* Smooth scroll behavior */
@@ -103,14 +103,20 @@
                 <div class="gradient-bg p-6 flex-shrink-0">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
-                                <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                            </div>
+                            @if(file_exists(public_path('images/ccs-logo.png')) || file_exists(public_path('images/ccs-logo.jpg')))
+                                <img src="{{ asset(file_exists(public_path('images/ccs-logo.png')) ? 'images/ccs-logo.png' : 'images/ccs-logo.jpg') }}" 
+                                     alt="CCS Logo" 
+                                     class="w-10 h-10 object-contain rounded-full bg-white p-1 border border-white/20">
+                            @else
+                                <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center border border-white/20">
+                                    <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                </div>
+                            @endif
                             <div class="text-white">
                                 <h1 class="text-lg font-bold">CCS Payment</h1>
-                                <p class="text-xs text-indigo-100">Monitoring System</p>
+                                <p class="text-xs text-white/90">Management System</p>
                             </div>
                         </div>
                         <button 
@@ -127,13 +133,19 @@
                 <!-- User Profile Section (Fixed) -->
                 <div class="p-4 border-b border-gray-200 flex-shrink-0">
                     <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-semibold">
-                            {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
-                        </div>
+                        @if(Auth::user()->student && Auth::user()->student->profile_photo)
+                            <img src="{{ asset('storage/profile_photos/' . Auth::user()->student->profile_photo) }}" 
+                                 alt="Profile Photo" 
+                                 class="w-10 h-10 rounded-full object-cover border-2 border-gray-200">
+                        @else
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary-600 to-secondary-500 flex items-center justify-center text-white font-semibold">
+                                {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
+                            </div>
+                        @endif
                         <div class="flex-1 min-w-0">
                             <p class="text-sm font-semibold text-gray-900 truncate">{{ Auth::user()->name }}</p>
                             <p class="text-xs text-gray-500 truncate">{{ Auth::user()->email }}</p>
-                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800 mt-1">
+                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-secondary-100 text-gray-800 mt-1">
                                 {{ ucfirst(Auth::user()->role ?? 'user') }}
                             </span>
                         </div>
@@ -218,9 +230,15 @@
                                     <x-dropdown align="right" width="48">
                                         <x-slot name="trigger">
                                             <button class="flex items-center space-x-2 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
-                                                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-xs font-semibold">
-                                                    {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
-                                                </div>
+                                                @if(Auth::user()->student && Auth::user()->student->profile_photo)
+                                                    <img src="{{ asset('storage/profile_photos/' . Auth::user()->student->profile_photo) }}" 
+                                                         alt="Profile Photo" 
+                                                         class="w-8 h-8 rounded-full object-cover border-2 border-gray-200">
+                                                @else
+                                                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary-600 to-secondary-500 flex items-center justify-center text-white text-xs font-semibold">
+                                                        {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
+                                                    </div>
+                                                @endif
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                                                 </svg>

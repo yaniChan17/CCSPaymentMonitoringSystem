@@ -20,7 +20,7 @@
 
         <!-- Form -->
         <div class="bg-white shadow-md rounded-xl border border-gray-100">
-            <form method="POST" action="{{ route('admin.payments.update', $payment) }}">
+            <form method="POST" action="{{ route('admin.payments.update', $payment) }}" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 
@@ -99,9 +99,9 @@
                                     required
                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('payment_method') border-red-500 @enderror">
                                 <option value="cash" {{ old('payment_method', $payment->payment_method) === 'cash' ? 'selected' : '' }}>Cash</option>
-                                <option value="check" {{ old('payment_method', $payment->payment_method) === 'check' ? 'selected' : '' }}>Check</option>
-                                <option value="bank_transfer" {{ old('payment_method', $payment->payment_method) === 'bank_transfer' ? 'selected' : '' }}>Bank Transfer</option>
-                                <option value="online" {{ old('payment_method', $payment->payment_method) === 'online' ? 'selected' : '' }}>Online</option>
+                                <option value="gcash" {{ old('payment_method', $payment->payment_method) === 'gcash' ? 'selected' : '' }}>GCash</option>
+                                <option value="maya" {{ old('payment_method', $payment->payment_method) === 'maya' ? 'selected' : '' }}>Maya</option>
+                                <option value="paypal" {{ old('payment_method', $payment->payment_method) === 'paypal' ? 'selected' : '' }}>PayPal</option>
                             </select>
                             @error('payment_method')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -154,6 +154,51 @@
                                       placeholder="Optional notes or remarks..."
                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('notes') border-red-500 @enderror">{{ old('notes', $payment->notes) }}</textarea>
                             @error('notes')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <!-- Receipt Attachment -->
+                        <div>
+                            <label for="receipt_attachment" class="block text-sm font-medium text-gray-700 mb-1">
+                                Receipt Attachment
+                            </label>
+                            
+                            @if($payment->receipt_attachment)
+                                <div class="mb-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center space-x-2">
+                                            <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                            </svg>
+                                            <span class="text-sm text-gray-700">Current Receipt</span>
+                                        </div>
+                                        <a href="{{ asset('storage/receipts/' . $payment->receipt_attachment) }}" 
+                                           target="_blank"
+                                           class="text-sm text-primary-600 hover:text-primary-700 font-medium">
+                                            View File
+                                        </a>
+                                    </div>
+                                </div>
+                            @endif
+
+                            <input type="file" 
+                                   name="receipt_attachment" 
+                                   id="receipt_attachment" 
+                                   accept="image/*,.pdf"
+                                   class="block w-full text-sm text-gray-500
+                                          file:mr-4 file:py-2 file:px-4
+                                          file:rounded-lg file:border-0
+                                          file:text-sm file:font-semibold
+                                          file:bg-primary-50 file:text-primary-700
+                                          hover:file:bg-primary-100
+                                          cursor-pointer
+                                          border border-gray-300 rounded-lg
+                                          @error('receipt_attachment') border-red-500 @enderror">
+                            <p class="mt-1 text-xs text-gray-500">
+                                JPG, PNG, or PDF (MAX. 5MB). Upload proof of payment.
+                            </p>
+                            @error('receipt_attachment')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
