@@ -131,9 +131,13 @@ class PaymentController extends Controller
 
     /**
      * Update the specified payment in storage.
+     * Admin can edit ANY payment at ANY time (no restrictions).
      */
     public function update(Request $request, Payment $payment)
     {
+        // Store old values for audit
+        $oldValues = $payment->toArray();
+
         $validated = $request->validate([
             'student_id' => ['required', 'exists:students,id'],
             'amount' => ['required', 'numeric', 'min:0.01'],
@@ -144,7 +148,19 @@ class PaymentController extends Controller
             'notes' => ['nullable', 'string', 'max:1000'],
         ]);
 
-        $payment->update($validated);
+        $payment->update(array_merge($validated, [
+            'edited_by' => auth()->id(),
+            'edited_at' => now()
+        ]));
+
+        // Audit log
+        \App\Models\PaymentAuditLog::create([
+            'payment_id' => $payment->id,
+            'action' => 'updated',
+            'user_id' => auth()->id(),
+            'old_values' => $oldValues,
+            'new_values' => $payment->fresh()->toArray()
+        ]);
 
         return redirect()->route('admin.payments.index')
             ->with('success', 'Payment updated successfully!');

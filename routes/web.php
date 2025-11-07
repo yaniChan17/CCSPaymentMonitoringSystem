@@ -1,12 +1,16 @@
 <?php
 
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\Admin\AnnouncementController;
+use App\Http\Controllers\Admin\FeeScheduleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
 use App\Http\Controllers\Admin\ReportController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentDashboardController;
 use App\Http\Controllers\TreasurerDashboardController;
+use App\Http\Controllers\Treasurer\PaymentController as TreasurerPaymentController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -43,6 +47,14 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('payments', AdminPaymentController::class)->except(['create', 'store']);
     Route::get('/payments-export', [AdminPaymentController::class, 'export'])->name('payments.export');
     
+    // Fee Schedules
+    Route::resource('fee-schedules', FeeScheduleController::class);
+    Route::post('fee-schedules/{feeSchedule}/activate', [FeeScheduleController::class, 'activate'])->name('fee-schedules.activate');
+    Route::post('fee-schedules/{feeSchedule}/close', [FeeScheduleController::class, 'close'])->name('fee-schedules.close');
+    
+    // Announcements
+    Route::resource('announcements', AnnouncementController::class)->except(['show', 'edit', 'update']);
+    
     // Reports
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
     Route::get('/reports/summary', [ReportController::class, 'summary'])->name('reports.summary');
@@ -58,11 +70,22 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 // Treasurer Routes
 Route::middleware(['auth', 'treasurer'])->prefix('treasurer')->name('treasurer.')->group(function () {
     Route::get('/dashboard', [TreasurerDashboardController::class, 'index'])->name('dashboard');
+    
+    // Payment Management
+    Route::resource('payments', TreasurerPaymentController::class);
 });
 
 // Student Routes
 Route::middleware(['auth', 'student'])->prefix('student')->name('student.')->group(function () {
     Route::get('/dashboard', [StudentDashboardController::class, 'index'])->name('dashboard');
+});
+
+// Notifications (all roles)
+Route::middleware('auth')->group(function () {
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+    Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.read-all');
+    Route::get('/notifications/unread-count', [NotificationController::class, 'unreadCount'])->name('notifications.unread-count');
 });
 
 // Profile Routes (accessible to all authenticated users)

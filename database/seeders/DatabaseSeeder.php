@@ -14,6 +14,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Create blocks first
+        $this->call(BlockSeeder::class);
+
         // Create Admin User
         $admin = User::factory()->create([
             'name' => 'Admin User',
@@ -22,12 +25,16 @@ class DatabaseSeeder extends Seeder
             'role' => 'admin',
         ]);
 
-        // Create Treasurer Users
+        // Get blocks
+        $blocks = \App\Models\Block::all();
+
+        // Create Treasurer Users (assign to different blocks)
         $treasurer1 = User::factory()->create([
             'name' => 'Maria Santos',
             'email' => 'treasurer@ccs.edu',
             'password' => bcrypt('password'),
             'role' => 'treasurer',
+            'block_id' => $blocks[0]->id ?? null,
         ]);
 
         $treasurer2 = User::factory()->create([
@@ -35,6 +42,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'treasurer2@ccs.edu',
             'password' => bcrypt('password'),
             'role' => 'treasurer',
+            'block_id' => $blocks[1]->id ?? null,
         ]);
 
         // Create 10 Students with varied data
@@ -42,12 +50,16 @@ class DatabaseSeeder extends Seeder
 
         // Create student user accounts for the first 3 students
         foreach ($students->take(3) as $index => $student) {
+            // Assign to blocks in round-robin fashion
+            $blockId = $blocks[$index % $blocks->count()]->id ?? null;
+            
             User::factory()->create([
                 'name' => $student->full_name,
                 'email' => $student->email,
                 'password' => bcrypt('password'),
                 'role' => 'student',
                 'student_id' => $student->id,
+                'block_id' => $blockId,
             ]);
         }
 
