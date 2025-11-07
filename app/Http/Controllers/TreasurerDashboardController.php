@@ -2,115 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\FeeSchedule;
 use App\Models\Payment;
 use App\Models\Student;
-use App\Models\User;
 use Illuminate\Http\Request;
 
 class TreasurerDashboardController extends Controller
 {
     public function index()
     {
-        $treasurer = auth()->user();
-        $activeFeeSchedule = FeeSchedule::active()->first();
+        $stats = [
+            'total_collected_today' => Payment::whereDate('created_at', today())
+                ->where('status', 'paid')
+                ->sum('amount'),
+            'payments_today' => Payment::whereDate('created_at', today())->count(),
+            'pending_payments' => Payment::where('status', 'pending')->count(),
+            'active_students' => Student::where('status', 'active')->count(),
+        ];
 
-        // Today's collection
-        $todayTotal = Payment::where('recorded_by', $treasurer->id)
-            ->whereDate('recorded_at', today())
-            ->sum('amount');
-        $todayCount = Payment::where('recorded_by', $treasurer->id)
-            ->whereDate('recorded_at', today())
-            ->count();
-
-        // This week
-        $weekTotal = Payment::where('recorded_by', $treasurer->id)
-            ->whereBetween('recorded_at', [now()->startOfWeek(), now()->endOfWeek()])
-            ->sum('amount');
-        $weekCount = Payment::where('recorded_by', $treasurer->id)
-            ->whereBetween('recorded_at', [now()->startOfWeek(), now()->endOfWeek()])
-            ->count();
-
-        // Active students in block
-        $activeStudents = User::where('role', 'student')
-            ->where('block_id', $treasurer->block_id)
-            ->count();
-
-        if ($activeFeeSchedule) {
-            $myBlockStudents = $activeStudents;
-            $myBlockExpected = $myBlockStudents * $activeFeeSchedule->amount;
-            $myBlockCollected = Payment::whereIn('student_id', function($query) use ($treasurer) {
-                $query->select('id')->from('users')
-                    ->where('block_id', $treasurer->block_id)
-                    ->where('role', 'student');
-            })
-            ->where('fee_schedule_id', $activeFeeSchedule->id)
-            ->where('status', 'paid')
-            ->sum('amount');
-
-            $myBlockRemaining = $myBlockExpected - $myBlockCollected;
-            $myBlockPercentage = $myBlockExpected > 0 ? round(($myBlockCollected / $myBlockExpected) * 100, 1) : 0;
-            $myBlockPaidCount = User::where('role', 'student')
-                ->where('block_id', $treasurer->block_id)
-                ->whereHas('payments', function($q) use ($activeFeeSchedule) {
-                    $q->where('fee_schedule_id', $activeFeeSchedule->id)
-                      ->where('status', 'paid')
-                      ->havingRaw('SUM(amount) >= ?', [$activeFeeSchedule->amount]);
-                })
-                ->count();
-
-            // Unpaid students
-            $unpaidStudents = User::where('role', 'student')
-                ->where('block_id', $treasurer->block_id)
-                ->get()
-                ->map(function($student) use ($activeFeeSchedule) {
-                    $paid = $student->payments()
-                        ->where('fee_schedule_id', $activeFeeSchedule->id)
-                        ->where('status', 'paid')
-                        ->sum('amount');
-                    $balance = $activeFeeSchedule->amount - $paid;
-
-                    return [
-                        'id' => $student->id,
-                        'name' => $student->name,
-                        'paid' => $paid,
-                        'balance' => $balance
-                    ];
-                })
-                ->where('balance', '>', 0)
-                ->values();
-        } else {
-            $myBlockStudents = 0;
-            $myBlockExpected = 0;
-            $myBlockCollected = 0;
-            $myBlockRemaining = 0;
-            $myBlockPercentage = 0;
-            $myBlockPaidCount = 0;
-            $unpaidStudents = collect();
-        }
-
-        // Recent payments by this treasurer
-        $recentPayments = Payment::with('student')
-            ->where('recorded_by', $treasurer->id)
-            ->latest('recorded_at')
+        $recentPayments = Payment::with(['student'])
+            ->where('recorded_by', auth()->id())
+            ->latest()
             ->take(10)
             ->get();
 
-        return view('treasurer.dashboard', compact(
-            'activeFeeSchedule',
-            'todayTotal',
-            'todayCount',
-            'weekTotal',
-            'weekCount',
-            'activeStudents',
-            'myBlockStudents',
-            'myBlockExpected',
-            'myBlockCollected',
-            'myBlockRemaining',
-            'myBlockPercentage',
-            'myBlockPaidCount',
-            'unpaidStudents',
-            'recentPayments'
-        ));
+        return view('treasurer.dashboard', compact('stats', 'recentPayments'));
     }
 }

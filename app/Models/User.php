@@ -25,7 +25,6 @@ class User extends Authenticatable
         'password',
         'role',
         'student_id',
-        'block_id',
     ];
 
     /**
@@ -65,30 +64,6 @@ class User extends Authenticatable
     public function recordedPayments(): HasMany
     {
         return $this->hasMany(Payment::class, 'recorded_by');
-    }
-
-    /**
-     * Get all payments for this student.
-     */
-    public function payments(): HasMany
-    {
-        return $this->hasMany(Payment::class, 'student_id');
-    }
-
-    /**
-     * Get the block this user belongs to.
-     */
-    public function block(): BelongsTo
-    {
-        return $this->belongsTo(Block::class);
-    }
-
-    /**
-     * Get all notifications for this user.
-     */
-    public function notifications(): HasMany
-    {
-        return $this->hasMany(Notification::class);
     }
 
     /**
