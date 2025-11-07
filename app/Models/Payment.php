@@ -18,7 +18,9 @@ class Payment extends Model
      */
     protected $fillable = [
         'student_id',
+        'fee_schedule_id',
         'recorded_by',
+        'edited_by',
         'amount',
         'payment_date',
         'status',
@@ -26,6 +28,9 @@ class Payment extends Model
         'reference_number',
         'notes',
         'receipt_attachment',
+        'recorded_at',
+        'is_late',
+        'edited_at',
     ];
 
     /**
@@ -38,6 +43,9 @@ class Payment extends Model
         return [
             'amount' => 'decimal:2',
             'payment_date' => 'date',
+            'recorded_at' => 'datetime',
+            'edited_at' => 'datetime',
+            'is_late' => 'boolean',
         ];
     }
 
@@ -63,5 +71,37 @@ class Payment extends Model
     public function recordedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'recorded_by');
+    }
+
+    /**
+     * Get the user who recorded this payment (for compatibility).
+     */
+    public function recorder(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'recorded_by');
+    }
+
+    /**
+     * Get the fee schedule this payment belongs to.
+     */
+    public function feeSchedule(): BelongsTo
+    {
+        return $this->belongsTo(FeeSchedule::class);
+    }
+
+    /**
+     * Get the user who edited this payment.
+     */
+    public function editor(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'edited_by');
+    }
+
+    /**
+     * Get all audit logs for this payment.
+     */
+    public function auditLogs()
+    {
+        return $this->hasMany(PaymentAuditLog::class);
     }
 }
