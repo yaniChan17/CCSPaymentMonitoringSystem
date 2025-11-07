@@ -73,9 +73,9 @@
                                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                                 required>
                             <option value="">Select Semester</option>
-                            <option value="1st" {{ old('semester') == '1st' ? 'selected' : '' }}>1st Semester</option>
-                            <option value="2nd" {{ old('semester') == '2nd' ? 'selected' : '' }}>2nd Semester</option>
-                            <option value="Summer" {{ old('semester') == 'Summer' ? 'selected' : '' }}>Summer</option>
+                            <option value="1st" {{ old('semester', $feeSchedule->semester) == '1st' ? 'selected' : '' }}>1st Semester</option>
+                            <option value="2nd" {{ old('semester', $feeSchedule->semester) == '2nd' ? 'selected' : '' }}>2nd Semester</option>
+                            <option value="Summer" {{ old('semester', $feeSchedule->semester) == 'Summer' ? 'selected' : '' }}>Summer</option>
                         </select>
                         @error('semester')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -109,8 +109,8 @@
                         <input type="date" 
                                name="due_date" 
                                id="due_date" 
-                               value="{{ old('due_date') }}"
-                               min="{{ date('Y-m-d', strtotime('+1 day')) }}"
+                               value="{{ old('due_date', $feeSchedule->due_date->format('Y-m-d')) }}"
+                               min="{{ date('Y-m-d') }}"
                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                                required>
                         @error('due_date')
@@ -126,7 +126,7 @@
                         <input type="number" 
                                name="late_penalty" 
                                id="late_penalty" 
-                               value="{{ old('late_penalty', 0) }}"
+                               value="{{ old('late_penalty', $feeSchedule->late_penalty) }}"
                                step="0.01"
                                min="0"
                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
@@ -143,7 +143,7 @@
                                    name="allow_partial" 
                                    id="allow_partial" 
                                    value="1"
-                                   {{ old('allow_partial', true) ? 'checked' : '' }}
+                                   {{ old('allow_partial', $feeSchedule->allow_partial) ? 'checked' : '' }}
                                    class="w-4 h-4 text-orange-600 border-gray-300 rounded focus:ring-orange-500">
                             <label for="allow_partial" class="ml-2 block text-sm text-gray-700">
                                 Allow partial payments
@@ -166,7 +166,7 @@
                             <input type="text" 
                                    name="target_program" 
                                    id="target_program" 
-                                   value="{{ old('target_program') }}"
+                                   value="{{ old('target_program', $feeSchedule->target_program) }}"
                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                                    placeholder="e.g., BSCS, BSIT">
                             @error('target_program')
@@ -183,10 +183,10 @@
                                     id="target_year" 
                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent">
                                 <option value="">All Years</option>
-                                <option value="1" {{ old('target_year') == '1' ? 'selected' : '' }}>1st Year</option>
-                                <option value="2" {{ old('target_year') == '2' ? 'selected' : '' }}>2nd Year</option>
-                                <option value="3" {{ old('target_year') == '3' ? 'selected' : '' }}>3rd Year</option>
-                                <option value="4" {{ old('target_year') == '4' ? 'selected' : '' }}>4th Year</option>
+                                <option value="1" {{ old('target_year', $feeSchedule->target_year) == '1' ? 'selected' : '' }}>1st Year</option>
+                                <option value="2" {{ old('target_year', $feeSchedule->target_year) == '2' ? 'selected' : '' }}>2nd Year</option>
+                                <option value="3" {{ old('target_year', $feeSchedule->target_year) == '3' ? 'selected' : '' }}>3rd Year</option>
+                                <option value="4" {{ old('target_year', $feeSchedule->target_year) == '4' ? 'selected' : '' }}>4th Year</option>
                             </select>
                             @error('target_year')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -203,7 +203,7 @@
                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent">
                                 <option value="">All Blocks</option>
                                 @foreach($blocks as $block)
-                                <option value="{{ $block->id }}" {{ old('target_block_id') == $block->id ? 'selected' : '' }}>
+                                <option value="{{ $block->id }}" {{ old('target_block_id', $feeSchedule->target_block_id) == $block->id ? 'selected' : '' }}>
                                     {{ $block->name }}
                                 </option>
                                 @endforeach
@@ -224,7 +224,7 @@
                               id="instructions" 
                               rows="4" 
                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                              placeholder="Enter any special instructions for students regarding this payment...">{{ old('instructions') }}</textarea>
+                              placeholder="Enter any special instructions for students regarding this payment...">{{ old('instructions', $feeSchedule->instructions) }}</textarea>
                     @error('instructions')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
@@ -239,8 +239,9 @@
                             id="status" 
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                             required>
-                        <option value="draft" {{ old('status') == 'draft' ? 'selected' : '' }}>Draft (Save without notifying)</option>
-                        <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>Active (Notify students immediately)</option>
+                        <option value="draft" {{ old('status', $feeSchedule->status) == 'draft' ? 'selected' : '' }}>Draft (Save without notifying)</option>
+                        <option value="active" {{ old('status', $feeSchedule->status) == 'active' ? 'selected' : '' }}>Active (Notify students immediately)</option>
+                        <option value="closed" {{ old('status', $feeSchedule->status) == 'closed' ? 'selected' : '' }}>Closed (Locked)</option>
                     </select>
                     <p class="mt-1 text-sm text-gray-500">
                         Selecting "Active" will immediately notify all target students and treasurers
@@ -259,7 +260,7 @@
                 </a>
                 <button type="submit" 
                         class="px-6 py-2 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-lg transition-all duration-200 shadow-lg">
-                    Edit Fee Schedule
+                    Update Fee Schedule
                 </button>
             </div>
         </form>
