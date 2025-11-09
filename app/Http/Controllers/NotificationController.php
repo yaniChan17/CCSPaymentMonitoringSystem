@@ -9,7 +9,7 @@ class NotificationController extends Controller
     public function index(Request $request)
     {
         $query = auth()->user()->notifications();
-        
+
         // Apply filter
         $filter = $request->get('filter', 'all');
         if ($filter === 'unread') {
@@ -17,7 +17,7 @@ class NotificationController extends Controller
         } elseif ($filter === 'read') {
             $query->where('is_read', true);
         }
-        
+
         $notifications = $query->orderBy('created_at', 'desc')->paginate(20);
         $allCount = auth()->user()->notifications()->count();
 
