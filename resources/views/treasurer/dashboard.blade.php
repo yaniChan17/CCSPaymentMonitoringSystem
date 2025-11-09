@@ -8,36 +8,8 @@
         <p class="text-sm text-gray-500 mt-1">Manage payments and track collections</p>
     </x-slot>
 
-    <!-- Quick Actions -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-        <a href="#" class="block bg-gradient-to-br from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105">
-            <div class="flex items-center justify-between">
-                <div>
-                    <div class="text-3xl mb-2">💵</div>
-                    <p class="text-2xl font-bold">Record Payment</p>
-                    <p class="text-sm text-green-100 mt-1">Add a new student payment</p>
-                </div>
-                <svg class="w-12 h-12 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
-                </svg>
-            </div>
-        </a>
-        <a href="#" class="block bg-gradient-to-br from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600 text-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105">
-            <div class="flex items-center justify-between">
-                <div>
-                    <div class="text-3xl mb-2">🔍</div>
-                    <p class="text-2xl font-bold">Search Student</p>
-                    <p class="text-sm text-indigo-100 mt-1">Find student records</p>
-                </div>
-                <svg class="w-12 h-12 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                </svg>
-            </div>
-        </a>
-    </div>
-
     <!-- Stats Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <!-- Today's Collection -->
         <div class="stat-card bg-white overflow-hidden shadow-md rounded-xl hover-lift border border-gray-100">
             <div class="p-6">
@@ -61,48 +33,18 @@
             </div>
         </div>
 
-    <!-- Stats Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-        <!-- Today's Collection -->
+        <!-- Pending Payments -->
         <div class="stat-card bg-white overflow-hidden shadow-md rounded-xl hover-lift border border-gray-100">
             <div class="p-6">
                 <div class="flex items-center justify-between">
                     <div class="flex-1">
-                        <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Today's Collection</div>
-                        <div class="text-3xl font-bold text-green-600">₱{{ number_format($stats['total_collected_today'], 2) }}</div>
-                        <div class="mt-2 flex items-center text-sm text-gray-600">
-                            <svg class="w-4 h-4 mr-1 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                            </svg>
-                            {{ $stats['payments_today'] }} payments
-                        </div>
+                        <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Pending Payments</div>
+                        <div class="text-3xl font-bold text-yellow-600">{{ $stats['pending_payments'] }}</div>
+                        <div class="mt-2 text-sm text-gray-500">Awaiting processing</div>
                     </div>
-                    <div class="w-14 h-14 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center shadow-lg">
+                    <div class="w-14 h-14 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl flex items-center justify-center shadow-lg">
                         <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- This Week's Collection -->
-        <div class="stat-card bg-white overflow-hidden shadow-md rounded-xl hover-lift border border-gray-100">
-            <div class="p-6">
-                <div class="flex items-center justify-between">
-                    <div class="flex-1">
-                        <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">This Week's Collection</div>
-                        <div class="text-3xl font-bold text-blue-600">₱{{ number_format($weekTotal, 2) }}</div>
-                        <div class="mt-2 flex items-center text-sm text-gray-600">
-                            <svg class="w-4 h-4 mr-1 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                            </svg>
-                            {{ $weekCount }} payments
-                        </div>
-                    </div>
-                    <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
                     </div>
                 </div>
@@ -114,16 +56,32 @@
             <div class="p-6">
                 <div class="flex items-center justify-between">
                     <div class="flex-1">
-                        <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Active Students in My Block</div>
+                        <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Active Students</div>
                         <div class="text-3xl font-bold text-gray-900">{{ $stats['active_students'] }}</div>
                         <div class="mt-2 text-sm text-gray-500">Enrolled this term</div>
                     </div>
-                    <div class="w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                    <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
                         <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
                         </svg>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions Card -->
+        <div class="stat-card bg-gradient-to-br from-primary-500 to-accent-600 overflow-hidden shadow-md rounded-xl hover-lift border border-indigo-300">
+            <div class="p-6">
+                <div class="text-xs font-semibold text-indigo-100 uppercase tracking-wider mb-3">Quick Actions</div>
+                <button class="w-full bg-white hover:bg-gray-50 text-primary-700 font-semibold py-3 px-4 rounded-lg transition-all duration-200 hover:shadow-lg flex items-center justify-center space-x-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                    </svg>
+                    <span>Record Payment</span>
+                </button>
+                <button class="w-full mt-2 bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 text-sm">
+                    Search Student
+                </button>
             </div>
         </div>
     </div>
