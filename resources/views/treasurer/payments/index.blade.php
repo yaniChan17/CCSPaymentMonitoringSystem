@@ -53,7 +53,7 @@
                                         </div>
                                         <div>
                                             <div class="text-sm font-medium text-gray-900">{{ $payment->student->full_name }}</div>
-                                            <div class="text-xs text-gray-500">{{ $payment->student->student_number ?? $payment->student->student_id }}</div>
+                                            <div class="text-xs text-gray-500">{{ $payment->student->student_id }}</div>
                                         </div>
                                     </div>
                                 </td>

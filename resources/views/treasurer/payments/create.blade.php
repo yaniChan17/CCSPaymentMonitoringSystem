@@ -36,7 +36,7 @@
                             <option value="">Select a student...</option>
                             @foreach($students as $student)
                                 <option value="{{ $student->id }}" {{ old('student_id') == $student->id ? 'selected' : '' }}>
-                                    {{ $student->name }} - {{ $student->student_number ?? $student->student_id }} ({{ $student->email }})
+                                    {{ $student->name }} - {{ $student->student_id }} ({{ $student->email }})
                                 </option>
                             @endforeach
                         </select>

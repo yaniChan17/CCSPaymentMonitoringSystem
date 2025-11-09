@@ -66,7 +66,7 @@
                             </div>
                             <div>
                                 <p class="text-xs text-gray-600">Student ID</p>
-                                <p class="text-sm font-medium text-gray-900 font-mono">{{ $payment->student->student_number ?? $payment->student->student_id }}</p>
+                                <p class="text-sm font-medium text-gray-900 font-mono">{{ $payment->student->student_id }}</p>
                             </div>
                             <div>
                                 <p class="text-xs text-gray-600">Email</p>
@@ -74,7 +74,7 @@
                             </div>
                             <div>
                                 <p class="text-xs text-gray-600">Block</p>
-                                <p class="text-sm font-medium text-gray-900">Block {{ $payment->student->block_id }}</p>
+                                <p class="text-sm font-medium text-gray-900">Block {{ $payment->student->block }}</p>
                             </div>
                         </div>
                     </div>
