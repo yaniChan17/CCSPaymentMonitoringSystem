@@ -18,7 +18,7 @@ return new class extends Migration
             $table->decimal('amount', 10, 2);
             $table->date('payment_date');
             $table->enum('status', ['paid', 'pending', 'overdue'])->default('paid');
-            $table->enum('payment_method', ['cash', 'online', 'check', 'bank_transfer'])->default('cash');
+            $table->enum('payment_method', ['cash', 'gcash', 'maya', 'paypal'])->default('cash');
             $table->string('reference_number')->nullable(); // For online/bank payments
             $table->text('notes')->nullable();
             $table->timestamps();

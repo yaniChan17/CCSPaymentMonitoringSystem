@@ -92,7 +92,21 @@ class TreasurerDashboardController extends Controller
             ->take(10)
             ->get();
 
+        // Pending payments count
+        $pendingPayments = Payment::where('recorded_by', $treasurer->id)
+            ->where('status', 'pending')
+            ->count();
+
+        // Create stats array for the view
+        $stats = [
+            'total_collected_today' => $todayTotal,
+            'payments_today' => $todayCount,
+            'pending_payments' => $pendingPayments,
+            'active_students' => $activeStudents,
+        ];
+
         return view('treasurer.dashboard', compact(
+            'stats',
             'activeFeeSchedule',
             'todayTotal',
             'todayCount',

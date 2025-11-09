@@ -89,7 +89,29 @@ class AdminDashboardController extends Controller
             ->take(10)
             ->get();
 
+        // Calculate stats for the view
+        $totalStudents = User::where('role', 'student')->count();
+        $activeStudents = User::where('role', 'student')->whereNotNull('block_id')->count();
+        $totalUsers = User::count(); // All users (admin, treasurer, student)
+        $totalPayments = Payment::where('status', 'paid')->sum('amount');
+        
+        // Calculate total balance (total fees - total paid)
+        $totalFees = \App\Models\Student::sum('total_fees');
+        $totalPaid = Payment::where('status', 'paid')->sum('amount');
+        $totalBalance = max(0, $totalFees - $totalPaid);
+
+        $stats = [
+            'total_students' => $totalStudents,
+            'active_students' => $activeStudents,
+            'total_users' => $totalUsers,
+            'total_payments' => $totalPayments,
+            'total_balance' => $totalBalance,
+            'total_collected' => $totalPayments,
+            'pending_payments' => Payment::where('status', 'pending')->count(),
+        ];
+
         return view('admin.dashboard', compact(
+            'stats',
             'activeFeeSchedule',
             'expectedTotal',
             'collectedTotal',

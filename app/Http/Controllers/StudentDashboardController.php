@@ -49,7 +49,30 @@ class StudentDashboardController extends Controller
             ->take(5)
             ->get();
 
+        // Get student record
+        $studentRecord = \App\Models\Student::where('id', $student->student_id)->first();
+        $totalFees = $studentRecord ? $studentRecord->total_fees : 0;
+        
+        // Count all payments
+        $paymentCount = Payment::where('student_id', $student->id)
+            ->where('status', 'paid')
+            ->count();
+
+        // Calculate total paid from all payments
+        $allPaid = Payment::where('student_id', $student->id)
+            ->where('status', 'paid')
+            ->sum('amount');
+
+        // Create stats array
+        $stats = [
+            'total_fees' => $totalFees,
+            'total_paid' => $allPaid,
+            'balance' => max(0, $totalFees - $allPaid),
+            'payment_count' => $paymentCount,
+        ];
+
         return view('student.dashboard', compact(
+            'stats',
             'activeFeeSchedule',
             'totalPaid',
             'balance',
