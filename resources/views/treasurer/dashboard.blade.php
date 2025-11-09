@@ -33,34 +33,39 @@
             </div>
         </div>
 
-        <!-- Pending Payments -->
+        <!-- This Week's Collection -->
         <div class="stat-card bg-white overflow-hidden shadow-md rounded-xl hover-lift border border-gray-100">
             <div class="p-6">
                 <div class="flex items-center justify-between">
                     <div class="flex-1">
-                        <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Pending Payments</div>
-                        <div class="text-3xl font-bold text-yellow-600">{{ $stats['pending_payments'] }}</div>
-                        <div class="mt-2 text-sm text-gray-500">Awaiting processing</div>
+                        <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">This Week's Collection</div>
+                        <div class="text-3xl font-bold text-blue-600">₱{{ number_format($weekTotal, 2) }}</div>
+                        <div class="mt-2 flex items-center text-sm text-gray-600">
+                            <svg class="w-4 h-4 mr-1 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                            {{ $weekCount }} payments
+                        </div>
                     </div>
-                    <div class="w-14 h-14 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl flex items-center justify-center shadow-lg">
+                    <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
                         <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                         </svg>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Active Students -->
+        <!-- Active Students in My Block -->
         <div class="stat-card bg-white overflow-hidden shadow-md rounded-xl hover-lift border border-gray-100">
             <div class="p-6">
                 <div class="flex items-center justify-between">
                     <div class="flex-1">
-                        <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Active Students</div>
+                        <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Active Students in My Block</div>
                         <div class="text-3xl font-bold text-gray-900">{{ $stats['active_students'] }}</div>
                         <div class="mt-2 text-sm text-gray-500">Enrolled this term</div>
                     </div>
-                    <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                    <div class="w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
                         <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
                         </svg>
