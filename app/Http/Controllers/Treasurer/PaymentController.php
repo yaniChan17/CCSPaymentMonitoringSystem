@@ -59,7 +59,7 @@ class PaymentController extends Controller
             'student_id' => 'required|exists:users,id',
             'fee_schedule_id' => 'required|exists:fee_schedules,id',
             'amount' => 'required|numeric|min:0',
-            'payment_method' => 'required|in:cash,check,bank_transfer,online',
+            'payment_method' => 'required|in:cash,gcash,maya,paypal',
             'payment_date' => 'required|date|before_or_equal:today',
             'reference_number' => 'nullable|string',
             'notes' => 'nullable|string'
@@ -169,7 +169,7 @@ class PaymentController extends Controller
         // Validate and update
         $validated = $request->validate([
             'amount' => 'required|numeric|min:0',
-            'payment_method' => 'required|in:cash,check,bank_transfer,online',
+            'payment_method' => 'required|in:cash,gcash,maya,paypal',
             'payment_date' => 'required|date|before_or_equal:today',
             'reference_number' => 'nullable|string',
             'notes' => 'nullable|string'
