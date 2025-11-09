@@ -70,6 +70,46 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the block this user belongs to.
+     */
+    public function block(): BelongsTo
+    {
+        return $this->belongsTo(Block::class);
+    }
+
+    /**
+     * Get all payments for this user (if student).
+     */
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class, 'student_id');
+    }
+
+    /**
+     * Get all notifications for this user.
+     */
+    public function notifications()
+    {
+        return $this->hasMany(UserNotification::class);
+    }
+
+    /**
+     * Get all fee schedules created by this user.
+     */
+    public function createdFeeSchedules(): HasMany
+    {
+        return $this->hasMany(FeeSchedule::class, 'created_by');
+    }
+
+    /**
+     * Get all announcements posted by this user.
+     */
+    public function postedAnnouncements(): HasMany
+    {
+        return $this->hasMany(Announcement::class, 'posted_by');
+    }
+
+    /**
      * Check if user is an admin.
      */
     public function isAdmin(): bool

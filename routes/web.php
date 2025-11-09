@@ -43,6 +43,14 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('payments', AdminPaymentController::class)->except(['create', 'store']);
     Route::get('/payments-export', [AdminPaymentController::class, 'export'])->name('payments.export');
     
+    // Fee Schedules
+    Route::resource('fee-schedules', App\Http\Controllers\Admin\FeeScheduleController::class);
+    Route::post('fee-schedules/{feeSchedule}/activate', [App\Http\Controllers\Admin\FeeScheduleController::class, 'activate'])->name('fee-schedules.activate');
+    Route::post('fee-schedules/{feeSchedule}/close', [App\Http\Controllers\Admin\FeeScheduleController::class, 'close'])->name('fee-schedules.close');
+    
+    // Announcements
+    Route::resource('announcements', App\Http\Controllers\Admin\AnnouncementController::class)->except(['show', 'edit', 'update']);
+    
     // Reports
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
     Route::get('/reports/summary', [ReportController::class, 'summary'])->name('reports.summary');
@@ -62,6 +70,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 // Treasurer Routes
 Route::middleware(['auth', 'treasurer'])->prefix('treasurer')->name('treasurer.')->group(function () {
     Route::get('/dashboard', [TreasurerDashboardController::class, 'index'])->name('dashboard');
+    
+    // Payment Management (Direct Posting - No Approval)
+    Route::resource('payments', App\Http\Controllers\Treasurer\PaymentController::class);
 });
 
 // Student Routes
@@ -76,6 +87,12 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile/photo', [ProfileController::class, 'updatePhoto'])->name('profile.photo.update');
     Route::get('/profile/photo/delete', [ProfileController::class, 'deletePhoto'])->name('profile.photo.delete');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    
+    // Notifications (all roles)
+    Route::get('notifications', [App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('notifications/{notification}/read', [App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('notifications.read');
+    Route::post('notifications/read-all', [App\Http\Controllers\NotificationController::class, 'markAllAsRead'])->name('notifications.read-all');
+    Route::get('notifications/unread-count', [App\Http\Controllers\NotificationController::class, 'unreadCount'])->name('notifications.unread-count');
 });
 
 require __DIR__.'/auth.php';
