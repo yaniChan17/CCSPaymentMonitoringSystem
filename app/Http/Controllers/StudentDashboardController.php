@@ -72,6 +72,7 @@ class StudentDashboardController extends Controller
         ];
 
         return view('student.dashboard', compact(
+            'student',
             'stats',
             'activeFeeSchedule',
             'totalPaid',
