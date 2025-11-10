@@ -19,11 +19,8 @@ class PaymentController extends Controller
     {
         $treasurer = auth()->user();
         
-        // Get payments for students in treasurer's block
+        // Get payments recorded by this treasurer
         $payments = Payment::with(['student', 'feeSchedule'])
-            ->whereHas('student', function ($q) use ($treasurer) {
-                $q->where('block_id', $treasurer->block_id);
-            })
             ->where('recorded_by', $treasurer->id)
             ->latest('recorded_at')
             ->paginate(20);

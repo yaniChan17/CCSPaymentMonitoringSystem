@@ -86,75 +86,6 @@
         </div>
     </div>
 
-    @if($activeFeeSchedule)
-        <!-- Current Fee Schedule Card -->
-        <div class="bg-white shadow-md rounded-xl border border-gray-100 mb-8">
-            <div class="p-6 border-b border-gray-100">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-900">{{ $activeFeeSchedule->name }}</h3>
-                        <p class="text-sm text-gray-500 mt-1">{{ $activeFeeSchedule->academic_year }} - {{ $activeFeeSchedule->semester }}</p>
-                    </div>
-                    @php
-                        $daysRemaining = $activeFeeSchedule->daysUntilDue();
-                        $colorClass = $daysRemaining > 7 ? 'text-green-600' : ($daysRemaining >= 3 ? 'text-yellow-600' : 'text-red-600');
-                        $bgClass = $daysRemaining > 7 ? 'bg-green-100' : ($daysRemaining >= 3 ? 'bg-yellow-100' : 'bg-red-100');
-                    @endphp
-                    <div class="text-right">
-                        <p class="text-sm text-gray-600">Due: {{ $activeFeeSchedule->due_date->format('M d, Y') }}</p>
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold {{ $bgClass }} {{ $colorClass }} mt-1">
-                            {{ abs($daysRemaining) }} day{{ abs($daysRemaining) !== 1 ? 's' : '' }} {{ $daysRemaining >= 0 ? 'remaining' : 'overdue' }}
-                        </span>
-                    </div>
-                </div>
-            </div>
-            <div class="p-6">
-                <!-- Fee Summary Cards -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                    <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-4 border border-blue-200">
-                        <div class="text-xs font-semibold text-blue-600 uppercase tracking-wider mb-1">Total Fee</div>
-                        <div class="text-2xl font-bold text-blue-900">₱{{ number_format($activeFeeSchedule->amount, 2) }}</div>
-                    </div>
-                    <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-4 border border-green-200">
-                        <div class="text-xs font-semibold text-green-600 uppercase tracking-wider mb-1">Paid</div>
-                        <div class="text-2xl font-bold text-green-900">₱{{ number_format($totalPaid, 2) }}</div>
-                    </div>
-                    <div class="bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg p-4 border border-orange-200">
-                        <div class="text-xs font-semibold text-orange-600 uppercase tracking-wider mb-1">Balance</div>
-                        <div class="text-2xl font-bold {{ $balance > 0 ? 'text-orange-900' : 'text-green-900' }}">₱{{ number_format($balance, 2) }}</div>
-                    </div>
-                </div>
-
-                <!-- Payment Instructions -->
-                @if($activeFeeSchedule->instructions)
-                    <div class="bg-gray-50 rounded-lg p-4 border border-gray-200 mb-4">
-                        <h4 class="text-sm font-semibold text-gray-900 mb-2">Payment Instructions</h4>
-                        <p class="text-sm text-gray-700">{{ $activeFeeSchedule->instructions }}</p>
-                    </div>
-                @endif
-
-                <!-- Treasurer Contact -->
-                @if($myTreasurer)
-                    <div class="bg-primary-50 rounded-lg p-4 border border-primary-200">
-                        <h4 class="text-sm font-semibold text-gray-900 mb-2">Your Block Treasurer</h4>
-                        <div class="flex items-center">
-                            <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-accent-600 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3">
-                                {{ strtoupper(substr($myTreasurer->name, 0, 2)) }}
-                            </div>
-                            <div>
-                                <p class="text-sm font-semibold text-gray-900">{{ $myTreasurer->name }}</p>
-                                <p class="text-xs text-gray-600">{{ $myTreasurer->email }}</p>
-                                @if($myTreasurer->contact_number)
-                                    <p class="text-xs text-gray-600">{{ $myTreasurer->contact_number }}</p>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                @endif
-            </div>
-        </div>
-    @endif
-
     <!-- Payment Summary -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <!-- Total Fees -->
@@ -227,6 +158,75 @@
             </div>
         </div>
     </div>
+
+    @if($activeFeeSchedule)
+        <!-- Current Fee Schedule Card -->
+        <div class="bg-white shadow-md rounded-xl border border-gray-100 mb-8">
+            <div class="p-6 border-b border-gray-100">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900">{{ $activeFeeSchedule->name }}</h3>
+                        <p class="text-sm text-gray-500 mt-1">{{ $activeFeeSchedule->academic_year }} - {{ $activeFeeSchedule->semester }}</p>
+                    </div>
+                    @php
+                        $daysRemaining = $activeFeeSchedule->daysUntilDue();
+                        $colorClass = $daysRemaining > 7 ? 'text-green-600' : ($daysRemaining >= 3 ? 'text-yellow-600' : 'text-red-600');
+                        $bgClass = $daysRemaining > 7 ? 'bg-green-100' : ($daysRemaining >= 3 ? 'bg-yellow-100' : 'bg-red-100');
+                    @endphp
+                    <div class="text-right">
+                        <p class="text-sm text-gray-600">Due: {{ $activeFeeSchedule->due_date->format('M d, Y') }}</p>
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold {{ $bgClass }} {{ $colorClass }} mt-1">
+                            {{ abs($daysRemaining) }} day{{ abs($daysRemaining) !== 1 ? 's' : '' }} {{ $daysRemaining >= 0 ? 'remaining' : 'overdue' }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6">
+                <!-- Fee Summary Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-4 border border-blue-200">
+                        <div class="text-xs font-semibold text-blue-600 uppercase tracking-wider mb-1">Total Fee</div>
+                        <div class="text-2xl font-bold text-blue-900">₱{{ number_format($activeFeeSchedule->amount, 2) }}</div>
+                    </div>
+                    <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-4 border border-green-200">
+                        <div class="text-xs font-semibold text-green-600 uppercase tracking-wider mb-1">Paid</div>
+                        <div class="text-2xl font-bold text-green-900">₱{{ number_format($totalPaid, 2) }}</div>
+                    </div>
+                    <div class="bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg p-4 border border-orange-200">
+                        <div class="text-xs font-semibold text-orange-600 uppercase tracking-wider mb-1">Balance</div>
+                        <div class="text-2xl font-bold {{ $balance > 0 ? 'text-orange-900' : 'text-green-900' }}">₱{{ number_format($balance, 2) }}</div>
+                    </div>
+                </div>
+
+                <!-- Payment Instructions -->
+                @if($activeFeeSchedule->instructions)
+                    <div class="bg-gray-50 rounded-lg p-4 border border-gray-200 mb-4">
+                        <h4 class="text-sm font-semibold text-gray-900 mb-2">Payment Instructions</h4>
+                        <p class="text-sm text-gray-700">{{ $activeFeeSchedule->instructions }}</p>
+                    </div>
+                @endif
+
+                <!-- Treasurer Contact -->
+                @if($myTreasurer)
+                    <div class="bg-primary-50 rounded-lg p-4 border border-primary-200">
+                        <h4 class="text-sm font-semibold text-gray-900 mb-2">Your Block Treasurer</h4>
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-accent-600 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3">
+                                {{ strtoupper(substr($myTreasurer->name, 0, 2)) }}
+                            </div>
+                            <div>
+                                <p class="text-sm font-semibold text-gray-900">{{ $myTreasurer->name }}</p>
+                                <p class="text-xs text-gray-600">{{ $myTreasurer->email }}</p>
+                                @if($myTreasurer->contact_number)
+                                    <p class="text-xs text-gray-600">{{ $myTreasurer->contact_number }}</p>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                @endif
+            </div>
+        </div>
+    @endif
 
     <!-- Announcements Section -->
     @if($announcements && $announcements->count() > 0)
