@@ -67,9 +67,14 @@ class UserController extends Controller
             'role' => ['required', 'in:admin,treasurer,student'],
             // Student-specific fields
             'student_id' => ['required_if:role,student', 'nullable', 'string', 'unique:students,student_id'],
-            'course' => ['required_if:role,student', 'nullable', 'string'],
-            'year_level' => ['required_if:role,student', 'nullable', 'string'],
-            'block' => ['required_if:role,student', 'nullable', 'string', 'max:10'],
+            'course' => ['required_if:role,admin,treasurer', 'nullable', 'string'],
+            'year_level' => ['required_if:role,admin,treasurer', 'nullable', 'string'],
+            'block' => ['required_if:role,admin,treasurer', 'nullable', 'string', 'max:50'],
+            // Admin/Treasurer personal info fields
+            'contact_number' => ['required_if:role,admin,treasurer', 'nullable', 'string'],
+            'father_name' => ['required_if:role,admin,treasurer', 'nullable', 'string'],
+            'mother_name' => ['required_if:role,admin,treasurer', 'nullable', 'string'],
+            'address' => ['required_if:role,admin,treasurer', 'nullable', 'string'],
         ]);
 
         // Create user
@@ -78,6 +83,13 @@ class UserController extends Controller
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
             'role' => $validated['role'],
+            'course' => $validated['course'] ?? null,
+            'year_level' => $validated['year_level'] ?? null,
+            'block' => $validated['block'] ?? null,
+            'contact_number' => $validated['contact_number'] ?? null,
+            'father_name' => $validated['father_name'] ?? null,
+            'mother_name' => $validated['mother_name'] ?? null,
+            'address' => $validated['address'] ?? null,
         ]);
 
         // Create student record if role is student
@@ -89,16 +101,16 @@ class UserController extends Controller
 
             // Convert year_level number to formatted string
             $yearLevelMap = ['1' => '1st Year', '2' => '2nd Year', '3' => '3rd Year', '4' => '4th Year'];
-            $yearLevelFormatted = $yearLevelMap[$validated['year_level']] ?? $validated['year_level'];
+            $yearLevelFormatted = $yearLevelMap[$validated['student_id'] ?? '1'] ?? '1st Year';
 
             $student = Student::create([
                 'student_id' => $validated['student_id'],
                 'first_name' => $firstName,
                 'last_name' => $lastName,
                 'email' => $validated['email'],
-                'course' => $validated['course'] ?? 'BSIT',
+                'course' => 'BSIT',
                 'year_level' => $yearLevelFormatted,
-                'block' => $validated['block'] ?? null,
+                'block' => null,
                 'status' => 'active',
             ]);
 

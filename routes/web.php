@@ -51,6 +51,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Announcements
     Route::resource('announcements', App\Http\Controllers\Admin\AnnouncementController::class)->except(['show', 'edit', 'update']);
     
+    // Blocks Management
+    Route::resource('blocks', App\Http\Controllers\Admin\BlockController::class);
+    
     // Reports
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
     Route::get('/reports/summary', [ReportController::class, 'summary'])->name('reports.summary');
@@ -73,11 +76,18 @@ Route::middleware(['auth', 'treasurer'])->prefix('treasurer')->name('treasurer.'
     
     // Payment Management (Direct Posting - No Approval)
     Route::resource('payments', App\Http\Controllers\Treasurer\PaymentController::class);
+    
+    // Students in My Block
+    Route::get('/students', [App\Http\Controllers\Treasurer\StudentController::class, 'index'])->name('students.index');
 });
 
 // Student Routes
 Route::middleware(['auth', 'student'])->prefix('student')->name('student.')->group(function () {
     Route::get('/dashboard', [StudentDashboardController::class, 'index'])->name('dashboard');
+    
+    // Help Center
+    Route::get('/help', [App\Http\Controllers\Student\HelpController::class, 'index'])->name('help.index');
+    Route::get('/help/contact', [App\Http\Controllers\Student\HelpController::class, 'contact'])->name('help.contact');
 });
 
 // Profile Routes (accessible to all authenticated users)
@@ -86,7 +96,11 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::patch('/profile/photo', [ProfileController::class, 'updatePhoto'])->name('profile.photo.update');
     Route::get('/profile/photo/delete', [ProfileController::class, 'deletePhoto'])->name('profile.photo.delete');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    
+    // Account Settings (separate from profile)
+    Route::get('/settings', [ProfileController::class, 'settings'])->name('settings.edit');
+    Route::patch('/settings/password', [ProfileController::class, 'updatePassword'])->name('settings.password.update');
+    Route::delete('/settings/account', [ProfileController::class, 'destroy'])->name('settings.account.destroy');
     
     // Notifications (all roles)
     Route::get('notifications', [App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');

@@ -1,18 +1,19 @@
-<x-layouts.fullpage>
-    <div class="max-w-5xl mx-auto space-y-6">
-        <!-- Header with Back Button -->
-        <div class="flex items-center justify-between">
-            <div>
-                <h1 class="text-3xl font-bold text-gray-900">Profile Settings</h1>
-                <p class="mt-2 text-sm text-gray-600">Manage your personal information</p>
-            </div>
-            <a href="{{ route('dashboard') }}" 
-               class="inline-flex items-center px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg transition-colors">
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-                </svg>
-                Back to Dashboard
-            </a>
+<x-sidebar-layout>
+    <x-slot name="navigation">
+        @if(Auth::user()->role === 'admin')
+            <x-nav.admin />
+        @elseif(Auth::user()->role === 'treasurer')
+            <x-nav.treasurer />
+        @else
+            <x-nav.student />
+        @endif
+    </x-slot>
+
+    <div class="max-w-4xl mx-auto space-y-6">
+        <!-- Header -->
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900">Profile Settings</h1>
+            <p class="mt-2 text-sm text-gray-600">Manage your account information and settings</p>
         </div>
 
         @if(session('success'))
@@ -121,8 +122,9 @@
                                    name="name" 
                                    id="name" 
                                    value="{{ old('name', $user->name) }}"
+                                   {{ $isStudent ? 'readonly' : '' }}
                                    required
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent {{ $isStudent ? 'bg-gray-50 cursor-not-allowed' : '' }}">
                             @error('name')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -137,8 +139,9 @@
                                    name="email" 
                                    id="email" 
                                    value="{{ old('email', $user->email) }}"
+                                   {{ $isStudent ? 'readonly' : '' }}
                                    required
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent {{ $isStudent ? 'bg-gray-50 cursor-not-allowed' : '' }}">
                             @error('email')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -166,7 +169,8 @@
                                    name="course" 
                                    id="course" 
                                    value="{{ old('course', $isStudent && $student ? $student->course : $user->course) }}"
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                   {{ $isStudent ? 'readonly' : '' }}
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent {{ $isStudent ? 'bg-gray-50 cursor-not-allowed' : '' }}">
                             @error('course')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -177,15 +181,24 @@
                             <label for="year_level" class="block text-sm font-medium text-gray-700 mb-1">
                                 Year Level
                             </label>
-                            <select name="year_level" 
-                                    id="year_level"
-                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
-                                <option value="">Select Year Level</option>
-                                <option value="1st Year" {{ old('year_level', $isStudent && $student ? $student->year_level : $user->year_level) === '1st Year' ? 'selected' : '' }}>1st Year</option>
-                                <option value="2nd Year" {{ old('year_level', $isStudent && $student ? $student->year_level : $user->year_level) === '2nd Year' ? 'selected' : '' }}>2nd Year</option>
-                                <option value="3rd Year" {{ old('year_level', $isStudent && $student ? $student->year_level : $user->year_level) === '3rd Year' ? 'selected' : '' }}>3rd Year</option>
-                                <option value="4th Year" {{ old('year_level', $isStudent && $student ? $student->year_level : $user->year_level) === '4th Year' ? 'selected' : '' }}>4th Year</option>
-                            </select>
+                            @if($isStudent)
+                                <input type="text" 
+                                       name="year_level" 
+                                       id="year_level" 
+                                       value="{{ old('year_level', $student ? $student->year_level : $user->year_level) }}"
+                                       readonly
+                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 cursor-not-allowed">
+                            @else
+                                <select name="year_level" 
+                                        id="year_level"
+                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                    <option value="">Select Year Level</option>
+                                    <option value="1st Year" {{ old('year_level', $user->year_level) === '1st Year' ? 'selected' : '' }}>1st Year</option>
+                                    <option value="2nd Year" {{ old('year_level', $user->year_level) === '2nd Year' ? 'selected' : '' }}>2nd Year</option>
+                                    <option value="3rd Year" {{ old('year_level', $user->year_level) === '3rd Year' ? 'selected' : '' }}>3rd Year</option>
+                                    <option value="4th Year" {{ old('year_level', $user->year_level) === '4th Year' ? 'selected' : '' }}>4th Year</option>
+                                </select>
+                            @endif
                             @error('year_level')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -200,7 +213,8 @@
                                    name="block" 
                                    id="block" 
                                    value="{{ old('block', $isStudent && $student ? $student->block : $user->block) }}"
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                   {{ $isStudent ? 'readonly' : '' }}
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent {{ $isStudent ? 'bg-gray-50 cursor-not-allowed' : '' }}">
                             @error('block')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -279,9 +293,6 @@
                         </button>
                         <a href="{{ route('dashboard') }}" 
                            class="inline-flex items-center px-6 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg transition-colors">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                            </svg>
                             Cancel
                         </a>
                     </div>
@@ -309,4 +320,4 @@
             </div>
         </div>
     </div>
-</x-layouts.fullpage>
+</x-sidebar-layout>

@@ -7,7 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -34,17 +34,40 @@ class ProfileController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
             'student_id' => ['nullable', 'string', 'max:50'],
+            'course' => ['nullable', 'string', 'max:100'],
+            'year_level' => ['nullable', 'string', 'max:50'],
             'block' => ['nullable', 'string', 'max:50'],
             'contact_number' => ['nullable', 'string', 'max:20'],
+            'father_name' => ['nullable', 'string', 'max:255'],
+            'mother_name' => ['nullable', 'string', 'max:255'],
+            'address' => ['nullable', 'string', 'max:500'],
+            'photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
             'guardian_name' => ['nullable', 'string', 'max:255'],
             'guardian_contact' => ['nullable', 'string', 'max:20'],
-            'address' => ['nullable', 'string', 'max:500'],
         ]);
 
-        // Update user basic info
+        // Handle photo upload
+        if ($request->hasFile('photo')) {
+            // Delete old photo if exists
+            if ($user->photo) {
+                Storage::disk('public')->delete($user->photo);
+            }
+            $validated['photo'] = $request->file('photo')->store('profile_photos', 'public');
+        }
+
+        // Update user info
         $user->fill([
             'name' => $validated['name'],
             'email' => $validated['email'],
+            'student_id' => $validated['student_id'] ?? $user->student_id,
+            'course' => $validated['course'] ?? $user->course,
+            'year_level' => $validated['year_level'] ?? $user->year_level,
+            'block' => $validated['block'] ?? $user->block,
+            'contact_number' => $validated['contact_number'] ?? $user->contact_number,
+            'father_name' => $validated['father_name'] ?? $user->father_name,
+            'mother_name' => $validated['mother_name'] ?? $user->mother_name,
+            'address' => $validated['address'] ?? $user->address,
+            'photo' => $validated['photo'] ?? $user->photo,
         ]);
 
         if ($user->isDirty('email')) {
@@ -138,6 +161,33 @@ class ProfileController extends Controller
         }
 
         return Redirect::route('profile.edit')->with('success', 'Profile photo removed successfully!');
+    }
+
+    /**
+     * Display the user's account settings page.
+     */
+    public function settings(Request $request): View
+    {
+        return view('profile.settings', [
+            'user' => $request->user(),
+        ]);
+    }
+
+    /**
+     * Update the user's password.
+     */
+    public function updatePassword(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'current_password' => ['required', 'current_password'],
+            'password' => ['required', 'min:8', 'confirmed'],
+        ]);
+
+        $request->user()->update([
+            'password' => Hash::make($validated['password']),
+        ]);
+
+        return Redirect::route('settings.edit')->with('success', 'Password updated successfully!');
     }
 
     /**
