@@ -135,7 +135,7 @@
                 </div>
 
                 {{-- Edit Profile Button --}}
-                <a href="{{ route('student.profile.edit') }}" 
+                <a href="{{ route('profile.edit') }}" 
                    class="px-4 py-2 bg-white text-primary-600 text-sm font-semibold rounded-lg hover:bg-pink-50 transition-colors shadow-sm">
                     Edit Profile
                 </a>
