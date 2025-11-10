@@ -1,19 +1,18 @@
-<x-sidebar-layout>
-    <x-slot name="navigation">
-        @if(Auth::user()->role === 'admin')
-            <x-nav.admin />
-        @elseif(Auth::user()->role === 'treasurer')
-            <x-nav.treasurer />
-        @else
-            <x-nav.student />
-        @endif
-    </x-slot>
-
-    <div class="max-w-4xl mx-auto space-y-6">
-        <!-- Header -->
-        <div>
-            <h1 class="text-3xl font-bold text-gray-900">Account Settings</h1>
-            <p class="mt-2 text-sm text-gray-600">Manage your account security and preferences</p>
+<x-layouts.fullpage>
+    <div class="max-w-5xl mx-auto space-y-6">
+        <!-- Header with Back Button -->
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900">Account Settings</h1>
+                <p class="mt-2 text-sm text-gray-600">Manage your account security and preferences</p>
+            </div>
+            <a href="{{ route('dashboard') }}" 
+               class="inline-flex items-center px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg transition-colors">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+                Back to Dashboard
+            </a>
         </div>
 
         @if(session('success'))
@@ -145,4 +144,4 @@
             </a>
         </div>
     </div>
-</x-sidebar-layout>
+</x-layouts.fullpage>
