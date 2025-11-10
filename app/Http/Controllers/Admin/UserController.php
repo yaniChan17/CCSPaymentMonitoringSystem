@@ -67,19 +67,15 @@ class UserController extends Controller
             'role' => ['required', 'in:admin,treasurer,student'],
             // Student-specific fields
             'student_id' => ['required_if:role,student', 'nullable', 'string', 'unique:students,student_id'],
-            'course' => ['required_if:role,student', 'nullable', 'string'],
-            'year_level' => ['required_if:role,student', 'nullable', 'string'],
-            'block' => ['required_if:role,student', 'nullable', 'string', 'max:10'],
-            // Admin/Treasurer credentials
-            'government_id_type' => ['required_if:role,admin,treasurer', 'nullable', 'in:driver_license,passport,sss_id,umid,philhealth_id'],
-            'government_id_number' => ['required_if:role,admin,treasurer', 'nullable', 'string'],
-            'government_id_file' => ['required_if:role,admin,treasurer', 'nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:2048'],
+            'course' => ['required_if:role,admin,treasurer', 'nullable', 'string'],
+            'year_level' => ['required_if:role,admin,treasurer', 'nullable', 'string'],
+            'block' => ['required_if:role,admin,treasurer', 'nullable', 'string', 'max:50'],
+            // Admin/Treasurer personal info fields
+            'contact_number' => ['required_if:role,admin,treasurer', 'nullable', 'string'],
+            'father_name' => ['required_if:role,admin,treasurer', 'nullable', 'string'],
+            'mother_name' => ['required_if:role,admin,treasurer', 'nullable', 'string'],
+            'address' => ['required_if:role,admin,treasurer', 'nullable', 'string'],
         ]);
-
-        // Handle government ID file upload
-        if (in_array($validated['role'], ['admin', 'treasurer']) && $request->hasFile('government_id_file')) {
-            $validated['government_id_file'] = $request->file('government_id_file')->store('government_ids', 'public');
-        }
 
         // Create user
         $user = User::create([
@@ -87,9 +83,13 @@ class UserController extends Controller
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
             'role' => $validated['role'],
-            'government_id_type' => $validated['government_id_type'] ?? null,
-            'government_id_number' => $validated['government_id_number'] ?? null,
-            'government_id_file' => $validated['government_id_file'] ?? null,
+            'course' => $validated['course'] ?? null,
+            'year_level' => $validated['year_level'] ?? null,
+            'block' => $validated['block'] ?? null,
+            'contact_number' => $validated['contact_number'] ?? null,
+            'father_name' => $validated['father_name'] ?? null,
+            'mother_name' => $validated['mother_name'] ?? null,
+            'address' => $validated['address'] ?? null,
         ]);
 
         // Create student record if role is student
@@ -101,14 +101,26 @@ class UserController extends Controller
 
             // Convert year_level number to formatted string
             $yearLevelMap = ['1' => '1st Year', '2' => '2nd Year', '3' => '3rd Year', '4' => '4th Year'];
-            $yearLevelFormatted = $yearLevelMap[$validated['year_level']] ?? $validated['year_level'];
+            $yearLevelFormatted = $yearLevelMap[$validated['student_id'] ?? '1'] ?? '1st Year';
 
             $student = Student::create([
                 'student_id' => $validated['student_id'],
                 'first_name' => $firstName,
                 'last_name' => $lastName,
                 'email' => $validated['email'],
-                'course' => $validated['course'] ?? 'BSIT',
+                'course' => 'BSIT',
+                'year_level' => $yearLevelFormatted,
+                'block' => null,
+                'status' => 'active',
+            ]);
+
+            // Link the student to the user
+            $user->update(['student_id' => $student->id]);
+        }
+
+        return redirect()->route('admin.users.index')
+            ->with('success', 'User created successfully!');
+    }
                 'year_level' => $yearLevelFormatted,
                 'block' => $validated['block'] ?? null,
                 'status' => 'active',
