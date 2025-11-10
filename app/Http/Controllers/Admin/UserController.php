@@ -121,18 +121,6 @@ class UserController extends Controller
         return redirect()->route('admin.users.index')
             ->with('success', 'User created successfully!');
     }
-                'year_level' => $yearLevelFormatted,
-                'block' => $validated['block'] ?? null,
-                'status' => 'active',
-            ]);
-
-            // Link the student to the user
-            $user->update(['student_id' => $student->id]);
-        }
-
-        return redirect()->route('admin.users.index')
-            ->with('success', 'User created successfully!');
-    }
 
     /**
      * Display the specified user.

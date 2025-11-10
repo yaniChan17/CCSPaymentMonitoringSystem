@@ -22,14 +22,6 @@
             </div>
         @endif
 
-        @php
-            $user = Auth::user();
-            $isAdmin = $user->role === 'admin';
-            $isTreasurer = $user->role === 'treasurer';
-            $isStudent = $user->role === 'student';
-            $student = $user->student;
-        @endphp
-
         <!-- Profile Photo Section -->
         <div class="bg-white shadow-md rounded-xl border border-gray-100 overflow-hidden">
             <div class="p-6">
@@ -42,17 +34,13 @@
                     <div class="flex items-center space-x-6">
                         <!-- Current Photo -->
                         <div class="flex-shrink-0">
-                            @if($student && $student->profile_photo)
-                                <img src="{{ asset('storage/profile_photos/' . $student->profile_photo) }}" 
-                                     alt="Profile Photo" 
-                                     class="w-24 h-24 rounded-full object-cover border-4 border-gray-200">
-                            @elseif($user->photo)
-                                <img src="{{ Storage::url($user->photo) }}" 
+                            @if(Auth::user()->student && Auth::user()->student->profile_photo)
+                                <img src="{{ asset('storage/profile_photos/' . Auth::user()->student->profile_photo) }}" 
                                      alt="Profile Photo" 
                                      class="w-24 h-24 rounded-full object-cover border-4 border-gray-200">
                             @else
                                 <div class="w-24 h-24 rounded-full bg-gradient-to-br from-primary-600 to-secondary-500 flex items-center justify-center text-white text-2xl font-bold border-4 border-gray-200">
-                                    {{ strtoupper(substr($user->name, 0, 2)) }}
+                                    {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
                                 </div>
                             @endif
                         </div>
@@ -88,7 +76,7 @@
                             Upload Photo
                         </button>
 
-                        @if(($student && $student->profile_photo) || $user->photo)
+                        @if(Auth::user()->student && Auth::user()->student->profile_photo)
                             <a href="{{ route('profile.photo.delete') }}" 
                                onclick="return confirm('Are you sure you want to remove your profile photo?')"
                                class="inline-flex items-center px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg transition-colors">
@@ -108,9 +96,16 @@
             <div class="p-6">
                 <h2 class="text-lg font-semibold text-gray-900 mb-4">Personal Information</h2>
 
-                <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data" class="space-y-6">
+                <form method="POST" action="{{ route('profile.update') }}" class="space-y-6">
                     @csrf
                     @method('PATCH')
+
+                    @php
+                        $student = Auth::user()->student;
+                        $isAdmin = Auth::user()->role === 'admin';
+                        $isTreasurer = Auth::user()->role === 'treasurer';
+                        $isStudent = Auth::user()->role === 'student';
+                    @endphp
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <!-- Full Name -->
@@ -121,16 +116,15 @@
                             <input type="text" 
                                    name="name" 
                                    id="name" 
-                                   value="{{ old('name', $user->name) }}"
-                                   {{ $isStudent ? 'readonly' : '' }}
+                                   value="{{ old('name', Auth::user()->name) }}"
                                    required
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent {{ $isStudent ? 'bg-gray-50 cursor-not-allowed' : '' }}">
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
                             @error('name')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
 
-                        <!-- Email -->
+                        <!-- Email (Read-only for non-admin) -->
                         <div>
                             <label for="email" class="block text-sm font-medium text-gray-700 mb-1">
                                 Email Address <span class="text-red-500">*</span>
@@ -138,135 +132,108 @@
                             <input type="email" 
                                    name="email" 
                                    id="email" 
-                                   value="{{ old('email', $user->email) }}"
-                                   {{ $isStudent ? 'readonly' : '' }}
+                                   value="{{ old('email', Auth::user()->email) }}"
+                                   {{ !$isAdmin ? 'readonly' : '' }}
                                    required
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent {{ $isStudent ? 'bg-gray-50 cursor-not-allowed' : '' }}">
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent {{ !$isAdmin ? 'bg-gray-50 cursor-not-allowed' : '' }}">
                             @error('email')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
 
-                        <!-- Student ID / Employee ID -->
-                        <div>
-                            <label for="student_id" class="block text-sm font-medium text-gray-700 mb-1">
-                                {{ $isStudent ? 'Student ID' : 'Employee ID' }}
-                            </label>
-                            <input type="text" 
-                                   name="student_id" 
-                                   id="student_id" 
-                                   value="{{ old('student_id', $isStudent && $student ? $student->student_id : $user->student_id) }}"
-                                   readonly
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 cursor-not-allowed">
-                        </div>
-
-                        <!-- Course/Program -->
-                        <div>
-                            <label for="course" class="block text-sm font-medium text-gray-700 mb-1">
-                                Course/Program
-                            </label>
-                            <input type="text" 
-                                   name="course" 
-                                   id="course" 
-                                   value="{{ old('course', $isStudent && $student ? $student->course : $user->course) }}"
-                                   {{ $isStudent ? 'readonly' : '' }}
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent {{ $isStudent ? 'bg-gray-50 cursor-not-allowed' : '' }}">
-                            @error('course')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <!-- Year Level -->
-                        <div>
-                            <label for="year_level" class="block text-sm font-medium text-gray-700 mb-1">
-                                Year Level
-                            </label>
-                            @if($isStudent)
+                        <!-- Student/Employee ID -->
+                        @if($student)
+                            <div>
+                                <label for="student_id" class="block text-sm font-medium text-gray-700 mb-1">
+                                    Student/Employee ID <span class="text-red-500">*</span>
+                                </label>
                                 <input type="text" 
-                                       name="year_level" 
-                                       id="year_level" 
-                                       value="{{ old('year_level', $student ? $student->year_level : $user->year_level) }}"
+                                       name="student_id" 
+                                       id="student_id" 
+                                       value="{{ old('student_id', $student->student_id) }}"
+                                       {{ !$isAdmin ? 'readonly' : '' }}
+                                       required
+                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent {{ !$isAdmin ? 'bg-gray-50 cursor-not-allowed' : '' }}">
+                                @error('student_id')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <!-- Course -->
+                            <div>
+                                <label for="course" class="block text-sm font-medium text-gray-700 mb-1">
+                                    Course/Program
+                                </label>
+                                <input type="text" 
+                                       name="course" 
+                                       id="course" 
+                                       value="{{ old('course', $student->course ?? 'BSIT') }}"
                                        readonly
                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 cursor-not-allowed">
-                            @else
-                                <select name="year_level" 
-                                        id="year_level"
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
-                                    <option value="">Select Year Level</option>
-                                    <option value="1st Year" {{ old('year_level', $user->year_level) === '1st Year' ? 'selected' : '' }}>1st Year</option>
-                                    <option value="2nd Year" {{ old('year_level', $user->year_level) === '2nd Year' ? 'selected' : '' }}>2nd Year</option>
-                                    <option value="3rd Year" {{ old('year_level', $user->year_level) === '3rd Year' ? 'selected' : '' }}>3rd Year</option>
-                                    <option value="4th Year" {{ old('year_level', $user->year_level) === '4th Year' ? 'selected' : '' }}>4th Year</option>
-                                </select>
-                            @endif
-                            @error('year_level')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
+                            </div>
 
-                        <!-- Block -->
-                        <div>
-                            <label for="block" class="block text-sm font-medium text-gray-700 mb-1">
-                                Block
-                            </label>
-                            <input type="text" 
-                                   name="block" 
-                                   id="block" 
-                                   value="{{ old('block', $isStudent && $student ? $student->block : $user->block) }}"
-                                   {{ $isStudent ? 'readonly' : '' }}
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent {{ $isStudent ? 'bg-gray-50 cursor-not-allowed' : '' }}">
-                            @error('block')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <!-- Contact Number (Editable for all) -->
-                        <div>
-                            <label for="contact_number" class="block text-sm font-medium text-gray-700 mb-1">
-                                Contact Number
-                            </label>
-                            <input type="text" 
-                                   name="contact_number" 
-                                   id="contact_number" 
-                                   value="{{ old('contact_number', $isStudent && $student ? $student->contact_number : $user->contact_number) }}"
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
-                            @error('contact_number')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <!-- Father's Name (Admin/Treasurer Only) -->
-                        @if($isAdmin || $isTreasurer)
+                            <!-- Block (Readonly for Treasurer) -->
                             <div>
-                                <label for="father_name" class="block text-sm font-medium text-gray-700 mb-1">
-                                    Father's Full Name
+                                <label for="block" class="block text-sm font-medium text-gray-700 mb-1">
+                                    Block
                                 </label>
                                 <input type="text" 
-                                       name="father_name" 
-                                       id="father_name" 
-                                       value="{{ old('father_name', $user->father_name) }}"
+                                       name="block" 
+                                       id="block" 
+                                       value="{{ old('block', $student->block) }}"
+                                       {{ ($isTreasurer || $isStudent) ? 'readonly' : '' }}
+                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent {{ ($isTreasurer || $isStudent) ? 'bg-gray-50 cursor-not-allowed' : '' }}">
+                                @if($isTreasurer || $isStudent)
+                                    <p class="mt-1 text-xs text-gray-500">Block is assigned by admin</p>
+                                @endif
+                            </div>
+
+                            <!-- Contact Number (Editable by all) -->
+                            <div>
+                                <label for="contact_number" class="block text-sm font-medium text-gray-700 mb-1">
+                                    Contact Number
+                                </label>
+                                <input type="text" 
+                                       name="contact_number" 
+                                       id="contact_number" 
+                                       value="{{ old('contact_number', $student->contact_number) }}"
                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
-                                @error('father_name')
+                                @error('contact_number')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
 
-                            <!-- Mother's Name (Admin/Treasurer Only) -->
+                            <!-- Guardian Name -->
                             <div>
-                                <label for="mother_name" class="block text-sm font-medium text-gray-700 mb-1">
-                                    Mother's Full Name
+                                <label for="guardian_name" class="block text-sm font-medium text-gray-700 mb-1">
+                                    Guardian Name
                                 </label>
                                 <input type="text" 
-                                       name="mother_name" 
-                                       id="mother_name" 
-                                       value="{{ old('mother_name', $user->mother_name) }}"
+                                       name="guardian_name" 
+                                       id="guardian_name" 
+                                       value="{{ old('guardian_name', $student->guardian_name) }}"
                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
-                                @error('mother_name')
+                                @error('guardian_name')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
 
-                            <!-- Complete Address (Admin/Treasurer Only) -->
+                            <!-- Guardian Contact -->
+                            <div>
+                                <label for="guardian_contact" class="block text-sm font-medium text-gray-700 mb-1">
+                                    Guardian Contact
+                                </label>
+                                <input type="text" 
+                                       name="guardian_contact" 
+                                       id="guardian_contact" 
+                                       value="{{ old('guardian_contact', $student->guardian_contact) }}"
+                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                @error('guardian_contact')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <!-- Address -->
                             <div class="md:col-span-2">
                                 <label for="address" class="block text-sm font-medium text-gray-700 mb-1">
                                     Complete Address
@@ -274,7 +241,7 @@
                                 <textarea name="address" 
                                           id="address" 
                                           rows="3"
-                                          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">{{ old('address', $user->address) }}</textarea>
+                                          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">{{ old('address', $student->address) }}</textarea>
                                 @error('address')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror

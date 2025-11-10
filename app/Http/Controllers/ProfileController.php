@@ -17,17 +17,9 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
-        $user = $request->user();
-        
-        // Return role-specific view
-        if ($user->role === 'admin') {
-            return view('admin.profile.edit', ['user' => $user]);
-        } elseif ($user->role === 'treasurer') {
-            return view('treasurer.profile.edit', ['user' => $user]);
-        }
-        
-        // Student gets the custom view
-        return view('profile.edit-custom', ['user' => $user]);
+        return view('profile.edit-custom', [
+            'user' => $request->user(),
+        ]);
     }
 
     /**
