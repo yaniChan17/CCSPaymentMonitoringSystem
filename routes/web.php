@@ -96,7 +96,11 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::patch('/profile/photo', [ProfileController::class, 'updatePhoto'])->name('profile.photo.update');
     Route::get('/profile/photo/delete', [ProfileController::class, 'deletePhoto'])->name('profile.photo.delete');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    
+    // Account Settings (separate from profile)
+    Route::get('/settings', [ProfileController::class, 'settings'])->name('settings.edit');
+    Route::patch('/settings/password', [ProfileController::class, 'updatePassword'])->name('settings.password.update');
+    Route::delete('/settings/account', [ProfileController::class, 'destroy'])->name('settings.account.destroy');
     
     // Notifications (all roles)
     Route::get('notifications', [App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
