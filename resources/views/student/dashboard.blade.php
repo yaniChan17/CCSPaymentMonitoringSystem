@@ -8,6 +8,75 @@
         <p class="text-sm text-gray-500 mt-1">View your payment status and transaction history</p>
     </x-slot>
 
+    @if($activeFeeSchedule)
+        <!-- Current Fees Card -->
+        <div class="bg-gradient-to-br from-red-500 via-pink-500 to-red-600 overflow-hidden shadow-lg rounded-xl mb-8">
+            <div class="p-6 sm:p-8">
+                <div class="flex items-start justify-between mb-6">
+                    <div class="text-white">
+                        <h3 class="text-2xl font-bold">{{ $activeFeeSchedule->name }}</h3>
+                        <p class="text-pink-100 text-sm mt-1">{{ $activeFeeSchedule->academic_year }} - {{ $activeFeeSchedule->semester }}</p>
+                    </div>
+                    @php
+                        $daysRemaining = $activeFeeSchedule->daysUntilDue();
+                        $colorClass = $daysRemaining > 7 ? 'bg-green-400' : ($daysRemaining >= 3 ? 'bg-yellow-400' : 'bg-red-200');
+                        $textColor = $daysRemaining > 7 ? 'text-green-900' : ($daysRemaining >= 3 ? 'text-yellow-900' : 'text-red-900');
+                    @endphp
+                    <div class="text-right">
+                        <p class="text-sm text-pink-100">Due Date</p>
+                        <p class="text-lg font-bold text-white">{{ $activeFeeSchedule->due_date->format('M d, Y') }}</p>
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold {{ $colorClass }} {{ $textColor }} mt-2">
+                            {{ abs($daysRemaining) }} day{{ abs($daysRemaining) !== 1 ? 's' : '' }} {{ $daysRemaining >= 0 ? 'remaining' : 'overdue' }}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Fee Summary Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div class="bg-white/20 backdrop-blur-sm rounded-lg p-4 border border-white/30">
+                        <div class="text-xs font-semibold text-pink-100 uppercase tracking-wider mb-1">Total Fee</div>
+                        <div class="text-2xl font-bold text-white">₱{{ number_format($activeFeeSchedule->amount, 2) }}</div>
+                    </div>
+                    <div class="bg-white/20 backdrop-blur-sm rounded-lg p-4 border border-white/30">
+                        <div class="text-xs font-semibold text-pink-100 uppercase tracking-wider mb-1">Paid</div>
+                        <div class="text-2xl font-bold text-white">₱{{ number_format($totalPaid, 2) }}</div>
+                    </div>
+                    <div class="bg-white/20 backdrop-blur-sm rounded-lg p-4 border border-white/30">
+                        <div class="text-xs font-semibold text-pink-100 uppercase tracking-wider mb-1">Balance</div>
+                        <div class="text-2xl font-bold {{ $balance > 0 ? 'text-yellow-300' : 'text-green-300' }}">₱{{ number_format($balance, 2) }}</div>
+                    </div>
+                </div>
+
+                <!-- Payment Instructions -->
+                @if($activeFeeSchedule->instructions)
+                    <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20 mb-4">
+                        <h4 class="text-sm font-semibold text-white mb-2">Payment Instructions</h4>
+                        <p class="text-sm text-pink-100">{{ $activeFeeSchedule->instructions }}</p>
+                    </div>
+                @endif
+
+                <!-- Treasurer Contact -->
+                @if($myTreasurer)
+                    <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
+                        <h4 class="text-sm font-semibold text-white mb-2">Your Block Treasurer</h4>
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-red-600 text-sm font-bold mr-3">
+                                {{ strtoupper(substr($myTreasurer->name, 0, 2)) }}
+                            </div>
+                            <div>
+                                <p class="text-sm font-semibold text-white">{{ $myTreasurer->name }}</p>
+                                <p class="text-xs text-pink-100">{{ $myTreasurer->email }}</p>
+                                @if($myTreasurer->contact_number)
+                                    <p class="text-xs text-pink-100">{{ $myTreasurer->contact_number }}</p>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                @endif
+            </div>
+        </div>
+    @endif
+
     <!-- Student Profile Card -->
     <div class="bg-gradient-to-br from-primary-500 to-accent-600 overflow-hidden shadow-lg rounded-xl mb-8">
         <div class="p-6 sm:p-8">
@@ -136,6 +205,37 @@
         </div>
     </div>
 
+    <!-- Announcements Section -->
+    @if($announcements && $announcements->count() > 0)
+        <div class="bg-white shadow-md rounded-xl border border-gray-100 mb-8">
+            <div class="p-6 border-b border-gray-100">
+                <h3 class="text-lg font-semibold text-gray-900">Announcements</h3>
+                <p class="text-sm text-gray-500 mt-1">Latest updates and notices</p>
+            </div>
+            <div class="divide-y divide-gray-200">
+                @foreach($announcements as $announcement)
+                    <div class="p-6 hover:bg-gray-50 transition-colors duration-150">
+                        <div class="flex items-start justify-between">
+                            <div class="flex-1">
+                                <h4 class="text-md font-semibold text-gray-900 mb-2">{{ $announcement->title }}</h4>
+                                <p class="text-sm text-gray-700 mb-3">{{ $announcement->message }}</p>
+                                <div class="flex items-center text-xs text-gray-500">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                    </svg>
+                                    Posted {{ $announcement->created_at->format('M d, Y') }}
+                                </div>
+                            </div>
+                            <span class="ml-4 px-3 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded-full">
+                                {{ ucfirst($announcement->target_role) }}
+                            </span>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    @endif
+
             <!-- Payment History -->
             <div class="bg-white rounded-xl shadow-sm border border-gray-100">
                 <div class="p-6 border-b border-gray-100">
@@ -152,15 +252,15 @@
                         <thead class="bg-gray-50">
                             <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fee Schedule</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Method</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reference</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            @forelse ($payments as $payment)
+                            @forelse ($paymentHistory as $payment)
                                 <tr class="hover:bg-gray-50 transition-colors duration-150">
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center">
@@ -176,49 +276,36 @@
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm font-medium text-gray-900">{{ $payment->feeSchedule->name ?? 'N/A' }}</div>
+                                        @if($payment->feeSchedule)
+                                            <div class="text-xs text-gray-500">{{ $payment->feeSchedule->academic_year }}</div>
+                                        @endif
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="text-sm font-semibold text-gray-900">₱{{ number_format($payment->amount, 2) }}</div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            @if(str_contains($payment->payment_method, 'cash'))
-                                                <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"/>
-                                                    <path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd"/>
-                                                </svg>
-                                            @elseif(str_contains($payment->payment_method, 'check'))
-                                                <svg class="w-4 h-4 text-blue-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V8a2 2 0 00-2-2h-5L9 4H4zm7 5a1 1 0 10-2 0v1H8a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V9z" clip-rule="evenodd"/>
-                                                </svg>
-                                            @else
-                                                <svg class="w-4 h-4 text-purple-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"/>
-                                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"/>
-                                                </svg>
-                                            @endif
-                                            <span class="text-sm text-gray-700">{{ ucfirst(str_replace('_', ' ', $payment->payment_method)) }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold
-                                            {{ $payment->status === 'paid' ? 'bg-green-100 text-green-800' : ($payment->status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800') }}">
-                                            @if($payment->status === 'paid')
-                                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                                </svg>
-                                            @elseif($payment->status === 'pending')
-                                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
-                                                </svg>
-                                            @else
-                                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
-                                                </svg>
-                                            @endif
-                                            {{ ucfirst($payment->status) }}
+                                        @php
+                                            $method = strtolower($payment->payment_method);
+                                            $badgeColors = [
+                                                'cash' => 'bg-green-100 text-green-800',
+                                                'gcash' => 'bg-blue-100 text-blue-800',
+                                                'maya' => 'bg-orange-100 text-orange-800',
+                                                'paypal' => 'bg-indigo-100 text-indigo-800',
+                                            ];
+                                            $badgeColor = $badgeColors[$method] ?? 'bg-gray-100 text-gray-800';
+                                        @endphp
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold {{ $badgeColor }}">
+                                            {{ ucfirst($method) }}
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900 font-mono">{{ $payment->reference_number ?? 'N/A' }}</div>
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-800">
+                                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                            </svg>
+                                            PAID ✓
+                                        </span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                         <button class="inline-flex items-center px-3 py-1.5 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-all duration-200 hover:shadow-md">
