@@ -41,10 +41,10 @@
             @enderror
         </div>
 
-        <!-- Student/Employee ID (Optional) -->
+        <!-- Student ID -->
         <div>
             <label for="student_id" class="block text-sm font-medium text-gray-700 mb-2">
-                Student/Employee ID <span class="text-gray-400 text-xs">(Optional)</span>
+                Student ID <span class="text-red-500">*</span>
             </label>
             <div class="relative">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -57,12 +57,12 @@
                     type="text" 
                     name="student_id" 
                     value="{{ old('student_id') }}" 
+                    required
                     autocomplete="off"
                     class="input-focus block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-600 transition-all duration-200"
-                    placeholder="e.g., 2024-001234"
+                    placeholder="Enter your student ID (e.g., 2024-12345)"
                 />
             </div>
-            <p class="mt-1 text-xs text-gray-500">Leave blank to auto-generate a temporary ID</p>
             @error('student_id')
                 <p class="mt-2 text-sm text-red-600 flex items-center">
                     <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">

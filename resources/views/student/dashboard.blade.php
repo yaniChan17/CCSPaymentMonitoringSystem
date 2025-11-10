@@ -82,51 +82,74 @@
         <div class="p-6 sm:p-8">
             <div class="flex items-start justify-between">
                 <div class="flex items-center space-x-4">
-                    <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center text-primary-600 text-2xl font-bold shadow-lg">
-                        {{ strtoupper(substr($student->full_name, 0, 2)) }}
+                    {{-- Avatar --}}
+                    <div class="flex-shrink-0">
+                        @if(auth()->user()->profile_picture)
+                            <img src="{{ Storage::url(auth()->user()->profile_picture) }}" 
+                                 alt="{{ auth()->user()->name }}" 
+                                 class="w-20 h-20 rounded-full border-4 border-white shadow-lg object-cover">
+                        @else
+                            <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center border-4 border-white shadow-lg">
+                                <span class="text-2xl font-bold text-primary-600">
+                                    {{ strtoupper(substr(auth()->user()->name, 0, 2)) }}
+                                </span>
+                            </div>
+                        @endif
                     </div>
+
+                    {{-- Info --}}
                     <div class="text-white">
-                        <h3 class="text-2xl font-bold">{{ $student->full_name }}</h3>
-                        <p class="text-indigo-100 text-sm mt-1">{{ $student->student_id }}</p>
-                        <div class="flex items-center space-x-2 mt-2 flex-wrap">
-                            <span class="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs font-medium">
-                                {{ $student->course }}
-                            </span>
-                            <span class="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs font-medium">
-                                Year {{ $student->year_level }}
-                            </span>
-                            @if($student->block)
-                                <span class="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs font-medium">
-                                    Block {{ $student->block }}
-                                </span>
-                            @endif
-                            @if($student->status === 'active')
-                                <span class="px-3 py-1 bg-green-400/30 backdrop-blur-sm rounded-full text-xs font-semibold flex items-center">
-                                    <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                    </svg>
-                                    Active
-                                </span>
-                            @endif
-                        </div>
+                        <h2 class="text-2xl font-bold mb-1">{{ auth()->user()->name }}</h2>
+                        <p class="text-pink-100 text-sm flex items-center">
+                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
+                                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
+                            </svg>
+                            {{ auth()->user()->email }}
+                        </p>
+                        @if(auth()->user()->student_id)
+                            <p class="text-pink-100 text-sm flex items-center mt-1">
+                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"/>
+                                </svg>
+                                ID: {{ auth()->user()->student_id }}
+                            </p>
+                        @endif
+                        @if(auth()->user()->block)
+                            <p class="text-pink-100 text-sm flex items-center mt-1">
+                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
+                                </svg>
+                                Block: {{ auth()->user()->block->name ?? 'Not assigned' }}
+                            </p>
+                        @endif
+                        @if(auth()->user()->contact_number)
+                            <p class="text-pink-100 text-sm flex items-center mt-1">
+                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
+                                </svg>
+                                {{ auth()->user()->contact_number }}
+                            </p>
+                        @endif
                     </div>
                 </div>
-                <div class="hidden sm:block">
-                    <button class="px-4 py-2 bg-white text-primary-600 rounded-lg font-medium text-sm hover:bg-primary-50 transition-colors duration-200">
-                        Edit Profile
-                    </button>
-                </div>
+
+                {{-- Edit Profile Button --}}
+                <a href="{{ route('student.profile.edit') }}" 
+                   class="px-4 py-2 bg-white text-primary-600 text-sm font-semibold rounded-lg hover:bg-pink-50 transition-colors shadow-sm">
+                    Edit Profile
+                </a>
             </div>
-            <div class="mt-6 pt-6 border-t border-white/20">
-                <div class="grid grid-cols-2 gap-4 text-white">
-                    <div>
-                        <p class="text-xs text-indigo-100">Email</p>
-                        <p class="text-sm font-medium mt-1">{{ $student->email }}</p>
-                    </div>
-                    <div>
-                        <p class="text-xs text-indigo-100">Contact</p>
-                        <p class="text-sm font-medium mt-1">{{ $student->phone ?? 'Not provided' }}</p>
-                    </div>
+
+            {{-- Year & Block Info Cards --}}
+            <div class="grid grid-cols-2 gap-4 mt-6">
+                <div class="bg-white bg-opacity-20 backdrop-blur-sm rounded-lg p-4 border border-white border-opacity-30">
+                    <p class="text-xs font-semibold text-pink-100 uppercase tracking-wider">Year Level</p>
+                    <p class="text-2xl font-bold text-white mt-1">{{ auth()->user()->year_level ?? 'N/A' }}</p>
+                </div>
+                <div class="bg-white bg-opacity-20 backdrop-blur-sm rounded-lg p-4 border border-white border-opacity-30">
+                    <p class="text-xs font-semibold text-pink-100 uppercase tracking-wider">Block</p>
+                    <p class="text-2xl font-bold text-white mt-1">{{ auth()->user()->block->name ?? 'Not assigned' }}</p>
                 </div>
             </div>
         </div>

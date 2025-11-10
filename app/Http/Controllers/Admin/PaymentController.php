@@ -87,11 +87,14 @@ class PaymentController extends Controller
         $stats = [
             'total' => (clone $statsQuery)->count(),
             'total_amount' => (clone $statsQuery)->where('status', 'paid')->sum('amount'),
-            'pending_count' => (clone $statsQuery)->where('status', 'pending')->count(),
-            'pending_amount' => (clone $statsQuery)->where('status', 'pending')->sum('amount'),
-            'today' => (clone $statsQuery)->where('status', 'paid')
+            'today_total' => (clone $statsQuery)->where('status', 'paid')
                 ->whereDate('payment_date', today())
                 ->sum('amount'),
+            'today_count' => (clone $statsQuery)->where('status', 'paid')
+                ->whereDate('payment_date', today())
+                ->count(),
+            'late_count' => (clone $statsQuery)->where('is_late', true)->count(),
+            'late_amount' => (clone $statsQuery)->where('is_late', true)->sum('amount'),
         ];
 
         // Get available blocks and year levels for filters

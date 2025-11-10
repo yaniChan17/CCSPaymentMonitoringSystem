@@ -20,7 +20,7 @@
 
         <!-- Form -->
         <div class="bg-white shadow-md rounded-xl border border-gray-100">
-            <form method="POST" action="{{ route('admin.users.store') }}" x-data="{ role: 'student' }">
+            <form method="POST" action="{{ route('admin.users.store') }}" enctype="multipart/form-data" x-data="{ role: 'student' }">
                 @csrf
 
                 <div class="p-6 space-y-6">
@@ -176,6 +176,69 @@
                                     <option value="5" {{ old('block') == '5' ? 'selected' : '' }}>Block 5</option>
                                 </select>
                                 @error('block')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Government ID Fields (Admin/Treasurer Only) -->
+                    <div x-show="role === 'admin' || role === 'treasurer'" 
+                         x-transition
+                         x-cloak 
+                         class="border-t border-gray-200 pt-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Security Credentials (Required)</h3>
+                        <p class="text-sm text-gray-600 mb-4">For financial security, admin and treasurer accounts require government-issued ID verification.</p>
+
+                        <div class="space-y-4">
+                            <!-- ID Type -->
+                            <div>
+                                <label for="government_id_type" class="block text-sm font-medium text-gray-700 mb-1">
+                                    Government ID Type <span class="text-red-500">*</span>
+                                </label>
+                                <select name="government_id_type" 
+                                        id="government_id_type"
+                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('government_id_type') border-red-500 @enderror">
+                                    <option value="">Select ID Type</option>
+                                    <option value="driver_license" {{ old('government_id_type') === 'driver_license' ? 'selected' : '' }}>Driver's License</option>
+                                    <option value="passport" {{ old('government_id_type') === 'passport' ? 'selected' : '' }}>Passport</option>
+                                    <option value="sss_id" {{ old('government_id_type') === 'sss_id' ? 'selected' : '' }}>SSS ID</option>
+                                    <option value="umid" {{ old('government_id_type') === 'umid' ? 'selected' : '' }}>UMID</option>
+                                    <option value="philhealth_id" {{ old('government_id_type') === 'philhealth_id' ? 'selected' : '' }}>PhilHealth ID</option>
+                                </select>
+                                @error('government_id_type')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <!-- ID Number -->
+                            <div>
+                                <label for="government_id_number" class="block text-sm font-medium text-gray-700 mb-1">
+                                    ID Number <span class="text-red-500">*</span>
+                                </label>
+                                <input type="text" 
+                                       name="government_id_number" 
+                                       id="government_id_number" 
+                                       value="{{ old('government_id_number') }}"
+                                       placeholder="Enter ID number"
+                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('government_id_number') border-red-500 @enderror">
+                                @error('government_id_number')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <!-- ID File Upload -->
+                            <div>
+                                <label for="government_id_file" class="block text-sm font-medium text-gray-700 mb-1">
+                                    Upload ID (Image/PDF) <span class="text-red-500">*</span>
+                                </label>
+                                <input type="file" 
+                                       name="government_id_file" 
+                                       id="government_id_file" 
+                                       accept=".jpg,.jpeg,.png,.pdf"
+                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('government_id_file') border-red-500 @enderror">
+                                <p class="mt-1 text-xs text-gray-500">Max 2MB. Formats: JPG, PNG, PDF</p>
+                                @error('government_id_file')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>

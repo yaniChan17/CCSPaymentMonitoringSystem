@@ -49,30 +49,33 @@
                 </div>
             </div>
 
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            {{-- Today's Collection --}}
+            <div class="bg-white overflow-hidden shadow-md rounded-lg p-6 hover:shadow-xl transition-shadow">
                 <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm font-medium text-gray-600">Pending</p>
-                        <p class="mt-2 text-3xl font-bold text-gray-900">{{ $stats['pending_count'] }}</p>
-                        <p class="text-xs text-gray-500 mt-1">₱{{ number_format($stats['pending_amount'], 2) }}</p>
+                    <div class="flex-1">
+                        <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Today's Collection</div>
+                        <div class="text-3xl font-bold text-green-600">₱{{ number_format($stats['today_total'] ?? 0, 2) }}</div>
+                        <div class="mt-2 text-sm text-gray-500">{{ $stats['today_count'] ?? 0 }} payments</div>
                     </div>
-                    <div class="p-3 bg-yellow-50 rounded-lg">
-                        <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    <div class="w-14 h-14 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center shadow-lg">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                         </svg>
                     </div>
                 </div>
             </div>
 
+            {{-- Late Payments --}}
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm font-medium text-gray-600">Today's Collection</p>
-                        <p class="mt-2 text-3xl font-bold text-gray-900">₱{{ number_format($stats['today'], 2) }}</p>
+                        <p class="text-sm font-medium text-gray-600">Late Payments</p>
+                        <p class="mt-2 text-3xl font-bold text-gray-900">{{ $stats['late_count'] ?? 0 }}</p>
+                        <p class="text-xs text-gray-500 mt-1">₱{{ number_format($stats['late_amount'] ?? 0, 2) }}</p>
                     </div>
-                    <div class="p-3 bg-primary-50 rounded-lg">
-                        <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    <div class="p-3 bg-orange-50 rounded-lg">
+                        <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
                     </div>
                 </div>
@@ -268,12 +271,17 @@
                                     {{ ucfirst(str_replace('_', ' ', $payment->payment_method)) }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                        {{ $payment->status === 'paid' ? 'bg-green-100 text-green-800' : '' }}
-                                        {{ $payment->status === 'pending' ? 'bg-yellow-100 text-yellow-800' : '' }}
-                                        {{ $payment->status === 'cancelled' ? 'bg-red-100 text-red-800' : '' }}">
-                                        {{ ucfirst($payment->status) }}
+                                    <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                        </svg>
+                                        PAID ✓
                                     </span>
+                                    @if($payment->is_late)
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-orange-100 text-orange-800 ml-1">
+                                            Late
+                                        </span>
+                                    @endif
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                                     {{ $payment->recordedBy->name }}

@@ -28,6 +28,9 @@ class User extends Authenticatable
         'photo',
         'contact_number',
         'assigned_block',
+        'government_id_type',
+        'government_id_number',
+        'government_id_file',
     ];
 
     /**
