@@ -6,13 +6,22 @@ use Illuminate\Http\Request;
 
 class NotificationController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $notifications = auth()->user()->notifications()
-            ->orderBy('created_at', 'desc')
-            ->paginate(20);
+        $query = auth()->user()->notifications();
 
-        return view('notifications.index', compact('notifications'));
+        // Apply filter
+        $filter = $request->get('filter', 'all');
+        if ($filter === 'unread') {
+            $query->where('is_read', false);
+        } elseif ($filter === 'read') {
+            $query->where('is_read', true);
+        }
+
+        $notifications = $query->orderBy('created_at', 'desc')->paginate(20);
+        $allCount = auth()->user()->notifications()->count();
+
+        return view('notifications.index', compact('notifications', 'allCount'));
     }
 
     public function markAsRead($id)
